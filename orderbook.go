@@ -94,18 +94,30 @@ func (l *Limit) DeleteOrder(o *Order) {
 
 	sort.Sort(l.Orders)
 }
+
 func (l *Limit) Fill(o *Order) []Match {
-	matches := []Match{}
+	var (
+		matches        []Match
+		ordersToDelete []*Order
+	)
 
 	for _, order := range l.Orders {
 		match := l.fillOrder(order, o)
 		matches = append(matches, match)
 
-		l.TotalVolume -= match.SizeFilled 
-		
+		l.TotalVolume -= match.SizeFilled
+
+		if order.IsFilled() {
+			ordersToDelete = append(ordersToDelete, order)
+		}
+
 		if o.IsFilled() {
 			break
 		}
+	}
+
+	for _, order := range ordersToDelete {
+		l.DeleteOrder(order)
 	}
 
 	return matches
@@ -131,7 +143,7 @@ func (l *Limit) fillOrder(a, b *Order) Match {
 		sizeFilled = b.Size
 		b.Size = 0.0
 	} else {
-		a.Size -= a.Size
+		b.Size -= a.Size
 		sizeFilled = a.Size
 		a.Size = 0.0
 	}
@@ -144,6 +156,7 @@ func (l *Limit) fillOrder(a, b *Order) Match {
 	}
 }
 
+// the reason why we ahve both maps and slices is because you need to keep the orders sorted and map cannot be easily sorted
 type Orderbook struct {
 	asks []*Limit // non capitalized are private
 	bids []*Limit
@@ -168,19 +181,27 @@ func (ob *Orderbook) PlaceMarketOrder(o *Order) []Match {
 		if o.Size > ob.AskTotalVolume() {
 			panic(fmt.Errorf("not enough volume [size: %.2f] for market order [size: %.2f]", ob.AskTotalVolume(), o.Size))
 		}
-		
+
 		for _, limit := range ob.Asks() {
 			limitMatches := limit.Fill(o)
 			matches = append(matches, limitMatches...)
+
+			if len(limit.Orders) == 0 {
+				ob.clearLimit(false, limit)
+			}
 		}
 	} else {
 		if o.Size > ob.BidTotalVolume() {
 			panic(fmt.Errorf("not enough volume [size: %.2f] for market order [size: %.2f]", ob.BidTotalVolume(), o.Size))
 		}
-		
+
 		for _, limit := range ob.Bids() {
 			limitMatches := limit.Fill(o)
 			matches = append(matches, limitMatches...)
+
+			if len(limit.Orders) == 0 {
+				ob.clearLimit(true, limit)
+			}
 		}
 	}
 	return matches
@@ -207,17 +228,40 @@ func (ob *Orderbook) PlaceLimitOrder(price float64, o *Order) {
 
 		}
 	}
-
 	limit.AddOrder(o)
+
+}
+
+func (ob *Orderbook) clearLimit(bid bool, l *Limit) {
+	if bid {
+		delete(ob.BidLimits, l.Price)
+		for i := 0; i < len(ob.bids); i++ {
+			if ob.bids[i] == l {
+				ob.bids[i] = ob.bids[len(ob.bids)-1]
+				ob.bids = ob.bids[:len(ob.bids)-1]
+			}
+		}
+	} else {
+		delete(ob.AskLimits, l.Price)
+		for i := 0; i < len(ob.asks); i++ {
+			if ob.asks[i] == l {
+				ob.asks[i] = ob.asks[len(ob.asks)-1]
+				ob.asks = ob.asks[:len(ob.asks)-1]
+			}
+		}
+	}
+}
+
+func (ob *Orderbook) CancelOrder(o *Order) {
+	limit := o.Limit
+	limit.DeleteOrder(o)
 }
 
 func (ob *Orderbook) BidTotalVolume() float64 {
 	totalVolume := 0.0
-
 	for i := 0; i < len(ob.bids); i++ {
 		totalVolume += ob.bids[i].TotalVolume
 	}
-
 	return totalVolume
 }
 
