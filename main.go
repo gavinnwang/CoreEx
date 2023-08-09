@@ -86,6 +86,18 @@ func (ex *Exchange) handleGetBook(c echo.Context) error {
 		}
 	}
 
+	for _, limit := range ob.Bids() {
+		for _, order := range limit.Orders {
+			o := Order{
+				Price:     limit.Price,
+				Size:      order.Size,
+				Bid:       order.Bid,
+				Timestamp: order.Timestamp,
+			}
+			orderbookData.Bids = append(orderbookData.Bids, &o)
+		}
+	}
+  
  return c.JSON(http.StatusOK, orderbookData) 
 }
 
