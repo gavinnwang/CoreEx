@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+
 	"github.com/labstack/echo"
+
 	"github.com/wry0313/crypto-exchange/orderbook"
 )
 
@@ -51,6 +53,7 @@ type PlaceOrderRequest struct {
 
 // only limit order because market order doesn't have a price
 type Order struct {
+	ID        int64
 	Price     float64
 	Size      float64
 	Bid       bool
@@ -58,8 +61,10 @@ type Order struct {
 }
 
 type OrderbookData struct {
-	Asks []*Order
-	Bids []*Order
+	TotalBidVolume float64
+	TotalAskVolume float64
+	Asks           []*Order
+	Bids           []*Order
 }
 
 func (ex *Exchange) handleGetBook(c echo.Context) error {
@@ -70,8 +75,10 @@ func (ex *Exchange) handleGetBook(c echo.Context) error {
 	}
 
 	orderbookData := OrderbookData{
-		Asks: []*Order{},
-		Bids: []*Order{},
+		TotalBidVolume: ob.BidTotalVolume(),
+		TotalAskVolume: ob.AskTotalVolume(),
+		Asks:           []*Order{},
+		Bids:           []*Order{},
 	}
 
 	for _, limit := range ob.Asks() {
@@ -97,8 +104,13 @@ func (ex *Exchange) handleGetBook(c echo.Context) error {
 			orderbookData.Bids = append(orderbookData.Bids, &o)
 		}
 	}
-  
- return c.JSON(http.StatusOK, orderbookData) 
+
+	return c.JSON(http.StatusOK, orderbookData)
+}
+
+func (ex *Exchange) cancelOrder(c echo.Context) error {
+
+	return nil
 }
 
 func (ex *Exchange) handlePlaceOrder(c echo.Context) error {
@@ -110,7 +122,16 @@ func (ex *Exchange) handlePlaceOrder(c echo.Context) error {
 	market := Market(placeOrderData.Market)
 	ob := ex.orderbooks[market]
 	order := orderbook.NewOrder(placeOrderData.Bid, placeOrderData.Size)
-	ob.PlaceLimitOrder(placeOrderData.Price, order)
 
-	return c.JSON(200, map[string]any{"msg": "order placed"})
+	if placeOrderData.Type == LimitOrder {
+		ob.PlaceLimitOrder(placeOrderData.Price, order)
+		return c.JSON(200, map[string]any{"msg": "limit order placed"})
+	}
+
+	if placeOrderData.Type == MarketOrder {
+		matches := ob.PlaceMarketOrder(order)
+		return c.JSON(200, map[string]any{"matches": len(matches)})
+	}
+
+	return nil
 }
