@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/big"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/ethereum/go-ethereum/common"
@@ -25,9 +26,14 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
 	e := echo.New()
 	e.HTTPErrorHandler = httperrorHandler
-	ex := NewExchange()
+
+	ex, err := NewExchange(os.Getenv("EXCHANGE_PRIVATE_KEY"))
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	e.GET("/book/:market", ex.handleGetBook)
 	e.POST("/order", ex.handlePlaceOrder)
@@ -122,18 +128,19 @@ type Exchange struct {
 	orderbooks map[Market]*orderbook.Orderbook
 }
 
-func NewExchange() *Exchange {
+func NewExchange(privateKey string) (*Exchange, error) {
 	orderbooks := make(map[Market]*orderbook.Orderbook)
 	orderbooks[MarketETH] = orderbook.NewOrderbook()
 
-	privateKey, err := crypto.HexToECDSA(exchangePrivateKey)
+	pk, err := crypto.HexToECDSA(privateKey)
+	fmt.Println(pk)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	return &Exchange{
-		PrivateKey: privateKey,
+		PrivateKey: pk,
 		orderbooks: orderbooks,
-	}
+	}, nil
 }
 
 type PlaceOrderRequest struct {
