@@ -2,7 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo"
 
@@ -11,11 +13,17 @@ import (
 
 func main() {
 	e := echo.New()
+	e.HTTPErrorHandler = httperrorHandler
 	ex := NewExchange()
 
 	e.GET("/book/:market", ex.handleGetBook)
 	e.POST("/order", ex.handlePlaceOrder)
+	e.DELETE("/order/:id", ex.cancelOrder)
 	e.Start(":3000")
+}
+
+func httperrorHandler(err error, c echo.Context) {
+	fmt.Println(err)
 }
 
 type OrderType string
@@ -84,6 +92,7 @@ func (ex *Exchange) handleGetBook(c echo.Context) error {
 	for _, limit := range ob.Asks() {
 		for _, order := range limit.Orders {
 			o := Order{
+				ID:        order.ID,
 				Price:     limit.Price,
 				Size:      order.Size,
 				Bid:       order.Bid,
@@ -96,6 +105,7 @@ func (ex *Exchange) handleGetBook(c echo.Context) error {
 	for _, limit := range ob.Bids() {
 		for _, order := range limit.Orders {
 			o := Order{
+				ID:        order.ID,
 				Price:     limit.Price,
 				Size:      order.Size,
 				Bid:       order.Bid,
@@ -108,9 +118,26 @@ func (ex *Exchange) handleGetBook(c echo.Context) error {
 	return c.JSON(http.StatusOK, orderbookData)
 }
 
-func (ex *Exchange) cancelOrder(c echo.Context) error {
+type CancelOrderRequest struct {
+	Bid bool
+	ID  int64
+}
 
-	return nil
+func (ex *Exchange) cancelOrder(c echo.Context) error {
+	idStr := c.Param("id") // fetching param is always string
+	id, _ := strconv.Atoi(idStr)
+
+	ob := ex.orderbooks[MarketETH]
+	order := ob.Orders[int64(id)]
+	ob.CancelOrder(order)
+
+	return c.JSON(200, map[string]any{"msg": "order deleted"})
+}
+
+type MatchedOrder struct {
+	ID    int64
+	Price float64
+	Size  float64
 }
 
 func (ex *Exchange) handlePlaceOrder(c echo.Context) error {
@@ -130,7 +157,8 @@ func (ex *Exchange) handlePlaceOrder(c echo.Context) error {
 
 	if placeOrderData.Type == MarketOrder {
 		matches := ob.PlaceMarketOrder(order)
-		return c.JSON(200, map[string]any{"matches": len(matches)})
+
+		return c.JSON(200, map[string]any{"matches": matches})
 	}
 
 	return nil
