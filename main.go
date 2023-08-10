@@ -1,17 +1,30 @@
 package main
 
 import (
+	"context"
+	"crypto/ecdsa"
 	"encoding/json"
 	"fmt"
+	"log"
+	"math/big"
 	"net/http"
 	"strconv"
 
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
 
 	"github.com/wry0313/crypto-exchange/orderbook"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	e := echo.New()
 	e.HTTPErrorHandler = httperrorHandler
 	ex := NewExchange()
@@ -19,6 +32,71 @@ func main() {
 	e.GET("/book/:market", ex.handleGetBook)
 	e.POST("/order", ex.handlePlaceOrder)
 	e.DELETE("/order/:id", ex.cancelOrder)
+
+	client, err := ethclient.Dial("http://localhost:8545")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// address := common.HexToAddress("0xE19B27EcF741284AE7e3fF5F8aba026266ba25F6")
+
+	privateKey, err := crypto.HexToECDSA(
+		"fad9c8855b740a0b7ed4c221dbad0f33a83a49cad6b3fe8d5817ac83d38b6a19",
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	publicKey := privateKey.Public()
+	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+	if !ok {
+		log.Fatal("cfnnot assert type: publicKey is not of type *ecdsa.PublicKey")
+	}
+
+	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+
+	nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	value := big.NewInt(1000000000000000000) // in wei (1 eth)
+
+	gasLimit := uint64(21000) // in units
+	gasPrice, err := client.SuggestGasPrice(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	toAddress := common.HexToAddress("0x4592d8f8d7b001e72cb26a73e4fa1806a51ac79d")
+
+	tx := types.NewTransaction(nonce, toAddress, value, gasLimit, gasPrice, nil)
+
+	// fmt.Println(tx)
+
+	chainID, err := client.NetworkID(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(chainID)
+
+	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainID), privateKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err = client.SendTransaction(context.Background(), signedTx); err != nil {
+		log.Fatal(err)
+	}
+
+	balance, err := client.BalanceAt(context.Background(), toAddress, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(balance)
+
 	e.Start(":3000")
 }
 
@@ -40,13 +118,20 @@ const (
 )
 
 type Exchange struct {
+	PrivateKey *ecdsa.PrivateKey
 	orderbooks map[Market]*orderbook.Orderbook
 }
 
 func NewExchange() *Exchange {
 	orderbooks := make(map[Market]*orderbook.Orderbook)
 	orderbooks[MarketETH] = orderbook.NewOrderbook()
+
+	privateKey, err := crypto.HexToECDSA(exchangePrivateKey)
+	if err != nil {
+		log.Fatal(err)
+	}
 	return &Exchange{
+		PrivateKey: privateKey,
 		orderbooks: orderbooks,
 	}
 }
@@ -157,8 +242,26 @@ func (ex *Exchange) handlePlaceOrder(c echo.Context) error {
 
 	if placeOrderData.Type == MarketOrder {
 		matches := ob.PlaceMarketOrder(order)
+		matchedOrders := make([]*MatchedOrder, len(matches))
 
-		return c.JSON(200, map[string]any{"matches": matches})
+		isBid := false
+		if order.Bid {
+			isBid = true
+		}
+
+		for i := 0; i < len(matchedOrders); i++ {
+			id := matches[i].Bid.ID
+			if isBid {
+				id = matches[i].Ask.ID
+			}
+			matchedOrders[i] = &MatchedOrder{
+				ID:    id,
+				Size:  matches[i].SizeFilled,
+				Price: matches[i].Price,
+			}
+		}
+
+		return c.JSON(200, map[string]any{"matches": matchedOrders})
 	}
 
 	return nil
