@@ -21,6 +21,58 @@ import (
 	"github.com/wry0313/crypto-exchange/orderbook"
 )
 
+const (
+	MarketOrder OrderType = "MARKET"
+	LimitOrder  OrderType = "LIMIT"
+
+	MarketETH Market = "ETH"
+)
+
+type (
+	OrderType string
+	Market    string
+
+	PlaceOrderRequest struct {
+		Type   OrderType // Limit or Market
+		Bid    bool
+		Size   float64
+		Price  float64
+		Market Market
+	}
+
+	// only limit order because market order doesn't have a price
+	Order struct {
+		ID        int64
+		Price     float64
+		Size      float64
+		Bid       bool
+		Timestamp int64
+	}
+
+	OrderbookData struct {
+		TotalBidVolume float64
+		TotalAskVolume float64
+		Asks           []*Order
+		Bids           []*Order
+	}
+
+	Exchange struct {
+		PrivateKey *ecdsa.PrivateKey
+		orderbooks map[Market]*orderbook.Orderbook
+	}
+
+	CancelOrderRequest struct {
+		Bid bool
+		ID  int64
+	}
+
+	MatchedOrder struct {
+		ID    int64
+		Price float64
+		Size  float64
+	}
+)
+
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -46,9 +98,7 @@ func main() {
 
 	// address := common.HexToAddress("0xE19B27EcF741284AE7e3fF5F8aba026266ba25F6")
 
-	privateKey, err := crypto.HexToECDSA(
-		"fad9c8855b740a0b7ed4c221dbad0f33a83a49cad6b3fe8d5817ac83d38b6a19",
-	)
+	privateKey, err := crypto.HexToECDSA(os.Getenv("EXCHANGE_PRIVATE_KEY"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,7 +116,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	value := big.NewInt(1000000000000000000) // in wei (1 eth)
+	value := big.NewInt(123456) // in wei (1 eth)
 
 	gasLimit := uint64(21000) // in units
 	gasPrice, err := client.SuggestGasPrice(context.Background())
@@ -78,14 +128,10 @@ func main() {
 
 	tx := types.NewTransaction(nonce, toAddress, value, gasLimit, gasPrice, nil)
 
-	// fmt.Println(tx)
-
 	chainID, err := client.NetworkID(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println(chainID)
 
 	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainID), privateKey)
 	if err != nil {
@@ -110,24 +156,6 @@ func httperrorHandler(err error, c echo.Context) {
 	fmt.Println(err)
 }
 
-type OrderType string
-
-const (
-	MarketOrder OrderType = "MARKET"
-	LimitOrder  OrderType = "LIMIT"
-)
-
-type Market string
-
-const (
-	MarketETH Market = "ETH"
-)
-
-type Exchange struct {
-	PrivateKey *ecdsa.PrivateKey
-	orderbooks map[Market]*orderbook.Orderbook
-}
-
 func NewExchange(privateKey string) (*Exchange, error) {
 	orderbooks := make(map[Market]*orderbook.Orderbook)
 	orderbooks[MarketETH] = orderbook.NewOrderbook()
@@ -141,30 +169,6 @@ func NewExchange(privateKey string) (*Exchange, error) {
 		PrivateKey: pk,
 		orderbooks: orderbooks,
 	}, nil
-}
-
-type PlaceOrderRequest struct {
-	Type   OrderType // Limit or Market
-	Bid    bool
-	Size   float64
-	Price  float64
-	Market Market
-}
-
-// only limit order because market order doesn't have a price
-type Order struct {
-	ID        int64
-	Price     float64
-	Size      float64
-	Bid       bool
-	Timestamp int64
-}
-
-type OrderbookData struct {
-	TotalBidVolume float64
-	TotalAskVolume float64
-	Asks           []*Order
-	Bids           []*Order
 }
 
 func (ex *Exchange) handleGetBook(c echo.Context) error {
@@ -210,11 +214,6 @@ func (ex *Exchange) handleGetBook(c echo.Context) error {
 	return c.JSON(http.StatusOK, orderbookData)
 }
 
-type CancelOrderRequest struct {
-	Bid bool
-	ID  int64
-}
-
 func (ex *Exchange) cancelOrder(c echo.Context) error {
 	idStr := c.Param("id") // fetching param is always string
 	id, _ := strconv.Atoi(idStr)
@@ -224,12 +223,6 @@ func (ex *Exchange) cancelOrder(c echo.Context) error {
 	ob.CancelOrder(order)
 
 	return c.JSON(200, map[string]any{"msg": "order deleted"})
-}
-
-type MatchedOrder struct {
-	ID    int64
-	Price float64
-	Size  float64
 }
 
 func (ex *Exchange) handlePlaceOrder(c echo.Context) error {
