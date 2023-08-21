@@ -26,7 +26,7 @@ func transferETH(client *ethclient.Client, fromPrivKey *ecdsa.PrivateKey, to com
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("balance: %d\n", balance)
+	fmt.Printf("balance: %d\n", new(big.Int).Div(balance, big.NewInt(1000000000000000000)))
 	nonce, err := client.PendingNonceAt(ctx, fromAddress)
 	if err != nil {
 		return err
@@ -51,6 +51,21 @@ func transferETH(client *ethclient.Client, fromPrivKey *ecdsa.PrivateKey, to com
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("balance after transfer: %d\n", balance)
+	fmt.Printf("balance after transfer: %d\n", new(big.Int).Div(balance, big.NewInt(1000000000000000000)))
 	return client.SendTransaction(ctx, signedTx)
+}
+
+func (ex *Exchange) getReserve() (*big.Int, error) {
+	exchangePubKey := ex.PrivateKey.Public()
+	exchangePublicKeyECDSA, ok := exchangePubKey.(*ecdsa.PublicKey)
+	if !ok {
+		return nil, fmt.Errorf("error casting pubic key to ECDSA")
+	}
+	exchangeAddress := crypto.PubkeyToAddress(*exchangePublicKeyECDSA)	
+	balance, err := ex.Client.BalanceAt(context.Background(), exchangeAddress, nil)
+	balanceInEth := new(big.Int).Div(balance, big.NewInt(1000000000000000000))
+	if err != nil {
+		return nil, fmt.Errorf("error getting balance: %v", err)	
+	}	
+	return balanceInEth, nil
 }

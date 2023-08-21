@@ -93,6 +93,7 @@ func main() {
 		log.Fatal(err)
 	}
 	pkStr := "61880c63e6f3088fce0a401f68fc2343625107223b13529bb13cc567c2de2f38"
+
 	// pk, err := crypto.HexToECDSA(pkStr)
 	// if err != nil {
 	// 	log.Fatal(err)
@@ -312,6 +313,12 @@ func (ex *Exchange) handlePlaceLimitOrder(
 	fmt.Println("transfer successful add order to orderbook")
 	ob := ex.orderbooks[market]
 	ob.PlaceLimitOrder(price, order)
+
+	reserve, err := ex.getReserve()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("reserve in exchange after transfering limit order: %v\n", reserve)
 	return nil
 }
 
