@@ -328,18 +328,26 @@ func (ex *Exchange) handlePlaceLimitOrder(
 	price float64,
 	order *orderbook.Order,
 ) error {
+	_, ok := ex.Users[order.UserID]
+	if !ok {
+		return fmt.Errorf("user not found for userID: %v", order.UserID)
+	}
 	ob := ex.orderbooks[market]
 	ob.PlaceLimitOrder(price, order)
+	log.Printf("new LIMIT order => type: [%t] | price [%.2f] | size [%.2f]\n", order.Bid, order.Limit.Price, order.Size)
 
 	return nil
 }
 
+
+type PlaceOrderResponse struct {
+	OrderID int64
+}
 func (ex *Exchange) handlePlaceOrder(c echo.Context) error {
 	var placeOrderData PlaceOrderRequest
 	if err := json.NewDecoder(c.Request().Body).Decode(&placeOrderData); err != nil {
 		return err
 	}
-	log.Printf("received placeOrderData: %v\n", placeOrderData)
 
 	market := Market(placeOrderData.Market)
 	order := orderbook.NewOrder(placeOrderData.Bid, placeOrderData.Size, placeOrderData.UserID)
@@ -348,7 +356,10 @@ func (ex *Exchange) handlePlaceOrder(c echo.Context) error {
 		if err := ex.handlePlaceLimitOrder(market, placeOrderData.Price, order); err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]any{"msg": err.Error()})
 		}
-		return c.JSON(200, map[string]any{"msg": "limit order placed"})
+		resp := &PlaceOrderResponse{
+			OrderID: order.ID,
+		}
+		return c.JSON(200, resp)
 	}
 
 	if placeOrderData.Type == MarketOrder {
