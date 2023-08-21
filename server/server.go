@@ -292,6 +292,8 @@ func (ex *Exchange) cancelOrder(c echo.Context) error {
 	order := ob.Orders[int64(id)]
 	ob.CancelOrder(order)
 
+	log.Println("order cancelled id => ", idStr)
+
 	return c.JSON(200, map[string]any{"msg": "order deleted"})
 }
 
@@ -308,6 +310,8 @@ func (ex *Exchange) handlePlaceMarketOrder(
 		isBid = true
 	}
 
+	totalSizeFilled := 0.0
+	sumPrice := 0.0
 	for i := 0; i < len(matchedOrders); i++ {
 		id := matches[i].Bid.ID
 		if isBid {
@@ -318,7 +322,12 @@ func (ex *Exchange) handlePlaceMarketOrder(
 			Size:  matches[i].SizeFilled,
 			Price: matches[i].Price,
 		}
+		totalSizeFilled += matches[i].SizeFilled
+		sumPrice += matches[i].Price
 	}
+	avgPrice := sumPrice / float64(len(matchedOrders))
+	
+	log.Printf("filled market order => %d | type: [%t] | size [%.2f] | avgPrice: [%.2f]\n", order.ID,  order.Bid, totalSizeFilled, avgPrice)
 
 	return matches, matchedOrders
 }
@@ -356,23 +365,22 @@ func (ex *Exchange) handlePlaceOrder(c echo.Context) error {
 		if err := ex.handlePlaceLimitOrder(market, placeOrderData.Price, order); err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]any{"msg": err.Error()})
 		}
-		resp := &PlaceOrderResponse{
-			OrderID: order.ID,
-		}
-		return c.JSON(200, resp)
 	}
 
 	if placeOrderData.Type == MarketOrder {
-		matches, matchedOrders := ex.handlePlaceMarketOrder(market, order)
+		matches, _ := ex.handlePlaceMarketOrder(market, order)
 
 		if err := ex.handleMatches(matches); err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]any{"msg": err.Error()})
 		}
 
-		return c.JSON(200, map[string]any{"matches": matchedOrders})
+		// return c.JSON(200, map[string]any{"matches": matchedOrders})
 	}
-
-	return nil
+	
+	resp := &PlaceOrderResponse{
+		OrderID: order.ID,
+	}
+	return c.JSON(http.StatusOK, resp)
 }
 
 func (ex *Exchange) handleMatches(matches []orderbook.Match) error {
@@ -459,9 +467,9 @@ func (ex *Exchange) getBalance(privateKey *ecdsa.PrivateKey) (*big.Int, error) {
 	}
 	exchangeAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 	balance, err := ex.Client.BalanceAt(context.Background(), exchangeAddress, nil)
-	balanceInEth := new(big.Int).Div(balance, big.NewInt(1000000000000000000))
+	// balanceInEth := new(big.Int).Div(balance, big.NewInt(1000000000000000000))
 	if err != nil {
 		return nil, fmt.Errorf("error getting balance: %v", err)
 	}
-	return balanceInEth, nil
+	return balance, nil
 }

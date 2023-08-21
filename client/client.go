@@ -12,11 +12,12 @@ import (
 
 const Endpoint = "http://localhost:3000"
 
-type PlaceLimitOrderParams struct {
+type PlaceOrderParams struct {
 	UserID int64
 	Bid    bool
-	Price  float64
-	Size   float64
+	// price only needed for placing LIMIT orders.
+	Price float64
+	Size  float64
 }
 
 type Client struct {
@@ -27,6 +28,48 @@ func NewClient() *Client {
 	return &Client{
 		Client: http.DefaultClient,
 	}
+}
+
+func (c *Client) PlaceMarketOrder(p *PlaceOrderParams) (*server.PlaceOrderResponse, error) {
+	params := &server.PlaceOrderRequest{
+		UserID: p.UserID,
+		Type:   server.MarketOrder,
+		Bid:    p.Bid,
+		Size:   p.Size,
+		Market: server.MarketETH,
+	}
+	
+	body, err := json.Marshal(params)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling params: %w", err)
+	}
+
+	e := Endpoint + "/order"
+	req, err := http.NewRequest(http.MethodPost, e, bytes.NewReader(body))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %v", err)
+	}
+	resp, err := c.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error sending request: %v", err)
+	}
+	if resp.StatusCode != http.StatusOK { 
+		bodyBytes, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("Error while reading response body with error status code: %v", err)
+		}
+
+		// Convert the body bytes to a string
+		errorMsg := string(bodyBytes)
+
+		// Handle or log the error message
+		return nil, fmt.Errorf("Received error response: %s", errorMsg)
+	}
+	placeOrderResponse := &server.PlaceOrderResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(placeOrderResponse); err != nil {
+		return nil, fmt.Errorf("error decoding response: %v", err)
+	}
+	return placeOrderResponse, nil
 }
 
 func (c *Client) CancelOrder(orderID int64) error {
@@ -55,7 +98,7 @@ func (c *Client) CancelOrder(orderID int64) error {
 	return nil
 }
 
-func (c *Client) PlaceLimitOrder(p *PlaceLimitOrderParams) (*server.PlaceOrderResponse, error) {
+func (c *Client) PlaceLimitOrder(p *PlaceOrderParams) (*server.PlaceOrderResponse, error) {
 	params := &server.PlaceOrderRequest{
 		UserID: p.UserID,
 		Type:   server.LimitOrder,
@@ -76,7 +119,7 @@ func (c *Client) PlaceLimitOrder(p *PlaceLimitOrderParams) (*server.PlaceOrderRe
 	}
 	resp, err := c.Do(req)
 	if err != nil {
-		return nil,fmt.Errorf("error sending request: %v", err)
+		return nil, fmt.Errorf("error sending request: %v", err)
 	}
 	if resp.StatusCode != http.StatusOK {
 		bodyBytes, err := io.ReadAll(resp.Body)
