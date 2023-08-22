@@ -59,9 +59,10 @@ type (
 	}
 
 	Exchange struct {
-		Client     *ethclient.Client
-		Users      map[int64]*User
-		orders     map[int64]int64 // orderID -> userID
+		Client *ethclient.Client
+		Users  map[int64]*User
+		// Orders maps a user to its orders
+		Orders     map[int64][]*orderbook.Order
 		PrivateKey *ecdsa.PrivateKey
 		orderbooks map[Market]*orderbook.Orderbook
 	}
@@ -122,8 +123,9 @@ func StartServer() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("user3 balance: %d\n", user3Balance)	
+	log.Printf("user3 balance: %d\n", user3Balance)
 
+	e.GET("/order/:userID", ex.handleGetOrders)
 	e.GET("/book/:market", ex.handleGetBook)
 	e.POST("/order", ex.handlePlaceOrder)
 	e.DELETE("/order/:id", ex.cancelOrder)
@@ -220,10 +222,42 @@ func NewExchange(privateKey string, client *ethclient.Client) (*Exchange, error)
 	return &Exchange{
 		Client:     client,
 		Users:      make(map[int64]*User),
-		orders:     make(map[int64]int64),
+		Orders:     make(map[int64][]*orderbook.Order),
 		PrivateKey: pk,
 		orderbooks: orderbooks,
 	}, nil
+}
+
+func (ex *Exchange) handleGetOrders(c echo.Context) error {
+	userID, err := strconv.Atoi(c.Param("userID"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]any{"msg": "invalid user id"})
+	}
+
+	orders := ex.Orders[int64(userID)]
+
+	jsonSerializableOrders := make([]*Order, 0)
+	for _, order := range orders {
+		if order.IsFilled() {
+			continue
+		}
+		o := &Order{
+			UserID:    order.UserID,
+			ID:        order.ID,
+			Price:     order.Limit.Price,
+			Size:      order.Size,
+			Bid:       order.Bid,
+			Timestamp: order.Timestamp,
+		}
+		fmt.Printf("%+v\n", o)
+		jsonSerializableOrders = append(jsonSerializableOrders, o)
+	}
+
+	err = c.JSON(http.StatusOK, jsonSerializableOrders)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]any{"msg": err.Error()})
+	}
+	return nil
 }
 
 func (ex *Exchange) handleGetUserBalance(c echo.Context) error {
@@ -259,7 +293,7 @@ func (ex *Exchange) handleGetBook(c echo.Context) error {
 	for _, limit := range ob.Asks() {
 		for _, order := range limit.Orders {
 			o := Order{
-				UserID:   order.UserID,
+				UserID:    order.UserID,
 				ID:        order.ID,
 				Price:     limit.Price,
 				Size:      order.Size,
@@ -273,7 +307,7 @@ func (ex *Exchange) handleGetBook(c echo.Context) error {
 	for _, limit := range ob.Bids() {
 		for _, order := range limit.Orders {
 			o := Order{
-				UserID:   order.UserID,
+				UserID:    order.UserID,
 				ID:        order.ID,
 				Price:     limit.Price,
 				Size:      order.Size,
@@ -286,6 +320,7 @@ func (ex *Exchange) handleGetBook(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, orderbookData)
 }
+
 type PriceResponse struct {
 	Price float64
 }
@@ -303,7 +338,7 @@ func (ex *Exchange) handleGetBestAsk(c echo.Context) error {
 	pr := PriceResponse{
 		Price: bestAsk.Price,
 	}
-	return c.JSON(http.StatusOK, pr) 
+	return c.JSON(http.StatusOK, pr)
 }
 
 func (ex *Exchange) handleGetBestBid(c echo.Context) error {
@@ -319,7 +354,7 @@ func (ex *Exchange) handleGetBestBid(c echo.Context) error {
 	pr := PriceResponse{
 		Price: bestBid.Price,
 	}
-	return c.JSON(http.StatusOK, pr) 
+	return c.JSON(http.StatusOK, pr)
 }
 
 func (ex *Exchange) cancelOrder(c echo.Context) error {
@@ -365,7 +400,7 @@ func (ex *Exchange) handlePlaceMarketOrder(
 	}
 	avgPrice := sumPrice / totalSizeFilled
 	log.Printf("matched orders: %+v\n", matchedOrders[0])
-	log.Printf("filled market order => %d | bid: [%t] | size [%.2f] | avgPrice: [%.2f]\n", order.ID,  order.Bid, totalSizeFilled, avgPrice)
+	log.Printf("filled market order => %d | bid: [%t] | size [%.2f] | avgPrice: [%.2f]\n", order.ID, order.Bid, totalSizeFilled, avgPrice)
 
 	return matches, matchedOrders
 }
@@ -381,15 +416,18 @@ func (ex *Exchange) handlePlaceLimitOrder(
 	}
 	ob := ex.orderbooks[market]
 	ob.PlaceLimitOrder(price, order)
+
+	ex.Orders[order.UserID] = append(ex.Orders[order.UserID], order)
+
 	log.Printf("new LIMIT order => type: [%t] | price [%.2f] | size [%.2f]\n", order.Bid, order.Limit.Price, order.Size)
 
 	return nil
 }
 
-
 type PlaceOrderResponse struct {
 	OrderID int64
 }
+
 func (ex *Exchange) handlePlaceOrder(c echo.Context) error {
 	var placeOrderData PlaceOrderRequest
 	if err := json.NewDecoder(c.Request().Body).Decode(&placeOrderData); err != nil {
@@ -414,7 +452,7 @@ func (ex *Exchange) handlePlaceOrder(c echo.Context) error {
 
 		// return c.JSON(200, map[string]any{"matches": matchedOrders})
 	}
-	
+
 	resp := &PlaceOrderResponse{
 		OrderID: order.ID,
 	}
@@ -466,9 +504,9 @@ func transferETH(client *ethclient.Client, fromPrivKey *ecdsa.PrivateKey, to com
 	if err != nil {
 		return fmt.Errorf("error getting nonce: %v", err)
 	}
-	
+
 	gasLimit := uint64(21000) // in units
-	gasPrice, err :=  client.SuggestGasPrice(ctx)
+	gasPrice, err := client.SuggestGasPrice(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}

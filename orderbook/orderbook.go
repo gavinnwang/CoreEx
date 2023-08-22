@@ -148,6 +148,7 @@ func (l *Limit) fillOrder(a, b *Order) Match {
 		a.Size -= b.Size
 		sizeFilled = b.Size
 		b.Size = 0.0
+		
 	} else {
 		b.Size -= a.Size
 		sizeFilled = a.Size
