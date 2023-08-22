@@ -128,6 +128,9 @@ func StartServer() {
 	e.POST("/order", ex.handlePlaceOrder)
 	e.DELETE("/order/:id", ex.cancelOrder)
 	e.GET("/balance/:id", ex.handleGetUserBalance)
+	e.GET("/book/:market/bid", ex.handleGetBestBid)
+	e.GET("/book/:market/ask", ex.handleGetBestAsk)
+	// e.Get("/book/:market/ask", )
 
 	// // address := common.HexToAddress("0xE19B27EcF741284AE7e3fF5F8aba026266ba25F6")
 
@@ -283,6 +286,41 @@ func (ex *Exchange) handleGetBook(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, orderbookData)
 }
+type PriceResponse struct {
+	Price float64
+}
+
+func (ex *Exchange) handleGetBestAsk(c echo.Context) error {
+	market := Market(c.Param("market"))
+	ob, ok := ex.orderbooks[market]
+	if !ok {
+		return c.JSON(http.StatusBadRequest, map[string]any{"msg": "market not found"})
+	}
+	if len(ob.Asks()) == 0 {
+		return c.JSON(http.StatusBadRequest, map[string]any{"msg": "no asks in orderbook"})
+	}
+	bestAsk := ob.Asks()[0]
+	pr := PriceResponse{
+		Price: bestAsk.Price,
+	}
+	return c.JSON(http.StatusOK, pr) 
+}
+
+func (ex *Exchange) handleGetBestBid(c echo.Context) error {
+	market := Market(c.Param("market"))
+	ob, ok := ex.orderbooks[market]
+	if !ok {
+		return c.JSON(http.StatusBadRequest, map[string]any{"msg": "market not found"})
+	}
+	if len(ob.Bids()) == 0 {
+		return c.JSON(http.StatusBadRequest, map[string]any{"msg": "no bids in orderbook"})
+	}
+	bestBid := ob.Bids()[0]
+	pr := PriceResponse{
+		Price: bestBid.Price,
+	}
+	return c.JSON(http.StatusOK, pr) 
+}
 
 func (ex *Exchange) cancelOrder(c echo.Context) error {
 	idStr := c.Param("id") // fetching param is always string
@@ -323,11 +361,11 @@ func (ex *Exchange) handlePlaceMarketOrder(
 			Price: matches[i].Price,
 		}
 		totalSizeFilled += matches[i].SizeFilled
-		sumPrice += matches[i].Price
+		sumPrice += matches[i].Price * matches[i].SizeFilled
 	}
-	avgPrice := sumPrice / float64(len(matchedOrders))
-	
-	log.Printf("filled market order => %d | type: [%t] | size [%.2f] | avgPrice: [%.2f]\n", order.ID,  order.Bid, totalSizeFilled, avgPrice)
+	avgPrice := sumPrice / totalSizeFilled
+	log.Printf("matched orders: %+v\n", matchedOrders[0])
+	log.Printf("filled market order => %d | bid: [%t] | size [%.2f] | avgPrice: [%.2f]\n", order.ID,  order.Bid, totalSizeFilled, avgPrice)
 
 	return matches, matchedOrders
 }

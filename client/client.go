@@ -30,6 +30,46 @@ func NewClient() *Client {
 	}
 }
 
+func (c *Client) GetBestBid() (float64, error) {
+	e := fmt.Sprintf("%s/book/%s/bid", Endpoint, server.MarketETH)
+	req, err := http.NewRequest(http.MethodGet, e, nil)
+	if err != nil {
+		return 0, fmt.Errorf("error creating request: %v", err)
+	}
+
+	resp, err := c.Do(req)
+	if err != nil {
+		return 0, fmt.Errorf("error sending request: %v", err)
+	}
+
+	priceResp := &server.PriceResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(priceResp); err != nil {
+		return 0, fmt.Errorf("error decoding response: %v", err)
+	}
+
+	return priceResp.Price, nil 
+}
+
+func (c *Client) GetBestAsk() (float64, error) {
+	e := fmt.Sprintf("%s/book/%s/ask", Endpoint, server.MarketETH)
+	req, err := http.NewRequest(http.MethodGet, e, nil)
+	if err != nil {
+		return 0, fmt.Errorf("error creating request: %v", err)
+	}
+
+	resp, err := c.Do(req)
+	if err != nil {
+		return 0, fmt.Errorf("error sending request: %v", err)
+	}
+
+	priceResp := &server.PriceResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(priceResp); err != nil {
+		return 0, fmt.Errorf("error decoding response: %v", err)
+	}
+
+	return priceResp.Price, nil 
+}
+
 func (c *Client) PlaceMarketOrder(p *PlaceOrderParams) (*server.PlaceOrderResponse, error) {
 	params := &server.PlaceOrderRequest{
 		UserID: p.UserID,
@@ -38,7 +78,7 @@ func (c *Client) PlaceMarketOrder(p *PlaceOrderParams) (*server.PlaceOrderRespon
 		Size:   p.Size,
 		Market: server.MarketETH,
 	}
-	
+
 	body, err := json.Marshal(params)
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling params: %w", err)
@@ -53,7 +93,7 @@ func (c *Client) PlaceMarketOrder(p *PlaceOrderParams) (*server.PlaceOrderRespon
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %v", err)
 	}
-	if resp.StatusCode != http.StatusOK { 
+	if resp.StatusCode != http.StatusOK {
 		bodyBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("Error while reading response body with error status code: %v", err)

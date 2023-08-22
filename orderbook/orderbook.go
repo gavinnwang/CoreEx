@@ -165,7 +165,7 @@ func (l *Limit) fillOrder(a, b *Order) Match {
 // the reason why we ahve both maps and slices is because you need to keep the orders sorted and map cannot be easily sorted
 type Orderbook struct {
 	asks []*Limit // non capitalized are private
-	bids []*Limit
+	bids []*Limit // in go you cannot sort maps, to solve this we have this slice which is always sorted
 
 	AskLimits map[float64]*Limit
 	BidLimits map[float64]*Limit
@@ -204,6 +204,9 @@ func (ob *Orderbook) PlaceMarketOrder(o *Order) []Match {
 			if len(limit.Orders) == 0 {
 				ob.clearLimit(false, limit)
 			}
+			if o.IsFilled() {
+				break
+			}
 		}
 	} else {
 		if o.Size > ob.BidTotalVolume() {
@@ -216,6 +219,9 @@ func (ob *Orderbook) PlaceMarketOrder(o *Order) []Match {
 
 			if len(limit.Orders) == 0 {
 				ob.clearLimit(true, limit)
+			}
+			if o.IsFilled() {
+				break
 			}
 		}
 	}
@@ -268,6 +274,10 @@ func (ob *Orderbook) clearLimit(bid bool, l *Limit) {
 			}
 		}
 	}
+
+	fmt.Printf("asks %+v", len(ob.asks))
+
+	fmt.Printf("clearing limit %+v\n", l)
 }
 
 func (ob *Orderbook) CancelOrder(o *Order) {
