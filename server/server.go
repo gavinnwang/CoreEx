@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"sync"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -63,6 +64,7 @@ type (
 		Users  map[int64]*User
 		// Orders maps a user to its orders
 		Orders     map[int64][]*orderbook.Order
+		mu         sync.RWMutex
 		PrivateKey *ecdsa.PrivateKey
 		orderbooks map[Market]*orderbook.Orderbook
 	}
@@ -71,13 +73,6 @@ type (
 		Bid bool
 		ID  int64
 	}
-
-	// MatchedOrder struct {
-	// 	UserID int64
-	// 	ID    int64
-	// 	Price float64
-	// 	Size  float64
-	// }
 
 	User struct {
 		ID         int64
@@ -181,7 +176,9 @@ func (ex *Exchange) handleGetOrders(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]any{"msg": "invalid user id"})
 	}
 
+	ex.mu.RLock()
 	orders := ex.Orders[int64(userID)]
+	ex.mu.RUnlock()
 
 	jsonSerializableOrders := make([]*Order, 0)
 	for _, order := range orders {
@@ -370,7 +367,9 @@ func (ex *Exchange) handlePlaceLimitOrder(
 	ob := ex.orderbooks[market]
 	ob.PlaceLimitOrder(price, order)
 
+	ex.mu.Lock();
 	ex.Orders[order.UserID] = append(ex.Orders[order.UserID], order)
+	ex.mu.Unlock();
 
 	log.Printf("new LIMIT order => type: [%t] | price [%.2f] | size [%.2f]\n", order.Bid, order.Limit.Price, order.Size)
 
@@ -464,7 +463,7 @@ func transferETH(client *ethclient.Client, fromPrivKey *ecdsa.PrivateKey, to com
 		return fmt.Errorf("error opening log file: %v", err)
 	}
 	defer logFile.Close()
-    localLogger := log.New(logFile, "transferETH: ", log.LstdFlags)
+	localLogger := log.New(logFile, "transferETH: ", log.LstdFlags)
 
 	ctx := context.Background()
 	publicKey := fromPrivKey.Public()

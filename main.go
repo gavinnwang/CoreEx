@@ -21,31 +21,6 @@ const (
 	maxOrders = 3
 )
 
-func marketOrderPlacer(c *client.Client) {
-	ticker := time.NewTicker(5 * time.Second)
-	for {
-		<-ticker.C
-		marketSellOrder := &client.PlaceOrderParams{
-			UserID: 3,
-			Bid:    false,
-			Size:   1000,
-		}
-		sellOrderResp, err := c.PlaceMarketOrder(marketSellOrder)
-		if err != nil {
-			log.Println(sellOrderResp.OrderID)
-		}
-		// marketBuyOrder := &client.PlaceOrderParams{
-		// 	UserID: 3,
-		// 	Bid: true,
-		// 	Size: 1000,
-		// }
-		// buyOrderResp, err := c.PlaceMarketOrder(marketBuyOrder)
-		// if err != nil {
-		// 	log.Println(buyOrderResp.OrderID)
-		// }
-	}
-
-}
 func marketMakerSimple(c *client.Client) {
 	ticker := time.NewTicker(5 * time.Second)
 
@@ -105,6 +80,31 @@ func marketMakerSimple(c *client.Client) {
 		fmt.Printf("Best bid: %.2f\n", bestBid)
 
 		<-ticker.C
+	}
+}
+
+func marketOrderPlacer(c *client.Client) {
+	ticker := time.NewTicker(1 * time.Second)
+	for {
+		<-ticker.C
+		marketSellOrder := &client.PlaceOrderParams{
+			UserID: 3,
+			Bid:    false,
+			Size:   230,
+		}
+		sellOrderResp, err := c.PlaceMarketOrder(marketSellOrder)
+		if err != nil {
+			log.Println(sellOrderResp.OrderID)
+		}
+		// marketBuyOrder := &client.PlaceOrderParams{
+		// 	UserID: 3,
+		// 	Bid: true,
+		// 	Size: 1000,
+		// }
+		// buyOrderResp, err := c.PlaceMarketOrder(marketBuyOrder)
+		// if err != nil {
+		// 	log.Println(buyOrderResp.OrderID)
+		// }
 	}
 }
 
