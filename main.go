@@ -1,9 +1,11 @@
 package main
 
 import (
+	"crypto/rand"
 	"fmt"
 	"log"
 	"math"
+	"math/big"
 	"time"
 
 	"github.com/wry0313/crypto-exchange/client"
@@ -11,7 +13,6 @@ import (
 )
 
 var (
-	tick   = 5 * time.Second
 	myAsks = make(map[float64]int64)
 	myBids = make(map[float64]int64)
 )
@@ -21,34 +22,41 @@ const (
 )
 
 func marketOrderPlacer(c *client.Client) {
-	ticker := time.NewTicker(tick)
+	ticker := time.NewTicker(5 * time.Second)
 	for {
+		<-ticker.C
 		marketSellOrder := &client.PlaceOrderParams{
-			UserID: 3, 
-			Bid: false,
-			Size: 1000,
+			UserID: 3,
+			Bid:    false,
+			Size:   1000,
 		}
 		sellOrderResp, err := c.PlaceMarketOrder(marketSellOrder)
 		if err != nil {
 			log.Println(sellOrderResp.OrderID)
 		}
-		marketBuyOrder := &client.PlaceOrderParams{
-			UserID: 3, 
-			Bid: true,
-			Size: 1000,
-		}
-		buyOrderResp, err := c.PlaceMarketOrder(marketBuyOrder)
-		if err != nil {
-			log.Println(buyOrderResp.OrderID)
-		}
-		<-ticker.C
+		// marketBuyOrder := &client.PlaceOrderParams{
+		// 	UserID: 3,
+		// 	Bid: true,
+		// 	Size: 1000,
+		// }
+		// buyOrderResp, err := c.PlaceMarketOrder(marketBuyOrder)
+		// if err != nil {
+		// 	log.Println(buyOrderResp.OrderID)
+		// }
 	}
 
 }
 func marketMakerSimple(c *client.Client) {
-	ticker := time.NewTicker(tick)
+	ticker := time.NewTicker(5 * time.Second)
 
 	for {
+		orders, err := c.GetOrders(1)
+		if err != nil {
+			panic(err)
+		}
+		log.Println("------------------------------")
+		log.Printf("user 1 orders: %v\n", orders)
+		log.Println("------------------------------")
 		bestAsk, err := c.GetBestAsk()
 		if err != nil {
 			log.Println(err)
@@ -59,7 +67,7 @@ func marketMakerSimple(c *client.Client) {
 		}
 
 		spread := math.Abs(bestAsk - bestBid)
-		fmt.Printf("Spread: %.2f\n", spread)
+		log.Printf("Spread: %.2f\n", spread)
 
 		if len(myBids) < 3 {
 			bidLimit := &client.PlaceOrderParams{
@@ -101,29 +109,33 @@ func marketMakerSimple(c *client.Client) {
 }
 
 func seedMarket(c *client.Client) error {
-	ask := &client.PlaceOrderParams{
-		UserID: 1,
-		Bid:    false,
-		Price:  10_000,
-		Size:   10,
-	}
+	ticker := time.NewTicker(2 * time.Second)
+	for {
+		// ask := &client.PlaceOrderParams{
+		// 	UserID: 1,
+		// 	Bid:    false,
+		// 	Price:  10_000,
+		// 	Size:   10,
+		// }
+		randomSize, _ := rand.Int(rand.Reader, big.NewInt(500))
+		randomPrice, _ := rand.Int(rand.Reader, big.NewInt(100))
+		bid := &client.PlaceOrderParams{
+			UserID: 1,
+			Bid:    true,
+			Price:  float64(200 + randomPrice.Int64()),
+			Size:   float64(500 + randomSize.Int64()),
+		}
+		// _, err := c.PlaceLimitOrder(ask);
+		// if err != nil {
+		// 	return err
+		// }
+		_, err := c.PlaceLimitOrder(bid)
+		if err != nil {
+			return err
+		}
 
-	bid := &client.PlaceOrderParams{
-		UserID: 1,
-		Bid:    true,
-		Price:  9_000,
-		Size:   10,
+		<-ticker.C
 	}
-	_, err := c.PlaceLimitOrder(ask)
-	if err != nil {
-		return err
-	}
-	_, err = c.PlaceLimitOrder(bid)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func main() {
@@ -133,11 +145,8 @@ func main() {
 
 	c := client.NewClient()
 
-	if err := seedMarket(c); err != nil {
-		panic(err)
-	}
-
-	go marketMakerSimple(c)
+	go seedMarket(c)
+	// go marketMakerSimple(c)
 	time.Sleep(1 * time.Second)
 	go marketOrderPlacer(c)
 

@@ -148,7 +148,7 @@ func (l *Limit) fillOrder(a, b *Order) Match {
 		a.Size -= b.Size
 		sizeFilled = b.Size
 		b.Size = 0.0
-		
+
 	} else {
 		b.Size -= a.Size
 		sizeFilled = a.Size
@@ -275,10 +275,6 @@ func (ob *Orderbook) clearLimit(bid bool, l *Limit) {
 			}
 		}
 	}
-
-	fmt.Printf("asks %+v", len(ob.asks))
-
-	fmt.Printf("clearing limit %+v\n", l)
 }
 
 func (ob *Orderbook) CancelOrder(o *Order) {

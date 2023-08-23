@@ -70,6 +70,26 @@ func (c *Client) GetBestAsk() (float64, error) {
 	return priceResp.Price, nil 
 }
 
+func (c *Client) GetOrders(userID int64) ([]server.Order, error) {
+	e := fmt.Sprintf("%s/order/%d", Endpoint, userID);
+	req, err := http.NewRequest(http.MethodGet, e, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error sending request: %v", err)
+	}
+
+	orders := []server.Order{}
+	if err := json.NewDecoder(resp.Body).Decode(&orders); err != nil {
+		return nil, fmt.Errorf("error decoding response: %v", err)
+	}
+
+	return orders, nil
+}
+
 func (c *Client) PlaceMarketOrder(p *PlaceOrderParams) (*server.PlaceOrderResponse, error) {
 	params := &server.PlaceOrderRequest{
 		UserID: p.UserID,

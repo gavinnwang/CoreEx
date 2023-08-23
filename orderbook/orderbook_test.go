@@ -20,10 +20,7 @@ func TestLimit(t *testing.T) {
 	l.AddOrder(buyOrderA)
 	l.AddOrder(buyOrderB)
 	l.AddOrder(buyOrderC)
-
 	l.DeleteOrder(buyOrderB)
-
-	fmt.Println(l)
 }
 
 func TestPlaceLimitOrder(t *testing.T) {
