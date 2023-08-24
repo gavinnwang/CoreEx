@@ -3,17 +3,14 @@ package orderbook
 import (
 	"encoding/json"
 	"fmt"
-
-	"time"
-
 	"github.com/shopspring/decimal"
+	"time"
 )
 
 type Order struct {
-	side Side
-	id   string
-
-	accountID     string
+	side      Side
+	id        string
+	accountID string
 	timestamp int64 // unix.nano for bette perforamnce
 	price     decimal.Decimal
 	quantity  decimal.Decimal
