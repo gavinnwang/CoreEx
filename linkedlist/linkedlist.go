@@ -5,52 +5,52 @@ import (
 	"strings"
 )
 
-type List[value any] struct {
-	root *Node[value]
+type List[Value any] struct {
+	root *Node[Value]
 	len  int
 }
 
-type Node[value any] struct {
-	next, prev *Node[value]
-	list       *List[value]
-	Value      value
+type Node[Value any] struct {
+	next, prev *Node[Value]
+	list       *List[Value]
+	Value      Value
 }
 
-func New[value any]() *List[value] { return new(List[value]).init() }
+func New[Value any]() *List[Value] { return new(List[Value]).init() }
 
 // Init is a convient helper function that initializes the sentinel root and len
-func (l *List[value]) init() *List[value] {
-	l.root = &Node[value]{}
+func (l *List[Value]) init() *List[Value] {
+	l.root = &Node[Value]{}
 	l.root.next = l.root
 	l.root.prev = l.root
 	l.len = 0
 	return l
 }
 
-func (n *Node[value]) Next() *Node[value] {
+func (n *Node[Value]) Next() *Node[Value] {
 	if p := n.next; n.list != nil && p != n.list.root {
 		return p
 	}
 	return nil
 }
 
-func (n *Node[value]) Prev() *Node[value] {
+func (n *Node[Value]) Prev() *Node[Value] {
 	if p := n.prev; n.list != nil && p != n.list.root {
 		return p
 	}
 	return nil
 }
 
-func (l *List[value]) Len() int { return l.len }
+func (l *List[Value]) Len() int { return l.len }
 
-func (l *List[value]) Front() *Node[value] {
+func (l *List[Value]) Front() *Node[Value] {
 	if l.len == 0 {
 		return nil
 	}
 	return l.root.next
 }
 
-func (l *List[value]) Back() *Node[value] {
+func (l *List[Value]) Back() *Node[Value] {
 	if l.len == 0 {
 		return nil
 	}
@@ -58,7 +58,7 @@ func (l *List[value]) Back() *Node[value] {
 }
 
 // insert inserts n after at increments l and return n
-func (l *List[value]) insert(n, at *Node[value]) *Node[value] {
+func (l *List[Value]) insert(n, at *Node[Value]) *Node[Value] {
 	n.prev = at
 	n.next = at.next
 	n.prev.next = n
@@ -69,11 +69,11 @@ func (l *List[value]) insert(n, at *Node[value]) *Node[value] {
 }
 
 // insertValue is a wrapper for calling insert
-func (l *List[value]) insertValue(v value, at *Node[value]) *Node[value] {
-	return l.insert(&Node[value]{Value: v}, at)
+func (l *List[Value]) insertValue(v Value, at *Node[Value]) *Node[Value] {
+	return l.insert(&Node[Value]{Value: v}, at)
 }
 
-func (l *List[value]) remove(n *Node[value]) {
+func (l *List[Value]) remove(n *Node[Value]) {
 	n.prev.next = n.next
 	n.next.prev = n.prev
 	n.next = nil // avoid memory leaks
@@ -83,7 +83,7 @@ func (l *List[value]) remove(n *Node[value]) {
 }
 
 // Remove removes n from l if n is an element and returns the value e.Value
-func (l *List[value]) Remove(n *Node[value]) value {
+func (l *List[Value]) Remove(n *Node[Value]) Value {
 	if n.list == l {
 		l.remove(n)
 	}
@@ -91,7 +91,7 @@ func (l *List[value]) Remove(n *Node[value]) value {
 }
 
 // move moves
-func (l *List[value]) move(n, at *Node[value]) {
+func (l *List[Value]) move(n, at *Node[Value]) {
 	if n == at {
 		return
 	}
@@ -104,16 +104,16 @@ func (l *List[value]) move(n, at *Node[value]) {
 	n.next.prev = n
 }
 
-func (l *List[value]) PushFront(v value) *Node[value] {
+func (l *List[Value]) PushFront(v Value) *Node[Value] {
 	return l.insertValue(v, l.root)
 }
 
-func (l *List[value]) PushBack(v value) *Node[value] {
+func (l *List[Value]) PushBack(v Value) *Node[Value] {
 	return l.insertValue(v, l.root.prev)
 }
 
 // String implements the stringer interface to print list
-func (l *List[value]) String() string {
+func (l *List[Value]) String() string {
 	var sb strings.Builder
 	sb.WriteString("[")
 

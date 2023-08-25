@@ -4,7 +4,8 @@ import "golang.org/x/exp/constraints"
 
 type TreeMap[Key, Value any] struct {
 	sentinel   *node[Key, Value]
-	beginNode  *node[Key, Value]
+	minNode    *node[Key, Value]
+	maxNode    *node[Key, Value]
 	count      int
 	keyCompare func(a Key, b Key) bool
 }
@@ -23,16 +24,17 @@ type node[Key, Value any] struct {
 func New[Key constraints.Ordered, Value any]() *TreeMap[Key, Value] {
 	sentinel := &node[Key, Value]{isBlack: true}
 	return &TreeMap[Key, Value]{
-		beginNode:  sentinel,
+		minNode:    sentinel,
+		maxNode:    sentinel,
 		sentinel:   sentinel,
 		keyCompare: defaultKeyCompare[Key],
 	}
 }
 
-func NewWithCustomKeyCompare[Key, Value any](keyCompare func(a, b Key) bool) *TreeMap[Key, Value] {
+func NewWith[Key, Value any](keyCompare func(a, b Key) bool) *TreeMap[Key, Value] {
 	sentinel := &node[Key, Value]{isBlack: true}
 	return &TreeMap[Key, Value]{
-		beginNode:  sentinel,
+		minNode:    sentinel,
 		sentinel:   sentinel,
 		keyCompare: keyCompare,
 	}
@@ -50,6 +52,7 @@ func (t *TreeMap[Key, Value]) Add(key Key, value Value) {
 	parent := t.sentinel
 	current := parent.left
 	less := true
+	// search through the tree until reaches a leaf node that is either bigger or smaller than the insert key
 	for current != nil {
 		parent = current
 		switch {
@@ -75,8 +78,11 @@ func (t *TreeMap[Key, Value]) Add(key Key, value Value) {
 	} else {
 		parent.right = x
 	}
-	if t.beginNode.left != nil {
-		t.beginNode = t.beginNode.left
+	if t.minNode.left != nil {
+		t.minNode = t.minNode.left
+	}
+	if t.maxNode.right != nil {
+		t.maxNode = t.maxNode.right
 	}
 	t.addAndRebalance(x)
 	t.count++
@@ -170,11 +176,18 @@ func (t *TreeMap[Key, Value]) Remove(key Key) bool {
 	if z == nil {
 		return false
 	}
-	if t.beginNode == z {
-		if z.right != nil {
-			t.beginNode = z.right
+	if t.maxNode == z {
+		if z.left != nil {
+			t.maxNode = z.left
 		} else {
-			t.beginNode = z.parent
+			t.maxNode = z.parent
+		}
+	}
+	if t.minNode == z {
+		if z.right != nil {
+			t.minNode = z.right
+		} else {
+			t.minNode = z.parent
 		}
 	}
 	t.count--
@@ -360,6 +373,21 @@ func (t *TreeMap[Key, Value]) Get(key Key) (Value, bool) {
 // Complexity: O(1).
 func (t *TreeMap[Key, Value]) Clear() {
 	t.count = 0
-	t.beginNode = t.sentinel
+	t.minNode = t.sentinel
+	t.maxNode = t.sentinel
 	t.sentinel.left = nil
+}
+
+func (t *TreeMap[Key, Value]) GetMin() (Value, bool) {
+	if t.minNode == t.sentinel {
+		return *new(Value), false
+	}
+	return t.minNode.value, true
+}
+
+func (t *TreeMap[Key, Value]) GetMax() (Value, bool) {
+	if t.maxNode == t.sentinel {
+		return *new(Value), false
+	}
+	return t.maxNode.value, true
 }
