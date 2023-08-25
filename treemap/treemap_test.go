@@ -7,13 +7,13 @@ import (
 )
 
 func Test(t *testing.T) {
-	treemap := NewTreeMap[int, string]()
+	treemap := New[int, string]()
 	treemap.Add(1, "hello")
-	fmt.Printf(treemap.Get(1))	
+	fmt.Printf(treemap.Get(1))
 }
 
 func BenchmarkSeqSet(b *testing.B) {
-	tr := NewTreeMap[int, string]()
+	tr := New[int, string]()
 	NumIterations := 100000
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < NumIterations; j++ {
@@ -25,7 +25,7 @@ func BenchmarkSeqSet(b *testing.B) {
 }
 
 func BenchmarkSeqGet(b *testing.B) {
-	tr := NewTreeMap[int, string]()
+	tr := New[int, string]()
 	NumIterations := 100000
 	for i := 0; i < NumIterations; i++ {
 		tr.Add(i, strconv.Itoa(i))

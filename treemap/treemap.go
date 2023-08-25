@@ -20,7 +20,7 @@ type node[Key, Value any] struct {
 
 // https://go.dev/blog/intro-generics
 // the ordered contraint describes the set of all types that can be ordered or compared with the < operator
-func NewTreeMap[Key constraints.Ordered, Value any]() *TreeMap[Key, Value] {
+func New[Key constraints.Ordered, Value any]() *TreeMap[Key, Value] {
 	sentinel := &node[Key, Value]{isBlack: true}
 	return &TreeMap[Key, Value]{
 		beginNode:  sentinel,
@@ -29,7 +29,7 @@ func NewTreeMap[Key constraints.Ordered, Value any]() *TreeMap[Key, Value] {
 	}
 }
 
-func NewTreeMapWithCustomKeyCompare[Key, Value any](keyCompare func(a, b Key) bool) *TreeMap[Key, Value] {
+func NewWithCustomKeyCompare[Key, Value any](keyCompare func(a, b Key) bool) *TreeMap[Key, Value] {
 	sentinel := &node[Key, Value]{isBlack: true}
 	return &TreeMap[Key, Value]{
 		beginNode:  sentinel,

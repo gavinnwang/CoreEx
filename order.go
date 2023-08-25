@@ -3,8 +3,9 @@ package orderbook
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/shopspring/decimal"
 	"time"
+
+	"github.com/shopspring/decimal"
 )
 
 type Order struct {
@@ -14,7 +15,6 @@ type Order struct {
 	timestamp int64 // unix.nano for bette perforamnce
 	price     decimal.Decimal
 	quantity  decimal.Decimal
-	isMaker   bool
 }
 
 type OrderUpdate struct {
