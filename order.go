@@ -14,7 +14,7 @@ type Order struct {
 	accountID string
 	timestamp int64 // unix.nano for bette perforamnce
 	price     decimal.Decimal
-	quantity  decimal.Decimal
+	volume    decimal.Decimal
 }
 
 type OrderUpdate struct {
@@ -35,9 +35,9 @@ func (o *Order) Side() Side {
 	return o.side
 }
 
-// Quantity returns quantity field copy
-func (o *Order) Quantity() decimal.Decimal {
-	return o.quantity
+// volume returns volume field copy
+func (o *Order) Volume() decimal.Decimal {
+	return o.volume
 }
 
 // Price returns price field copy
@@ -60,7 +60,7 @@ func (o *Order) TimeString() string {
 
 // String implements Stringer interface
 func (o *Order) String() string {
-	return fmt.Sprintf("\n\"%s\":\n\tside: %s\n\tquantity: %s\n\tprice: %s\n\ttime: %s\n", o.ID(), o.Side(), o.Quantity(), o.Price(), o.TimeString())
+	return fmt.Sprintf("\n\"%s\":\n\tside: %s\n\tvolume: %s\n\tprice: %s\n\ttime: %s\n", o.ID(), o.Side(), o.Volume(), o.Price(), o.TimeString())
 }
 
 // MarshalJSON implements json.Marshaler interface
@@ -70,13 +70,13 @@ func (o *Order) MarshalJSON() ([]byte, error) {
 			S         Side            `json:"side"`
 			ID        string          `json:"id"`
 			Timestamp int64           `json:"timestamp"`
-			Quantity  decimal.Decimal `json:"quantity"`
+			Volume    decimal.Decimal `json:"volume"`
 			Price     decimal.Decimal `json:"price"`
 		}{
 			S:         o.Side(),
 			ID:        o.ID(),
 			Timestamp: o.Time(),
-			Quantity:  o.Quantity(),
+			Volume:    o.Volume(),
 			Price:     o.Price(),
 		},
 	)
@@ -88,7 +88,7 @@ func (o *Order) UnmarshalJSON(data []byte) error {
 		S         Side            `json:"side"`
 		ID        string          `json:"id"`
 		Timestamp int64           `json:"timestamp"`
-		Quantity  decimal.Decimal `json:"quantity"`
+		Volume    decimal.Decimal `json:"volume"`
 		Price     decimal.Decimal `json:"price"`
 	}{}
 
@@ -98,7 +98,7 @@ func (o *Order) UnmarshalJSON(data []byte) error {
 	o.side = obj.S
 	o.id = obj.ID
 	o.timestamp = obj.Timestamp
-	o.quantity = obj.Quantity
+	o.volume = obj.Volume
 	o.price = obj.Price
 	return nil
 }
