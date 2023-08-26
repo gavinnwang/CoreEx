@@ -62,7 +62,7 @@ func (oq *OrderQueue) String() string {
 	sb.WriteString(fmt.Sprintf("\nqueue length: %d, price: %s, volume: %s, orders:", oq.Len(), oq.Price(), oq.Volume()))
 	for iter != nil {
 		order := iter.Value
-		str := fmt.Sprintf("\n\tid: %s, volume: %s, time: %s", order.ID(), order.Volume(), order.Price())
+		str := fmt.Sprintf("\n\tid: %s, volume: %s, time: %s", order.OrderID(), order.Volume(), order.Price())
 		sb.WriteString(str)
 		iter = iter.Next()
 	}

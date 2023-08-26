@@ -9,25 +9,28 @@ import (
 )
 
 type Order struct {
-	side      Side
-	id        string
-	accountID string
-	timestamp int64 // unix.nano for bette perforamnce
-	price     decimal.Decimal
-	volume    decimal.Decimal
+	side           Side
+	orderID        string
+	clientID       string
+	timestamp      time.Time
+	orderType      OrderType
+	partialAllowed bool
+	status   OrderStatus 
+	price          decimal.Decimal
+	volume         decimal.Decimal
 }
 
 type OrderUpdate struct {
-	side      Side
-	id        string
-	accountID string
-	size      decimal.Decimal
-	price     decimal.Decimal
+	side     Side
+	orderID  string
+	clientID string
+	size     decimal.Decimal
+	price    decimal.Decimal
 }
 
 // ID returns orderID field copy
-func (o *Order) ID() string {
-	return o.id
+func (o *Order) OrderID() string {
+	return o.orderID
 }
 
 // Side returns side of the order
@@ -46,21 +49,21 @@ func (o *Order) Price() decimal.Decimal {
 }
 
 // Time returns timestamp field copy in Unix
-func (o *Order) Time() int64 {
+func (o *Order) Time() time.Time {
 	return o.timestamp
 }
 
-// Time returns the timestamp field copy in human-readable format
-func (o *Order) TimeString() string {
-	seconds := o.timestamp / 1e9
-	nanos := o.timestamp % 1e9
-	t := time.Unix(seconds, nanos)
-	return t.Format(time.RFC3339)
+func (o *Order) OrderType() OrderType {
+	return o.orderType
+}
+
+func (o *Order) ClientID() string {
+	return o.clientID
 }
 
 // String implements Stringer interface
 func (o *Order) String() string {
-	return fmt.Sprintf("\n\"%s\":\n\tside: %s\n\tvolume: %s\n\tprice: %s\n\ttime: %s\n", o.ID(), o.Side(), o.Volume(), o.Price(), o.TimeString())
+	return fmt.Sprintf("\n\"%s\":\n\tside: %s\n\ttype: %s\n\tvolume: %s\n\tprice: %s\n\ttime: %s\n", o.OrderID(), o.Side(), o.OrderType(), o.Volume(), o.Price(), o.Time())
 }
 
 // MarshalJSON implements json.Marshaler interface
@@ -68,13 +71,13 @@ func (o *Order) MarshalJSON() ([]byte, error) {
 	return json.Marshal(
 		&struct {
 			S         Side            `json:"side"`
-			ID        string          `json:"id"`
-			Timestamp int64           `json:"timestamp"`
+			OrderID   string          `json:"orderID"`
+			Timestamp time.Time       `json:"timestamp"`
 			Volume    decimal.Decimal `json:"volume"`
 			Price     decimal.Decimal `json:"price"`
 		}{
 			S:         o.Side(),
-			ID:        o.ID(),
+			OrderID:   o.OrderID(),
 			Timestamp: o.Time(),
 			Volume:    o.Volume(),
 			Price:     o.Price(),
@@ -86,8 +89,8 @@ func (o *Order) MarshalJSON() ([]byte, error) {
 func (o *Order) UnmarshalJSON(data []byte) error {
 	obj := struct {
 		S         Side            `json:"side"`
-		ID        string          `json:"id"`
-		Timestamp int64           `json:"timestamp"`
+		OrderID   string          `json:"orderID"`
+		Timestamp time.Time       `json:"timestamp"`
 		Volume    decimal.Decimal `json:"volume"`
 		Price     decimal.Decimal `json:"price"`
 	}{}
@@ -96,7 +99,7 @@ func (o *Order) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	o.side = obj.S
-	o.id = obj.ID
+	o.orderID = obj.OrderID
 	o.timestamp = obj.Timestamp
 	o.volume = obj.Volume
 	o.price = obj.Price
