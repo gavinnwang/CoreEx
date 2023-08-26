@@ -8,6 +8,7 @@ const (
 	Open
 	Cancelled
 	Filled
+	PartiallyFilled
 )
 
 // String implements fmt.Stringer interface
@@ -23,6 +24,8 @@ func (os OrderStatus) String() string {
 		return "Cancelled"
 	case Filled:
 		return "Filled"
+	case PartiallyFilled:
+		return "PartiallyFilled"
 	default:
 		return "Unknown"
 	}

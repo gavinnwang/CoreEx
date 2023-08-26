@@ -11,10 +11,9 @@ type OrderSide struct {
 	// a sorted treemap with price being keys and order queues as values
 	priceTree  *treemap.TreeMap[decimal.Decimal, *OrderQueue]
 	priceTable map[string]*OrderQueue
-
-	volume    decimal.Decimal
-	depth     int
-	numOrders int
+	volume     decimal.Decimal
+	depth      int
+	numOrders  int
 }
 
 func keyComparator(a, b decimal.Decimal) bool {
@@ -23,9 +22,12 @@ func keyComparator(a, b decimal.Decimal) bool {
 
 func NewOrderSide() *OrderSide {
 	return &OrderSide{
-		priceTree:  treemap.NewWith[decimal.Decimal, *OrderQueue](keyComparator),
-		priceTable: map[string]*OrderQueue{},
-		volume:     decimal.Zero,
+		priceTree:    treemap.NewWith[decimal.Decimal, *OrderQueue](keyComparator),
+		priceTable:   map[string]*OrderQueue{},
+		marketOrders: list.New[*Order](),
+		volume:       decimal.Zero,
+		depth:        0,
+		numOrders:    0,
 	}
 }
 
@@ -77,13 +79,13 @@ func (os *OrderSide) Remove(n *list.Node[*Order]) *Order {
 }
 
 // MaxPriceQueue returns maximal level of price
-func (os *OrderSide) MaxPriceQueue() *OrderQueue {
+func (os *OrderSide) MaxPriceQueue() (*OrderQueue, bool) {
 	if os.depth > 0 {
 		if value, found := os.priceTree.GetMax(); found {
-			return value
+			return value, true
 		}
 	}
-	return nil
+	return nil, false
 }
 
 // MinPriceQueue returns minimal level of price
