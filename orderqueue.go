@@ -12,6 +12,8 @@ import (
 type OrderQueue struct {
 	volume decimal.Decimal
 	price  decimal.Decimal
+	// limitAndStopOrders *list.List[*Order]
+	// marketOrders *list.List[*Order]
 	orders *list.List[*Order]
 }
 
@@ -20,7 +22,6 @@ func NewOrderQueue(price decimal.Decimal) *OrderQueue {
 	return &OrderQueue{
 		price:  price,
 		volume: decimal.Zero,
-		orders: list.New[*Order](),
 	}
 }
 

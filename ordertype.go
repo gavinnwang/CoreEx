@@ -5,6 +5,7 @@ type OrderType int
 const (
 	Limit = iota
 	Market
+	Stop
 )
 
 // String implements fmt.Stringer interface

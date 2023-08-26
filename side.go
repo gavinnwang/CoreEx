@@ -9,13 +9,13 @@ type Side int
 
 const (
 	Ask Side = iota
-	Bid
+	Buy
 )
 
 // String implements fmt.Stringer interface
 func (s Side) String() string {
-	if s == Bid {
-		return "bid"
+	if s == Buy {
+		return "buy"
 	}
 	return "ask"
 }
@@ -29,7 +29,7 @@ func (s Side) MarshalJSON() ([]byte, error) {
 func (s *Side) UnmarshalJSON(data []byte) error {
 	switch string(data) {
 	case `"buy"`:
-		*s = Bid
+		*s = Buy
 	case `"sell"`:
 		*s = Ask
 	default:

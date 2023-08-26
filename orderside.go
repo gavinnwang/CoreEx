@@ -46,7 +46,7 @@ func (os *OrderSide) Append(o *Order) {
 	priceStr := price.String()
 
 	priceQueue, ok := os.priceTable[priceStr]
-	// if priceQueue at price level doesn't exit
+	// if priceQueue at price level doesn't exit, create a new order queue at that order level
 	if !ok {
 		priceQueue = NewOrderQueue(o.Price())
 		os.priceTable[priceStr] = priceQueue
@@ -87,11 +87,11 @@ func (os *OrderSide) MaxPriceQueue() *OrderQueue {
 }
 
 // MinPriceQueue returns minimal level of price
-func (os *OrderSide) MinPriceQueue() *OrderQueue {
+func (os *OrderSide) MinPriceQueue() (*OrderQueue, bool) {
 	if os.depth > 0 {
 		if value, found := os.priceTree.GetMin(); found {
-			return value
+			return value, true
 		}
 	}
-	return nil
+	return nil, false
 }
