@@ -22,12 +22,11 @@ func keyComparator(a, b decimal.Decimal) bool {
 
 func NewOrderSide() *OrderSide {
 	return &OrderSide{
-		priceTree:    treemap.NewWith[decimal.Decimal, *OrderQueue](keyComparator),
-		priceTable:   map[string]*OrderQueue{},
-		marketOrders: list.New[*Order](),
-		volume:       decimal.Zero,
-		depth:        0,
-		numOrders:    0,
+		priceTree:  treemap.NewWith[decimal.Decimal, *OrderQueue](keyComparator),
+		priceTable: map[string]*OrderQueue{},
+		volume:     decimal.Zero,
+		depth:      0,
+		numOrders:  0,
 	}
 }
 

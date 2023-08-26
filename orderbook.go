@@ -23,28 +23,37 @@ func NewOrderBook() *OrderBook {
 	}
 }
 
-func (ob *OrderBook) FillMarketOrder(side Side, clientID uuid.UUID, volume decimal.Decimal) {
-  if volume.Sign() <= 0 {
-    return 
-  }
+func (ob *OrderBook) FillMarketOrder(side Side, clientID uuid.UUID, volume decimal.Decimal) error {
+	if volume.Sign() <= 0 {
+		return ErrInvalidVolume
+	}
 	// create the order and add it to all orders
 	o := NewOrder(side, clientID, Market, decimal.Zero, volume, true)
 	ob.orders[o.OrderID()] = o
 	// fill the order by taking the best limit orders of the opposite Side
-	var oq *OrderQueue
-	var ok bool
+	var (
+		os   *OrderSide
+		iter func() (*OrderQueue, bool)
+	)
 	if side == Buy {
-		oq, ok = ob.asks.MinPriceQueue()
+		iter = ob.asks.MinPriceQueue
+		os = ob.asks
 	} else {
-		oq, ok = ob.asks.MaxPriceQueue()
+		iter = ob.bids.MaxPriceQueue
+		os = ob.bids
 	}
 
-	if !ok {
+	if os.Len() == 0 {
 		ob.marketOrders.PushBack(o)
-    return 
+		o.status = Received
+		return nil
 	}
 
-  for volume.Sign() > 0 && 
+	for volume.Sign() > 0 && os.Len() > 0 {
+		oq, _ := iter()
+		volume = ob.matchAtPriceLevel(oq, o)
+	}
+	return nil
 }
 
 func (ob *OrderBook) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft decimal.Decimal) {
@@ -67,4 +76,25 @@ func (ob *OrderBook) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft dec
 		}
 	}
 	return
+}
+
+func (ob *OrderBook) FillLimitOrder(side Side, clientID uuid.UUID, volume, price decimal.Decimal) error {
+	if volume.Sign() <= 0 {
+		return ErrInvalidVolume
+	}
+
+	if price.Sign() <= 0 {
+		return ErrInvalidPrice
+	}
+
+	o := NewOrder(side, clientID, Limit, price, volume, true)
+	ob.orders[o.OrderID()] = o
+
+	if side == Buy {
+		ob.bids.Append(o)
+	} else {
+		ob.asks.Append(o)
+	}
+
+	return nil
 }
