@@ -8,12 +8,11 @@ import (
 )
 
 type OrderSide struct {
-	// a sorted treemap with price being keys and order queues as values
-	priceTree  *treemap.TreeMap[decimal.Decimal, *OrderQueue]
-	priceTable map[string]*OrderQueue
-	volume     decimal.Decimal
-	depth      int
-	numOrders  int
+	priceTree  *treemap.TreeMap[decimal.Decimal, *OrderQueue] // price -> *OrderQueue, sorted by price
+	priceTable map[string]*OrderQueue                         // price -> *OrderQueue for quick lookup
+	volume     decimal.Decimal                                // total volume of all orders
+	depth      int                                            // number of price levels
+	numOrders  int                                            // number of orders
 }
 
 func keyComparator(a, b decimal.Decimal) bool {

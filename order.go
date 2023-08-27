@@ -48,7 +48,21 @@ func (o *Order) OrderID() uuid.UUID {
 	return o.orderID
 }
 
-// Side returns side of the order
+// shortOrderID returns first 4 characters of orderID (for debugging purposes)
+func (o *Order) shortOrderID() string {
+	return o.orderID.String()[:4]
+}
+
+func (o *Order) Logs() *OrderLogs {
+	return o.logs
+}
+
+// Status returns status field copy
+func (o *Order) Status() OrderStatus {
+	return o.status
+}
+
+// Side returns side field copy
 func (o *Order) Side() Side {
 	return o.side
 }
@@ -95,7 +109,7 @@ func (o *Order) AppendLog(logMsg string) {
 
 // String implements Stringer interface
 func (o *Order) String() string {
-	return fmt.Sprintf("\n\"%s\":\n\tside: %s\n\ttype: %s\n\tvolume: %s\n\tprice: %s\n\ttime: %s\n", o.OrderID(), o.Side(), o.OrderType(), o.Volume(), o.Price(), o.CreatedAt())
+	return fmt.Sprintf("\norder %s:\n\tside: %s\n\ttype: %s\n\tvolume: %s\n\tprice: %s\n\ttime: %s\n", o.shortOrderID(), o.Side(), o.OrderType(), o.Volume(), o.Price(), o.CreatedAt())
 }
 
 // // MarshalJSON implements json.Marshaler interface

@@ -8,16 +8,16 @@ import (
 type Side int
 
 const (
-	Ask Side = iota
+	Sell Side = iota
 	Buy
 )
 
 // String implements fmt.Stringer interface
 func (s Side) String() string {
 	if s == Buy {
-		return "buy"
+		return "Buy"
 	}
-	return "ask"
+	return "Sell"
 }
 
 // MarshalJSON implements json.Marshaler interface
@@ -31,7 +31,7 @@ func (s *Side) UnmarshalJSON(data []byte) error {
 	case `"buy"`:
 		*s = Buy
 	case `"sell"`:
-		*s = Ask
+		*s = Sell
 	default:
 		return &json.UnsupportedValueError{
 			Value: reflect.New(reflect.TypeOf(data)),

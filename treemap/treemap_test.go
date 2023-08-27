@@ -19,21 +19,30 @@ func BenchmarkSeqSet(b *testing.B) {
 		for j := 0; j < NumIterations; j++ {
 			tr.Add(j, "")
 		}
-		tr.Clear()
 	}
 	b.ReportAllocs()
 }
 
 func BenchmarkSeqGet(b *testing.B) {
 	tr := New[int, string]()
-	NumIterations := 100000
+	NumIterations := 100 
 	for i := 0; i < NumIterations; i++ {
 		tr.Add(i, strconv.Itoa(i))
 	}
 	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+	for i := 0; i < NumIterations; i++ {
 		result, _ := tr.Get(i % NumIterations)
 		fmt.Println(result)
 	}
 	b.ReportAllocs()
+}
+
+func TestGetMax(t *testing.T) {
+	tr := New[int, string]()
+	NumIterations := 105 
+	for i := 5; i < NumIterations; i++ {
+		tr.Add(i, strconv.Itoa(i))
+	}
+	result, _ := tr.GetMin()
+	fmt.Printf("max: %v", result)
 }

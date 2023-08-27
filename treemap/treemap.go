@@ -35,6 +35,7 @@ func NewWith[Key, Value any](keyCompare func(a, b Key) bool) *TreeMap[Key, Value
 	sentinel := &node[Key, Value]{isBlack: true}
 	return &TreeMap[Key, Value]{
 		minNode:    sentinel,
+		maxNode:    sentinel,
 		sentinel:   sentinel,
 		keyCompare: keyCompare,
 	}
@@ -80,6 +81,9 @@ func (t *TreeMap[Key, Value]) Add(key Key, value Value) {
 	}
 	if t.minNode.left != nil {
 		t.minNode = t.minNode.left
+	}
+	if t.maxNode == t.sentinel {
+		t.maxNode = t.sentinel.left
 	}
 	if t.maxNode.right != nil {
 		t.maxNode = t.maxNode.right
