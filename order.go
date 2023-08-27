@@ -90,14 +90,14 @@ func (o *Order) ClientID() uuid.UUID {
 	return o.clientID
 }
 
-func (o *Order) partiallyFillOrder(remaining decimal.Decimal) {
+func (o *Order) setStatusToPartiallyFilled(remaining decimal.Decimal) {
 	o.volume = remaining
 	o.status = PartiallyFilled
 	logMsg := fmt.Sprintf("Order partially filled. Remaining volume: %s", remaining)
 	o.AppendLog(logMsg)
 }
 
-func (o *Order) fillOrder() {
+func (o *Order) setStatusToFilled() {
 	o.volume = decimal.Zero
 	o.status = Filled
 	o.AppendLog("Order fully filled.")

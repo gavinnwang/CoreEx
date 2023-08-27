@@ -16,7 +16,7 @@ type LogService struct {
 }
 
 func InitializeLogService(filename string) error {
-	file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0666)
 	if err != nil {
 		return fmt.Errorf("failed to open log file: %v", err)
 	}

@@ -1,6 +1,7 @@
 package orderbook
 
 import (
+	"fmt"
 	list "github/wry-0313/exchange/linkedlist"
 	"github/wry-0313/exchange/treemap"
 
@@ -41,7 +42,7 @@ func (os *OrderSide) Volume() decimal.Decimal {
 	return os.volume
 }
 
-func (os *OrderSide) Append(o *Order) {
+func (os *OrderSide) Append(o *Order) *list.Node[*Order]  {
 	price := o.Price()
 	priceStr := price.String()
 
@@ -55,9 +56,10 @@ func (os *OrderSide) Append(o *Order) {
 	}
 	os.numOrders++
 	os.volume = os.volume.Add(o.Volume())
-	priceQueue.Append(o)
+	return priceQueue.Append(o)
 }
 
+// Time Complexity: O(1) if don't remove price queue O(N) otherwise
 func (os *OrderSide) Remove(n *list.Node[*Order]) *Order {
 	price := n.Value.Price()
 	priceStr := price.String()
@@ -73,6 +75,7 @@ func (os *OrderSide) Remove(n *list.Node[*Order]) *Order {
 
 	os.numOrders--
 	os.volume = os.volume.Sub(o.Volume())
+	Log(fmt.Sprintf("OrderSide volume after remove: %s", os.volume))
 	return o
 }
 

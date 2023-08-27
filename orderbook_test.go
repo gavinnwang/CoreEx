@@ -2,6 +2,7 @@ package orderbook
 
 import (
 	"fmt"
+	"reflect"
 	"sync"
 	"testing"
 	"time"
@@ -43,7 +44,7 @@ func TestPlaceMarketOrderAfterLimitConcurrent(t *testing.T) {
 	go func() {
 		fmt.Println("start1")
 		defer wg.Done()
-		for i:=0;i<10;i++ {
+		for i := 0; i < 10; i++ {
 			ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
 		}
 	}()
@@ -51,7 +52,7 @@ func TestPlaceMarketOrderAfterLimitConcurrent(t *testing.T) {
 	go func() {
 		fmt.Println("start1.5")
 		defer wg.Done()
-		for i:=0;i<5;i++ {
+		for i := 0; i < 5; i++ {
 			ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
 		}
 	}()
@@ -59,24 +60,34 @@ func TestPlaceMarketOrderAfterLimitConcurrent(t *testing.T) {
 	go func() {
 		fmt.Println("start2")
 		defer wg.Done()
-		for i:=0;i<51;i++ {
+		for i := 0; i < 51; i++ {
 			ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(1))
 		}
 	}()
 	wg.Wait()
 	fmt.Printf("max: %v\n", max)
-	fmt.Printf("order: %v\n", ob.orders[orderID].logs)
+	fmt.Printf("order: %v\n", ob.activeOrders[orderID].Value.logs)
 	fmt.Printf("orderside volume %v\n", ob.bids.volume)
 }
 
-func TestMarketOrderPartialFill(t *testing.T){
+func TestMarketOrderPartialFill(t *testing.T) {
 	ob := NewOrderBook()
 	clientID := uuid.New()
-	orderID, err := ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10000), decimal.NewFromInt(10))
+	_, err := ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
 	if err != nil {
 		t.Error(err)
 	}
 	ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(15))
-	fmt.Printf("order: %v\n", ob.orders[orderID].logs)
-	fmt.Printf("orderside volume %v\n", ob.bids.volume)
+	// Log(fmt.Sprintf("order side volume %v\n", ob.asks.volume))
+	// Log(fmt.Sprintf("order queue volume %v\n", oq.volume))
+	assert(t, ob.asks.volume.String(), "5")
+	assert(t, ob.bids.volume.String(), "0")
+	depth := ob.asks.depth
+	assert(t, depth, 0)
+}
+
+func assert(t *testing.T, a, b any) {
+	if !reflect.DeepEqual(a, b) {
+		t.Errorf("%+v != %+v", a, b)
+	}
 }

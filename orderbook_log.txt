@@ -1,76 +1,23 @@
-ORDERBOOK 2023/08/27 18:21:25 orderbook_logservice.go:34: created limit order: 
-order d625bf49-9636-4582-a16a-755e19e27abd:
-	side: buy
-	type: Limit
-	volume: 10000
-	price: 10
-	time: 2023-08-27 18:21:25.573 +0800 CST m=+0.001662126
-
-ORDERBOOK 2023/08/27 18:29:19 orderbook_logservice.go:34: Created limit order: 
-order b733:
+ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: Created limit order: 
+order 3360:
 	side: Buy
 	type: Limit
-	volume: 10000
+	volume: 10
 	price: 10
-	time: 2023-08-27 18:29:19.114603 +0800 CST m=+0.001141543
+	time: 2023-08-27 22:59:16.727172 +0800 CST m=+0.001024917
 
-ORDERBOOK 2023/08/27 18:29:19 orderbook_logservice.go:34: Created market order: 
-order 6a8c:
+ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: Created market order: 
+order 2699:
 	side: Sell
 	type: Market
 	volume: 15
 	price: 0
-	time: 2023-08-27 18:29:19.115031 +0800 CST m=+0.001569293
+	time: 2023-08-27 22:59:16.727364 +0800 CST m=+0.001217417
 
-ORDERBOOK 2023/08/27 18:29:19 orderbook_logservice.go:34: Matching 6a8c at price level 10
-ORDERBOOK 2023/08/27 18:29:35 orderbook_logservice.go:34: Created limit order: 
-order 64c9:
-	side: Buy
-	type: Limit
-	volume: 10000
-	price: 10
-	time: 2023-08-27 18:29:35.642441 +0800 CST m=+0.001346126
+ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: Matching 2699 at price level 10
+ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: Matching 2699 with 3360
+ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: 2699: 15 -> 0 | 3360: 10 -> 5
+ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: OrderSide volume after remove: 0
+ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: The order is not fully filled, add it to the market order list: 2699
+ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: order side volume 5
 
-ORDERBOOK 2023/08/27 18:29:35 orderbook_logservice.go:34: Created market order: 
-order 5ae4:
-	side: Sell
-	type: Market
-	volume: 15
-	price: 0
-	time: 2023-08-27 18:29:35.642737 +0800 CST m=+0.001641626
-
-ORDERBOOK 2023/08/27 18:29:35 orderbook_logservice.go:34: Matching 5ae4 at price level 10
-ORDERBOOK 2023/08/27 18:29:36 orderbook_logservice.go:34: Created limit order: 
-order 993e:
-	side: Buy
-	type: Limit
-	volume: 10000
-	price: 10
-	time: 2023-08-27 18:29:36.646986 +0800 CST m=+0.000966959
-
-ORDERBOOK 2023/08/27 18:29:36 orderbook_logservice.go:34: Created market order: 
-order d4da:
-	side: Sell
-	type: Market
-	volume: 15
-	price: 0
-	time: 2023-08-27 18:29:36.647176 +0800 CST m=+0.001156334
-
-ORDERBOOK 2023/08/27 18:29:36 orderbook_logservice.go:34: Matching d4da at price level 10
-ORDERBOOK 2023/08/27 18:29:37 orderbook_logservice.go:34: Created limit order: 
-order 1e2e:
-	side: Buy
-	type: Limit
-	volume: 10000
-	price: 10
-	time: 2023-08-27 18:29:37.523959 +0800 CST m=+0.001140085
-
-ORDERBOOK 2023/08/27 18:29:37 orderbook_logservice.go:34: Created market order: 
-order 3e18:
-	side: Sell
-	type: Market
-	volume: 15
-	price: 0
-	time: 2023-08-27 18:29:37.524204 +0800 CST m=+0.001385668
-
-ORDERBOOK 2023/08/27 18:29:37 orderbook_logservice.go:34: Matching 3e18 at price level 10

@@ -12,7 +12,7 @@ import (
 )
 
 type OrderBook struct {
-	orders           map[uuid.UUID]*Order // orderID -> *Order for quick lookup
+	activeOrders     map[uuid.UUID]*list.Node[*Order] // orderID -> *Order for quick acctions such as update or cancel
 	ordersMu         sync.RWMutex
 	marketPrice      decimal.Decimal
 	marketPriceMu    sync.RWMutex
@@ -28,7 +28,7 @@ func NewOrderBook() *OrderBook {
 		log.Fatalf("Could not initialize log service: %v", err)
 	}
 	return &OrderBook{
-		orders:           map[uuid.UUID]*Order{},
+		activeOrders:     map[uuid.UUID]*list.Node[*Order]{},
 		bids:             NewOrderSide(),
 		asks:             NewOrderSide(),
 		marketBuyOrders:  list.New[*Order](),
@@ -43,27 +43,23 @@ func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume deci
 	}
 	// create the order and add it to all orders
 	o := NewOrder(side, clientID, Market, decimal.Zero, volume, true)
-	ob.addMarketOrder(o)
 	Log(fmt.Sprintf("Created market order: %v", o))
 	// fill the order by taking the best limit orders of the opposite Side
 	var (
-		os           *OrderSide
-		iter         func() (*OrderQueue, bool)
-		marketOrders *list.List[*Order]
+		os   *OrderSide
+		iter func() (*OrderQueue, bool)
 	)
 	if side == Buy {
 		iter = ob.asks.MinPriceQueue
 		os = ob.asks
-		marketOrders = ob.marketBuyOrders
 	} else {
 		iter = ob.bids.MaxPriceQueue
 		os = ob.bids
-		marketOrders = ob.marketSellOrders
 	}
 
 	if os.Len() == 0 {
 		// no limit orders in the opposite side, add the order to the market order list
-		marketOrders.PushBack(o)
+		ob.addMarketOrder(o)
 		Log(fmt.Sprintf("No limit orders in the opposite side, add the order to the market order list: %s", o.OrderID()))
 		return o.orderID, nil
 	}
@@ -78,32 +74,69 @@ func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume deci
 	if volumeLeft.Sign() > 0 {
 		// the order is not fully filled, add it to the market order list
 		Log(fmt.Sprintf("The order is not fully filled, add it to the market order list: %s", o.shortOrderID()))
-		marketOrders.PushBack(o)
+		ob.addMarketOrder(o)
 	}
 	return o.orderID, nil
 }
 
 func (ob *OrderBook) matchAtPriceLevel(os *OrderSide, oq *OrderQueue, o *Order) (volumeLeft decimal.Decimal) {
 	volumeLeft = o.Volume()
+
 	Log(fmt.Sprintf("Matching %s at price level %s", o.shortOrderID(), oq.Price()))
+
 	for oq.Len() > 0 && volumeLeft.Sign() > 0 { // while the price level have more limit orders and the order is not fully filled
+
 		bestOrderNode := oq.Head()
 		bestOrder := oq.Head().Value
+
+		Log(fmt.Sprintf("Matching %s with %s", o.shortOrderID(), bestOrder.shortOrderID()))
+
 		if volumeLeft.LessThan(bestOrder.Volume()) { // the best order will be partially filled
+
+			// we need to update the order status of the best order
+			// and we need to update the order status of the order
+
+			// call a method from orderside and let it abstract away the details
+
+			Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s", o.shortOrderID(), o.Volume(), o.Volume().Sub(volumeLeft), bestOrder.shortOrderID(), bestOrder.Volume(), bestOrder.Volume().Sub(volumeLeft)))
+
 			matchedVolumeLeft := bestOrder.Volume().Sub(volumeLeft) // update order status. This change should reflect in order queue
 			oq.volume = oq.volume.Sub(volumeLeft)
 			os.volume = os.volume.Sub(volumeLeft)
-			bestOrder.partiallyFillOrder(matchedVolumeLeft)
-			o.fillOrder()
+			bestOrder.setStatusToPartiallyFilled(matchedVolumeLeft)
+			o.setStatusToFilled()
+
 			volumeLeft = decimal.Zero
-		} else {
+			// Log(fmt.Sprintf("%s is partially filled and %s is completely filled", bestOrder.shortOrderID(), o.shortOrderID()))
+		} else { // the best order will be completely filled
 			volumeLeft = volumeLeft.Sub(bestOrder.Volume())
-			o.partiallyFillOrder(volumeLeft)
-			bestOrder.fillOrder()
-			oq.Remove(bestOrderNode)
+			// oq.volume = oq.volume.Sub(bestOrder.Volume())
+			// os.volume = os.volume.Sub(bestOrder.Volume())
+			// os.numOrders--
+			Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s", o.shortOrderID(), o.Volume(), decimal.Zero, bestOrder.shortOrderID(), bestOrder.Volume(), bestOrder.Volume().Sub(volumeLeft)))
+			// bestOrder.fillOrder()
+			// oq.Remove(bestOrderNode)
+			ob.fillAndRemoveOrder(bestOrderNode)
+			// Log(fmt.Sprintf("%s is partially filled and remaining volume is %s", o.shortOrderID(), volumeLeft))
+			o.setStatusToPartiallyFilled(volumeLeft)
 		}
 	}
 	return
+}
+
+// fillOrder
+func (ob *OrderBook) fillAndRemoveOrder(n *list.Node[*Order]) *Order {
+	o := n.Value
+
+	delete(ob.activeOrders, o.OrderID())
+
+	if o.Side() == Buy {
+		ob.bids.Remove(n)
+	} else {
+		return ob.asks.Remove(n)
+	}
+	o.setStatusToFilled()
+	return o
 }
 
 func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, price decimal.Decimal) (orderID uuid.UUID, err error) {
@@ -118,25 +151,27 @@ func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, pric
 	o := NewOrder(side, clientID, Limit, price, volume, true)
 	Log(fmt.Sprintf("Created limit order: %v", o))
 	ob.addLimitOrder(o)
-
 	return o.orderID, nil
 }
 
 func (ob *OrderBook) addMarketOrder(o *Order) {
-	ob.ordersMu.Lock()
-	ob.orders[o.OrderID()] = o
-	ob.ordersMu.Unlock()
+	if o.Side() == Buy {
+		ob.marketBuyOrders.PushBack(o)
+		ob.bids.volume = ob.bids.volume.Add(o.Volume())
+	} else {
+		ob.marketSellOrders.PushBack(o)
+		ob.asks.volume = ob.asks.volume.Add(o.Volume())
+	}
 }
 
 func (ob *OrderBook) addLimitOrder(o *Order) {
 	ob.ordersMu.Lock()
-	ob.orders[o.OrderID()] = o
-	ob.ordersMu.Unlock()
+	defer ob.ordersMu.Unlock()
 
 	if o.Side() == Buy {
-		ob.bids.Append(o)
+		ob.activeOrders[o.OrderID()] = ob.bids.Append(o)
 	} else {
-		ob.asks.Append(o)
+		ob.activeOrders[o.OrderID()] = ob.asks.Append(o)
 	}
 }
 
@@ -151,5 +186,5 @@ func (ob *OrderBook) SetMarketPrice(price decimal.Decimal) {
 	ob.marketPrice = price
 	ob.marketPriceMu.Unlock()
 
-	 // release the stop orders that are triggered by the new market price
+	// release the stop orders that are triggered by the new market price
 }

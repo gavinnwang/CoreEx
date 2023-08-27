@@ -73,6 +73,7 @@ func (l *List[Value]) insertValue(v Value, at *Node[Value]) *Node[Value] {
 	return l.insert(&Node[Value]{Value: v}, at)
 }
 
+// Time complexity: O(1)
 func (l *List[Value]) remove(n *Node[Value]) {
 	n.prev.next = n.next
 	n.next.prev = n.prev
