@@ -82,8 +82,106 @@ func TestMarketOrderPartialFill(t *testing.T) {
 	// Log(fmt.Sprintf("order queue volume %v\n", oq.volume))
 	assert(t, ob.asks.volume.String(), "5")
 	assert(t, ob.bids.volume.String(), "0")
-	depth := ob.asks.depth
-	assert(t, depth, 0)
+	assert(t, ob.asks.depth, 0)
+}
+
+func TestMarketOrderVolumeAndDepth(t *testing.T) {
+	ob := NewOrderBook()
+	clientID := uuid.New()
+	_, err := ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(15))
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(5))
+	if err != nil {
+		t.Error(err)
+	}
+
+	// Log(fmt.Sprintf("order side volume %v\n", ob.asks.volume))
+	// Log(fmt.Sprintf("order queue volume %v\n", oq.volume))
+	assert(t, ob.asks.volume.String(), "20")
+	assert(t, ob.bids.volume.String(), "0")
+	assert(t, ob.asks.depth, 0)
+	_, err = ob.PlaceLimitOrder(Sell, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
+	if err != nil {
+		t.Error(err)
+	}
+	// Log(fmt.Sprintf("order side volume %v\n", ob.asks.volume))
+	assert(t, ob.bids.volume.String(), "0")
+	assert(t, ob.asks.volume.String(), "30")
+	assert(t, ob.asks.depth, 1)
+	_, err = ob.PlaceLimitOrder(Sell, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
+	if err != nil {
+		t.Error(err)
+	}
+	// Log(fmt.Sprintf("order side volume %v\n", ob.asks.volume))
+	assert(t, ob.bids.volume.String(), "0")
+	assert(t, ob.asks.volume.String(), "40")
+	assert(t, ob.asks.depth, 1)
+	_, err = ob.PlaceLimitOrder(Sell, clientID, decimal.NewFromInt(15), decimal.NewFromInt(9))
+	if err != nil {
+		t.Error(err)
+	}
+	// Log(fmt.Sprintf("order side volume %v\n", ob.asks.volume))
+	assert(t, ob.bids.volume.String(), "0")
+	assert(t, ob.asks.volume.String(), "55")
+	assert(t, ob.asks.depth, 2)
+	assert(t, ob.asks.priceTree.Len(), 2)
+	assert(t, ob.bids.depth, 0)
+}
+
+func TestLimitOrderFilling(t *testing.T) {
+	ob := NewOrderBook()
+	clientID := uuid.New()
+	_, err := ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(15))
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, ob.asks.volume.String(), "15")
+	assert(t, ob.bids.volume.String(), "0")
+	assert(t, ob.asks.depth, 0)
+	_, err = ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(5), decimal.NewFromInt(10))
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, ob.asks.volume.String(), "10")
+	assert(t, ob.bids.volume.String(), "0")
+	assert(t, ob.asks.depth, 0)
+
+	_, err = ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(5), decimal.NewFromInt(20))
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, ob.asks.volume.String(), "5")
+	assert(t, ob.bids.volume.String(), "0")
+	assert(t, ob.asks.depth, 0)
+
+	_, err = ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(6), decimal.NewFromInt(30))
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, ob.asks.volume.String(), "0")
+	assert(t, ob.bids.volume.String(), "1")
+	assert(t, ob.asks.depth, 0)
+	assert(t, ob.bids.depth, 1)
+
+	_, err = ob.PlaceLimitOrder(Sell, clientID, decimal.NewFromInt(2), decimal.NewFromInt(50))
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, ob.asks.volume.String(), "2")
+	assert(t, ob.bids.volume.String(), "1")
+	assert(t, ob.asks.depth, 1)
+	assert(t, ob.bids.depth, 1)	
+
+	_, err = ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(51))
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, ob.asks.volume.String(), "0")
+	assert(t, ob.bids.volume.String(), "9")
+	assert(t, ob.asks.depth, 0)
+	assert(t, ob.bids.depth, 2)			
 }
 
 func assert(t *testing.T, a, b any) {

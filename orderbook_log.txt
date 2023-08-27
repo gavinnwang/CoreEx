@@ -1,23 +1,62 @@
-ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: Created limit order: 
-order 3360:
-	side: Buy
-	type: Limit
-	volume: 10
-	price: 10
-	time: 2023-08-27 22:59:16.727172 +0800 CST m=+0.001024917
-
-ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: Created market order: 
-order 2699:
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: Created market order: 
+order 5401:
 	side: Sell
 	type: Market
 	volume: 15
 	price: 0
-	time: 2023-08-27 22:59:16.727364 +0800 CST m=+0.001217417
+	time: 2023-08-28 02:34:05.532095 +0800 CST m=+0.002136667
 
-ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: Matching 2699 at price level 10
-ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: Matching 2699 with 3360
-ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: 2699: 15 -> 0 | 3360: 10 -> 5
-ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: OrderSide volume after remove: 0
-ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: The order is not fully filled, add it to the market order list: 2699
-ORDERBOOK 2023/08/27 22:59:16 orderbook_logservice.go:34: order side volume 5
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: 5401
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: Created limit order: 
+order 240e:
+	side: Buy
+	type: Limit
+	volume: 5
+	price: 10
+	time: 2023-08-28 02:34:05.532308 +0800 CST m=+0.002349042
 
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: Limit order matching with market order: 240e
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: 240e: 5 -> 0 | 5401: 15 -> 10
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: Created limit order: 
+order 0b60:
+	side: Buy
+	type: Limit
+	volume: 5
+	price: 20
+	time: 2023-08-28 02:34:05.532331 +0800 CST m=+0.002372001
+
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: Limit order matching with market order: 0b60
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: 0b60: 5 -> 0 | 5401: 10 -> 5
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: Created limit order: 
+order 80c4:
+	side: Buy
+	type: Limit
+	volume: 6
+	price: 30
+	time: 2023-08-28 02:34:05.532349 +0800 CST m=+0.002390501
+
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: Limit order matching with market order: 80c4
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: 80c4: 6 -> 1 | 5401: 5 -> 0
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: 80c4
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: Created limit order: 
+order e53f:
+	side: Sell
+	type: Limit
+	volume: 2
+	price: 50
+	time: 2023-08-28 02:34:05.532373 +0800 CST m=+0.002414292
+
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: The order is not fully filled or matched in price range, add it: e53f
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: Created limit order: 
+order 3519:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 51
+	time: 2023-08-28 02:34:05.53239 +0800 CST m=+0.002431792
+
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: Matching 3519 at price level 50
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: Matching 3519 with e53f
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: 3519: 10 -> 8 | e53f: 2 -> 0
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: OrderSide volume after remove: 0
+ORDERBOOK 2023/08/28 02:34:05 orderbook_logservice.go:34: The order is not fully filled or matched in price range, add it: 3519
