@@ -26,6 +26,8 @@ type OrderBook struct {
 
 	asks *OrderSide // limit sell orders
 	bids *OrderSide // limit buy orders
+
+	sortedOrdersMu sync.RWMutex
 }
 
 func NewOrderBook() *OrderBook {
@@ -72,6 +74,7 @@ func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume deci
 
 	var volumeLeft = o.Volume()
 
+	ob.sortedOrdersMu.Lock()
 	for volumeLeft.Sign() > 0 && os.Len() > 0 { // while the order is not fully filled and the opposite side has more limit orders
 		Log(fmt.Sprint("gonna call iter"))
 		oq, found := iter()
@@ -84,6 +87,7 @@ func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume deci
 		Log(fmt.Sprintf("os string: %v, oq: %v  volumeleft: %s\n", os, oq, volumeLeft))
 		volumeLeft = ob.matchAtPriceLevel(oq, o)
 	}
+	ob.sortedOrdersMu.Unlock()
 
 	if volumeLeft.Sign() > 0 {
 		// the order is not fully filled, add it to the market order list
@@ -99,6 +103,8 @@ func (ob *OrderBook) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft dec
 	volumeLeft = o.Volume()
 
 	Log(fmt.Sprintf("Matching %s at price level %s\n", o.shortOrderID(), oq.Price()))
+
+	ob.SetMarketPrice(oq.Price())
 
 	oq.priceLevelAccessMu.Lock()
 	defer oq.priceLevelAccessMu.Unlock()
@@ -256,11 +262,13 @@ func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, pric
 		os = ob.bids
 	}
 
+	ob.sortedOrdersMu.Lock()
 	bestPrice, ok := iter()
 
 	if !ok {
 		Log(fmt.Sprintf("No limit orders in the opposite side, initialize order: %s", o.shortOrderID()))
 		ob.addLimitOrder(o)
+		ob.sortedOrdersMu.Unlock()
 		return o.orderID, nil
 	}
 
@@ -268,6 +276,8 @@ func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, pric
 		bestPrice, _ := iter() // we don't dont have to check ok because we already checked it in the for loop condition with checking orderside size
 		volumeLeft = ob.matchAtPriceLevel(bestPrice, o)
 	}
+
+	ob.sortedOrdersMu.Unlock()
 
 	if volumeLeft.Sign() > 0 {
 		// the order is not fully filled or didn't find a match in price range, add it to the market order list
@@ -318,6 +328,7 @@ func (ob *OrderBook) SetMarketPrice(price decimal.Decimal) {
 	ob.marketPriceMu.Lock()
 	ob.marketPrice = price
 	ob.marketPriceMu.Unlock()
+	fmt.Println("market price: ", ob.marketPrice)
 
 	// release the stop orders that are triggered by the new market price
 }

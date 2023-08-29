@@ -8,3 +8,5 @@ require (
 	github.com/shopspring/decimal v1.3.1
 	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63
 )
+
+require github.com/emirpasic/gods v1.18.1 // indirect

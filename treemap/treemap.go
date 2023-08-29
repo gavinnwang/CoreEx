@@ -53,7 +53,7 @@ func defaultKeyCompare[Key constraints.Ordered](a, b Key) bool {
 
 // Time complexity: O(log N).
 // Sets the value and overrides if the key already exists
-func (t *TreeMap[Key, Value]) Add(key Key, value Value) {
+func (t *TreeMap[Key, Value]) Put(key Key, value Value) {
 	parent := t.sentinel
 	current := parent.left
 	less := true

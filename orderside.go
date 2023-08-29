@@ -3,7 +3,9 @@ package orderbook
 import (
 	"fmt"
 	list "github/wry-0313/exchange/linkedlist"
-	"github/wry-0313/exchange/treemap"
+	// "github/wry-0313/exchange/treemap"
+	rbtx "github.com/emirpasic/gods/examples/redblacktreeextended"
+	rbt "github.com/emirpasic/gods/trees/redblacktree"
 	"strings"
 	"sync"
 
@@ -11,10 +13,9 @@ import (
 )
 
 type OrderSide struct {
-	priceTree    *treemap.TreeMap[decimal.Decimal, *OrderQueue] // price -> *OrderQueue, sorted by price
-	priceTreeMu  sync.RWMutex                                   // protect priceTree
+	priceTree    *rbtx.RedBlackTreeExtended // price -> *OrderQueue, sorted by price
 	priceTable   map[string]*OrderQueue                         // price -> *OrderQueue for quick lookup
-	priceTableMu sync.RWMutex                                   // protect priceTable
+
 	
 	volume       decimal.Decimal                                // total volume of all orders
 	volumeMu     sync.RWMutex                                   // protect volume
@@ -30,12 +31,18 @@ func keyComparator(a, b decimal.Decimal) bool {
 
 func NewOrderSide() *OrderSide {
 	return &OrderSide{
-		priceTree:  treemap.NewWith[decimal.Decimal, *OrderQueue](keyComparator),
+		priceTree: &rbtx.RedBlackTreeExtended{
+			Tree: rbt.NewWith(rbtComparator),
+		},
 		priceTable: map[string]*OrderQueue{},
 		volume:     decimal.Zero,
 		depth:      0,
 		numOrders:  0,
 	}
+}
+
+func rbtComparator(a, b interface{}) int {
+	return a.(decimal.Decimal).Cmp(b.(decimal.Decimal))
 }
 
 func (os *OrderSide) Len() int {
@@ -54,21 +61,21 @@ func (os *OrderSide) Append(o *Order) *list.Node[*Order] {
 	price := o.Price()
 	priceStr := price.String()
 
-	os.priceTreeMu.Lock()
-	defer os.priceTreeMu.Unlock()
+	// os.priceTreeMu.Lock()
+	// defer os.priceTreeMu.Unlock()
 
-	os.priceTableMu.RLock()
+	// os.priceTableMu.RLock()
 	priceQueue, ok := os.priceTable[priceStr]
-	os.priceTableMu.RUnlock()
+	// os.priceTableMu.RUnlock()
 	// if priceQueue at price level doesn't exit, create a new order queue at that order level
 	if !ok {
 		priceQueue = NewOrderQueue(o.Price())
-		os.priceTableMu.Lock()
+		// os.priceTableMu.Lock()
 		os.priceTable[priceStr] = priceQueue
-		os.priceTableMu.Unlock()
+		// os.priceTableMu.Unlock()
 
 
-		os.priceTree.Add(price, priceQueue)
+		os.priceTree.Put(price, priceQueue)
 
 
 		os.depthMu.Lock()
@@ -89,30 +96,30 @@ func (os *OrderSide) Remove(n *list.Node[*Order]) *Order {
 	priceStr := price.String()
 
 
-	os.priceTableMu.RLock()
+	// os.priceTableMu.RLock()
 	priceQueue, found := os.priceTable[priceStr]
 	if !found {
 		Log(fmt.Sprintf("already removed: %s\n", priceQueue))
 		return n.Value
 	}
-	os.priceTableMu.RUnlock()
+	// os.priceTableMu.RUnlock()
 
-	os.priceTreeMu.Lock()
-	defer os.priceTreeMu.Unlock()
+	// os.priceTreeMu.Lock()
+	// defer os.priceTreeMu.Unlock()
 
 	o := priceQueue.Remove(n)
 
 	if priceQueue.Len() == 0 {
 		Log(fmt.Sprintf("Remove price queue at price level %s", priceStr))
-		os.priceTableMu.Lock()
+		// os.priceTableMu.Lock()
 		delete(os.priceTable, priceStr)
-		os.priceTableMu.Unlock()
+		// os.priceTableMu.Unlock()
 	
-		removed := os.priceTree.Remove(price)
-		if !removed {
-			Log(fmt.Sprintf("Error: price level not removed from tree at price level %s", priceStr))
-			panic("price level not removed from tree")
-		}
+		os.priceTree.Remove(price)
+		// if !removed {
+		// 	Log(fmt.Sprintf("Error: price level not removed from tree at price level %s", priceStr))
+		// 	panic("price level not removed from tree")
+		// }
 
 		Log(fmt.Sprintf("price level removed from tree at price level %s", priceStr))
 	
@@ -135,38 +142,38 @@ func (os *OrderSide) Remove(n *list.Node[*Order]) *Order {
 // MaxPriceQueue returns maximal level of price
 func (os *OrderSide) MaxPriceQueue() (*OrderQueue, bool) {
 	if os.Depth() > 0 {
-	os.priceTreeMu.Lock()
+	// os.priceTreeMu.Lock()
 
 		if oq, found := os.priceTree.GetMax(); found {
-			if oq.Len() == 0 {
+			if oq.(*OrderQueue).Len() == 0 {
 				Log(fmt.Sprintf("Error: MaxPriceQueue: price queue is empty: %s\n", oq))
 				Log(fmt.Sprintf("erro: os: %s\n", os))
 				max, _ := os.priceTree.GetMax()
-				Log(max.String())
+				Log(max.(*OrderQueue).String())
 				panic("MaxPriceQueue: price queue is empty")
 			}
-			os.priceTreeMu.Unlock()
-			return oq, true
+			// os.priceTreeMu.Unlock()
+			return oq.(*OrderQueue), true
 		}
 	}
-	os.priceTreeMu.Unlock()
+	// os.priceTreeMu.Unlock()
 	return nil, false
 }
 
 // MinPriceQueue returns minimal level of price
 func (os *OrderSide) MinPriceQueue() (*OrderQueue, bool) {
 	if os.Depth() > 0 {
-	os.priceTreeMu.RLock()
-	defer os.priceTreeMu.RUnlock()
+	// os.priceTreeMu.RLock()
+	// defer os.priceTreeMu.RUnlock()
 		if oq, found := os.priceTree.GetMin(); found {
-			if oq.Len()== 0 {
+			if oq.(*OrderQueue).Len()== 0 {
 				Log(fmt.Sprintf("Error: MinPriceQueue: price queue is empty: %s\n", oq))
 				Log(fmt.Sprintf("erro: os: %s\n", os))
 				min, _ := os.priceTree.GetMin()
-				Log(min.String())
+				Log(min.(*OrderQueue).String())
 				panic("Min PriceQueue: price queue is empty")
 			}
-			return oq, true
+			return oq.(*OrderQueue), true
 		}
 	}
 	return nil, false
@@ -184,12 +191,36 @@ func (os *OrderSide) Volume() decimal.Decimal {
 	return os.volume
 }
 
+// LessThan returns nearest OrderQueue with price less than given
+func (os *OrderSide) LessThan(price decimal.Decimal) *OrderQueue {
+	tree := os.priceTree.Tree
+	node := tree.Root
+
+	var floor *rbt.Node
+	for node != nil {
+		if tree.Comparator(price, node.Key) > 0 {
+			floor = node
+			node = node.Right
+		} else {
+			node = node.Left
+		}
+	}
+
+	if floor != nil {
+		return floor.Value.(*OrderQueue)
+	}
+
+	return nil
+}
+
 func (os *OrderSide) String() string {
 	sb := strings.Builder{}
-	// os.priceTreeMu.RLock()
-	// defer os.priceTreeMu.RUnlock()
-	for it := os.priceTree.Iterator(); it.Valid(); it.Next() {
-		sb.WriteString(fmt.Sprintf("\n\tprice: %s, queue: %s", it.Key(), it.Value()))
+
+	level, _ := os.MaxPriceQueue()
+	for level != nil {
+		sb.WriteString(fmt.Sprintf("\n%s -> %s", level.Price(), level.Volume()))
+		level = os.LessThan(level.Price())
 	}
+
 	return sb.String()
 }

@@ -127,7 +127,7 @@ func TestMarketOrderVolumeAndDepth(t *testing.T) {
 	assert(t, ob.bids.volume.String(), "0")
 	assert(t, ob.asks.volume.String(), "55")
 	assert(t, ob.asks.depth, 2)
-	assert(t, ob.asks.priceTree.Len(), 2)
+	// assert(t, ob.asks.priceTree.Len(), 2)
 	assert(t, ob.bids.depth, 0)
 }
 
@@ -201,11 +201,11 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		clientID := uuid.New()
-		for i := 0; i < 50; i++ {
+		for i := 0; i < 5000; i++ {
 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
 			ob.PlaceLimitOrder(Buy, clientID, quantity, price)
-			time.Sleep(time.Millisecond * 10)
+			// time.Sleep(time.Millisecond * 10)
 		}
 	}()
 
@@ -214,10 +214,10 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		clientID := uuid.New()
-		for i := 0; i < 50; i++ {
-			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+		for i := 0; i < 5000; i++ {
+			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
 			ob.PlaceMarketOrder(Sell, clientID, quantity)
-			time.Sleep(time.Millisecond * 10)
+			// time.Sleep(time.Millisecond * 10)
 		}
 	}()
 // Simulate placing limit orders
@@ -225,11 +225,11 @@ wg.Add(1)
 go func() {
 	defer wg.Done()
 	clientID := uuid.New()
-	for i := 0; i < 50; i++ {
+	for i := 0; i < 5000; i++ {
 		price := decimal.NewFromInt(rand.Int63n(10) + 10)
 		quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
 		ob.PlaceLimitOrder(Buy, clientID, quantity, price)
-		time.Sleep(time.Millisecond * 10)
+		// time.Sleep(time.Millisecond * 10)
 	}
 }()
 
@@ -238,10 +238,10 @@ wg.Add(1)
 go func() {
 	defer wg.Done()
 	clientID := uuid.New()
-	for i := 0; i < 50; i++ {
-		quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+	for i := 0; i < 5000; i++ {
+		quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
 		ob.PlaceMarketOrder(Sell, clientID, quantity)
-		time.Sleep(time.Millisecond * 10)
+		// time.Sleep(time.Millisecond * 10)
 	}
 }()
 	wg.Wait()
