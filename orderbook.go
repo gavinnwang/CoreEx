@@ -264,6 +264,7 @@ func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, pric
 
 	ob.sortedOrdersMu.Lock()
 	bestPrice, ok := iter()
+	
 
 	if !ok {
 		Log(fmt.Sprintf("No limit orders in the opposite side, initialize order: %s", o.shortOrderID()))
@@ -272,18 +273,21 @@ func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, pric
 		return o.orderID, nil
 	}
 
+
+
 	for volumeLeft.Sign() > 0 && os.Len() > 0 && comparator(bestPrice.Price()) {
 		bestPrice, _ := iter() // we don't dont have to check ok because we already checked it in the for loop condition with checking orderside size
 		volumeLeft = ob.matchAtPriceLevel(bestPrice, o)
 	}
 
-	ob.sortedOrdersMu.Unlock()
+
 
 	if volumeLeft.Sign() > 0 {
 		// the order is not fully filled or didn't find a match in price range, add it to the market order list
 		Log(fmt.Sprintf("The order is not fully filled or matched in price range, add it: %s", o.shortOrderID()))
 		ob.addLimitOrder(o)
 	}
+	ob.sortedOrdersMu.Unlock()
 
 	// o := NewOrder(side, clientID, Limit, price, volume, true)
 	// Log(fmt.Sprintf("Created limit order: %v", o))
@@ -308,13 +312,25 @@ func (ob *OrderBook) addMarketOrder(o *Order) {
 }
 
 func (ob *OrderBook) addLimitOrder(o *Order) {
-	ob.ordersMu.Lock()
-	defer ob.ordersMu.Unlock()
+	
+	// defer ob.ordersMu.Unlock()
 
 	if o.Side() == Buy {
-		ob.activeOrders[o.OrderID()] = ob.bids.Append(o)
+		// ob.sortedOrdersMu.Lock()
+		n := ob.bids.Append(o)
+
+		// ob.sortedOrdersMu.Unlock()
+		ob.ordersMu.Lock()
+
+		ob.activeOrders[o.OrderID()] = n
+		ob.ordersMu.Unlock()
 	} else {
-		ob.activeOrders[o.OrderID()] = ob.asks.Append(o)
+		// ob.sortedOrdersMu.Lock()
+		n := ob.asks.Append(o)
+		// ob.sortedOrdersMu.Unlock()
+		ob.ordersMu.Lock()
+		ob.activeOrders[o.OrderID()] = n
+		ob.ordersMu.Unlock()
 	}
 }
 
@@ -328,7 +344,7 @@ func (ob *OrderBook) SetMarketPrice(price decimal.Decimal) {
 	ob.marketPriceMu.Lock()
 	ob.marketPrice = price
 	ob.marketPriceMu.Unlock()
-	fmt.Println("market price: ", ob.marketPrice)
+	// fmt.Println("market price: ", ob.marketPrice)
 
 	// release the stop orders that are triggered by the new market price
 }

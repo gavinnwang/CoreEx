@@ -87,7 +87,7 @@ func (oq *OrderQueue) Remove(n *list.Node[*Order]) *Order {
 func (oq *OrderQueue) String() string {
 	sb := strings.Builder{}
 	// iter := oq.orders.Front()
-	sb.WriteString(fmt.Sprintf("\nqueue: length: %d, price: %s, volume: %s, orders:", oq.Len(), oq.Price(), oq.Volume()))
+	sb.WriteString(fmt.Sprintf("\nqueue: length: %d, price: %s, volume: %s", oq.Len(), oq.Price(), oq.Volume()))
 	// for iter != nil {
 	// 	order := iter.Value
 	// 	str := fmt.Sprintf("\n\tid: %s, volume: %s, price: %s", order.OrderID(), order.Volume(), order.Price())

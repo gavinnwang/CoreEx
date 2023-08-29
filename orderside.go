@@ -15,7 +15,8 @@ import (
 type OrderSide struct {
 	priceTree    *rbtx.RedBlackTreeExtended // price -> *OrderQueue, sorted by price
 	priceTable   map[string]*OrderQueue                         // price -> *OrderQueue for quick lookup
-
+	// priceTreeMu  sync.Mutex                                     // protect priceTree
+	// priceTableMu sync.RWMutex                                   // protect priceTable
 	
 	volume       decimal.Decimal                                // total volume of all orders
 	volumeMu     sync.RWMutex                                   // protect volume
@@ -145,9 +146,10 @@ func (os *OrderSide) MaxPriceQueue() (*OrderQueue, bool) {
 	// os.priceTreeMu.Lock()
 
 		if oq, found := os.priceTree.GetMax(); found {
+			Log(fmt.Sprintf("maxqueu len: %d\n", oq.(*OrderQueue).Len()))
 			if oq.(*OrderQueue).Len() == 0 {
 				Log(fmt.Sprintf("Error: MaxPriceQueue: price queue is empty: %s\n", oq))
-				Log(fmt.Sprintf("erro: os: %s\n", os))
+				Log(fmt.Sprintf("max price error: os: %s\n", os))
 				max, _ := os.priceTree.GetMax()
 				Log(max.(*OrderQueue).String())
 				panic("MaxPriceQueue: price queue is empty")
@@ -166,12 +168,14 @@ func (os *OrderSide) MinPriceQueue() (*OrderQueue, bool) {
 	// os.priceTreeMu.RLock()
 	// defer os.priceTreeMu.RUnlock()
 		if oq, found := os.priceTree.GetMin(); found {
+			Log(fmt.Sprintf("MinPriceQueue len: %d\n", oq.(*OrderQueue).Len()))
 			if oq.(*OrderQueue).Len()== 0 {
 				Log(fmt.Sprintf("Error: MinPriceQueue: price queue is empty: %s\n", oq))
-				Log(fmt.Sprintf("erro: os: %s\n", os))
+				Log(fmt.Sprintf("min price error: os: %s\n", os))
 				min, _ := os.priceTree.GetMin()
 				Log(min.(*OrderQueue).String())
 				panic("Min PriceQueue: price queue is empty")
+
 			}
 			return oq.(*OrderQueue), true
 		}
