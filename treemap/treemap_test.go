@@ -25,7 +25,7 @@ func BenchmarkSeqSet(b *testing.B) {
 
 func BenchmarkSeqGet(b *testing.B) {
 	tr := New[int, string]()
-	NumIterations := 100 
+	NumIterations := 100
 	for i := 0; i < NumIterations; i++ {
 		tr.Add(i, strconv.Itoa(i))
 	}
@@ -39,10 +39,28 @@ func BenchmarkSeqGet(b *testing.B) {
 
 func TestGetMax(t *testing.T) {
 	tr := New[int, string]()
-	NumIterations := 105 
-	for i := 5; i < NumIterations; i++ {
-		tr.Add(i, strconv.Itoa(i))
+	tr.Add(1, "1")
+	tr.Add(2, "2")
+	max, found := tr.GetMax()
+	if !found {
+		t.Error("max not found")
 	}
-	result, _ := tr.GetMin()
-	fmt.Printf("max: %v", result)
+	fmt.Printf("max: %v\n", max)
+	tr.Clear()
+	max, found = tr.GetMax()
+	if !found {
+		fmt.Println("max not found")
+	}
+	fmt.Printf("max: %v\n", max)
+	tr.Add(1, "1")
+	tr.Remove(1)
+	tr.Add(4, "4")
+	tr.Add(2, "2")
+	max, found = tr.GetMax()
+	if !found {
+		fmt.Println("max not found")
+	}
+	fmt.Printf("max: %v\n", max)
+	
+
 }

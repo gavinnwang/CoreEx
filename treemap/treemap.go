@@ -84,8 +84,7 @@ func (t *TreeMap[Key, Value]) Add(key Key, value Value) {
 	}
 	if t.maxNode == t.sentinel {
 		t.maxNode = t.sentinel.left
-	}
-	if t.maxNode.right != nil {
+	} else if t.maxNode.right != nil {
 		t.maxNode = t.maxNode.right
 	}
 	t.addAndRebalance(x)
@@ -394,4 +393,33 @@ func (t *TreeMap[Key, Value]) GetMax() (Value, bool) {
 		return *new(Value), false
 	}
 	return t.maxNode.value, true
+}
+
+type ForwardIterator[Key, Value any] struct {
+	tree *TreeMap[Key, Value]
+	node *node[Key, Value]
+}
+
+func (i ForwardIterator[Key, Value]) Key() Key { return i.node.key }
+
+func (i ForwardIterator[Key, Value]) Value() Value { return i.node.value }
+
+// Iterator returns an iterator for tree map.
+// It starts at the first element and goes to the one-past-the-end position.
+// You can iterate a map at O(N) complexity.
+
+// Method complexity: O(1)
+func (t *TreeMap[Key, Value]) Iterator() ForwardIterator[Key, Value] {
+	return ForwardIterator[Key, Value]{tree: t, node: t.minNode}
+}
+
+// Valid reports if the iterator position is valid.
+// In other words it returns true if an iterator is not at the one-before-the-start position.
+func (i ForwardIterator[Key, Value]) Valid() bool { return i.node != i.tree.sentinel }
+
+func (i *ForwardIterator[Key, Value]) Next() {
+	if i.node == i.tree.sentinel {
+		panic("out of bound iteration")
+	}
+	i.node = successor(i.node)
 }

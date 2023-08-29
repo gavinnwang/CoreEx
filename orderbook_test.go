@@ -2,6 +2,7 @@ package orderbook
 
 import (
 	"fmt"
+	"math/rand"
 	"reflect"
 	"sync"
 	"testing"
@@ -188,4 +189,63 @@ func assert(t *testing.T, a, b any) {
 	if !reflect.DeepEqual(a, b) {
 		t.Errorf("%+v != %+v", a, b)
 	}
+}
+
+
+func TestSimulateStockMarketFluctuations(t *testing.T) {
+	ob := NewOrderBook()
+	var wg sync.WaitGroup
+
+	// Simulate placing limit orders
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := uuid.New()
+		for i := 0; i < 50; i++ {
+			price := decimal.NewFromInt(rand.Int63n(10) + 10)
+			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+			ob.PlaceLimitOrder(Buy, clientID, quantity, price)
+			time.Sleep(time.Millisecond * 10)
+		}
+	}()
+
+	// Simulate placing market orders
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := uuid.New()
+		for i := 0; i < 50; i++ {
+			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+			ob.PlaceMarketOrder(Sell, clientID, quantity)
+			time.Sleep(time.Millisecond * 10)
+		}
+	}()
+// Simulate placing limit orders
+wg.Add(1)
+go func() {
+	defer wg.Done()
+	clientID := uuid.New()
+	for i := 0; i < 50; i++ {
+		price := decimal.NewFromInt(rand.Int63n(10) + 10)
+		quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+		ob.PlaceLimitOrder(Buy, clientID, quantity, price)
+		time.Sleep(time.Millisecond * 10)
+	}
+}()
+
+// Simulate placing market orders
+wg.Add(1)
+go func() {
+	defer wg.Done()
+	clientID := uuid.New()
+	for i := 0; i < 50; i++ {
+		quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+		ob.PlaceMarketOrder(Sell, clientID, quantity)
+		time.Sleep(time.Millisecond * 10)
+	}
+}()
+	wg.Wait()
+
+	// Validate the state of the order book
+	// Add your validation logic here
 }

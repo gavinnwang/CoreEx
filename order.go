@@ -4,6 +4,7 @@ import (
 	// "encoding/json"
 	// "log"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/google/uuid"
@@ -20,6 +21,7 @@ type Order struct {
 	logs      *OrderLogs
 	price     decimal.Decimal
 	volume    decimal.Decimal
+	volumeMu  sync.RWMutex
 }
 
 func NewOrder(side Side, clientID uuid.UUID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order {
@@ -69,6 +71,8 @@ func (o *Order) Side() Side {
 
 // volume returns volume field copy
 func (o *Order) Volume() decimal.Decimal {
+	o.volumeMu.RLock()
+	defer o.volumeMu.RUnlock()
 	return o.volume
 }
 
@@ -91,14 +95,18 @@ func (o *Order) ClientID() uuid.UUID {
 }
 
 func (o *Order) setStatusToPartiallyFilled(remaining decimal.Decimal) {
+	o.volumeMu.Lock()
 	o.volume = remaining
+	o.volumeMu.Unlock()
 	o.status = PartiallyFilled
 	logMsg := fmt.Sprintf("Order partially filled. Remaining volume: %s", remaining)
 	o.AppendLog(logMsg)
 }
 
 func (o *Order) setStatusToFilled() {
+	o.volumeMu.Lock()
 	o.volume = decimal.Zero
+	o.volumeMu.Unlock()
 	o.status = Filled
 	o.AppendLog("Order fully filled.")
 }
