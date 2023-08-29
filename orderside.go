@@ -13,17 +13,17 @@ import (
 )
 
 type OrderSide struct {
-	priceTree    *rbtx.RedBlackTreeExtended // price -> *OrderQueue, sorted by price
-	priceTable   map[string]*OrderQueue                         // price -> *OrderQueue for quick lookup
-	// priceTreeMu  sync.Mutex                                     // protect priceTree
-	// priceTableMu sync.RWMutex                                   // protect priceTable
+	priceTree   *rbtx.RedBlackTreeExtended // price -> *OrderQueue, sorted by price
+	priceTable  map[string]*OrderQueue     // price -> *OrderQueue for quick lookup
+
+	volume      decimal.Decimal            // total volume of all orders
+	volumeMu    sync.RWMutex               // protect volume
+
+	depth       int                        // number of active price levels
+	depthMu     sync.RWMutex               // protect depth
 	
-	volume       decimal.Decimal                                // total volume of all orders
-	volumeMu     sync.RWMutex                                   // protect volume
-	depth        int                                            // number of active price levels
-	depthMu      sync.RWMutex                                   // protect depth
-	numOrders    int                                            // number of orders
-	numOrdersMu  sync.RWMutex                                   // protect numOrders
+	numOrders   int                        // number of orders
+	numOrdersMu sync.RWMutex               // protect numOrders
 }
 
 func keyComparator(a, b decimal.Decimal) bool {
@@ -75,9 +75,7 @@ func (os *OrderSide) Append(o *Order) *list.Node[*Order] {
 		os.priceTable[priceStr] = priceQueue
 		// os.priceTableMu.Unlock()
 
-
 		os.priceTree.Put(price, priceQueue)
-
 
 		os.depthMu.Lock()
 		os.depth++
@@ -95,7 +93,6 @@ func (os *OrderSide) Append(o *Order) *list.Node[*Order] {
 func (os *OrderSide) Remove(n *list.Node[*Order]) *Order {
 	price := n.Value.Price()
 	priceStr := price.String()
-
 
 	// os.priceTableMu.RLock()
 	priceQueue, found := os.priceTable[priceStr]
@@ -115,7 +112,7 @@ func (os *OrderSide) Remove(n *list.Node[*Order]) *Order {
 		// os.priceTableMu.Lock()
 		delete(os.priceTable, priceStr)
 		// os.priceTableMu.Unlock()
-	
+
 		os.priceTree.Remove(price)
 		// if !removed {
 		// 	Log(fmt.Sprintf("Error: price level not removed from tree at price level %s", priceStr))
@@ -123,14 +120,12 @@ func (os *OrderSide) Remove(n *list.Node[*Order]) *Order {
 		// }
 
 		Log(fmt.Sprintf("price level removed from tree at price level %s", priceStr))
-	
-
 
 		os.depthMu.Lock()
 		os.depth--
 		os.depthMu.Unlock()
 	}
-	
+
 	os.numOrdersMu.Lock()
 	os.numOrders--
 	os.numOrdersMu.Unlock()
@@ -143,7 +138,7 @@ func (os *OrderSide) Remove(n *list.Node[*Order]) *Order {
 // MaxPriceQueue returns maximal level of price
 func (os *OrderSide) MaxPriceQueue() (*OrderQueue, bool) {
 	if os.Depth() > 0 {
-	// os.priceTreeMu.Lock()
+		// os.priceTreeMu.Lock()
 
 		if oq, found := os.priceTree.GetMax(); found {
 			Log(fmt.Sprintf("maxqueu len: %d\n", oq.(*OrderQueue).Len()))
@@ -165,11 +160,11 @@ func (os *OrderSide) MaxPriceQueue() (*OrderQueue, bool) {
 // MinPriceQueue returns minimal level of price
 func (os *OrderSide) MinPriceQueue() (*OrderQueue, bool) {
 	if os.Depth() > 0 {
-	// os.priceTreeMu.RLock()
-	// defer os.priceTreeMu.RUnlock()
+		// os.priceTreeMu.RLock()
+		// defer os.priceTreeMu.RUnlock()
 		if oq, found := os.priceTree.GetMin(); found {
 			Log(fmt.Sprintf("MinPriceQueue len: %d\n", oq.(*OrderQueue).Len()))
-			if oq.(*OrderQueue).Len()== 0 {
+			if oq.(*OrderQueue).Len() == 0 {
 				Log(fmt.Sprintf("Error: MinPriceQueue: price queue is empty: %s\n", oq))
 				Log(fmt.Sprintf("min price error: os: %s\n", os))
 				min, _ := os.priceTree.GetMin()

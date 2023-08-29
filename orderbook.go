@@ -152,6 +152,9 @@ func (ob *OrderBook) matchWithMarketOrders(marketOrders *list.List[*Order], orde
 
 	for marketOrders.Len() > 0 {
 
+		ob.SetMarketPrice(order.Price())
+
+
 		marketOrderNode := marketOrders.Front()
 		marketOrder := marketOrderNode.Value
 		marketOrderVolume := marketOrder.Volume()
@@ -264,7 +267,6 @@ func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, pric
 
 	ob.sortedOrdersMu.Lock()
 	bestPrice, ok := iter()
-	
 
 	if !ok {
 		Log(fmt.Sprintf("No limit orders in the opposite side, initialize order: %s", o.shortOrderID()))
@@ -273,14 +275,10 @@ func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, pric
 		return o.orderID, nil
 	}
 
-
-
 	for volumeLeft.Sign() > 0 && os.Len() > 0 && comparator(bestPrice.Price()) {
 		bestPrice, _ := iter() // we don't dont have to check ok because we already checked it in the for loop condition with checking orderside size
 		volumeLeft = ob.matchAtPriceLevel(bestPrice, o)
 	}
-
-
 
 	if volumeLeft.Sign() > 0 {
 		// the order is not fully filled or didn't find a match in price range, add it to the market order list
@@ -288,10 +286,6 @@ func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, pric
 		ob.addLimitOrder(o)
 	}
 	ob.sortedOrdersMu.Unlock()
-
-	// o := NewOrder(side, clientID, Limit, price, volume, true)
-	// Log(fmt.Sprintf("Created limit order: %v", o))
-	// ob.addLimitOrder(o)
 
 	return o.orderID, nil
 }
@@ -306,28 +300,20 @@ func (ob *OrderBook) addMarketOrder(o *Order) {
 		ob.marketSellMu.Lock() // Lock the mutex
 		ob.marketSellOrders.PushBack(o)
 		ob.marketSellMu.Unlock() // Unlock the mutex
-		// ob.asks.volume = ob.asks.volume.Add(o.Volume())
 		ob.asks.SetVolume(ob.asks.Volume().Add(o.Volume()))
 	}
 }
 
 func (ob *OrderBook) addLimitOrder(o *Order) {
-	
-	// defer ob.ordersMu.Unlock()
-
 	if o.Side() == Buy {
-		// ob.sortedOrdersMu.Lock()
 		n := ob.bids.Append(o)
 
-		// ob.sortedOrdersMu.Unlock()
 		ob.ordersMu.Lock()
-
 		ob.activeOrders[o.OrderID()] = n
 		ob.ordersMu.Unlock()
 	} else {
-		// ob.sortedOrdersMu.Lock()
 		n := ob.asks.Append(o)
-		// ob.sortedOrdersMu.Unlock()
+
 		ob.ordersMu.Lock()
 		ob.activeOrders[o.OrderID()] = n
 		ob.ordersMu.Unlock()
@@ -344,7 +330,7 @@ func (ob *OrderBook) SetMarketPrice(price decimal.Decimal) {
 	ob.marketPriceMu.Lock()
 	ob.marketPrice = price
 	ob.marketPriceMu.Unlock()
-	// fmt.Println("market price: ", ob.marketPrice)
+	fmt.Println("market price: ", ob.marketPrice)
 
 	// release the stop orders that are triggered by the new market price
 }
