@@ -16,6 +16,7 @@ type OrderQueue struct {
 	price    decimal.Decimal    // price level cannot be changed once initialized
 	orders   *list.List[*Order] // limit orders
 	ordersMu sync.RWMutex       // protect orders
+	priceLevelAccessMu sync.Mutex // protect price level access
 }
 
 // NewOrderQueue initializes a order queue of type orderbook.Order at a given price level. Defaults to zero total volume
@@ -46,16 +47,23 @@ func (oq *OrderQueue) Head() *list.Node[*Order] {
 }
 
 // Tail returns a poiner to the Order at the back of the queue
-func (oq *OrderQueue) Tail() *list.Node[*Order] {
-	oq.ordersMu.RLock()
-	defer oq.ordersMu.RUnlock()
-	return oq.orders.Back()
-}
+// func (oq *OrderQueue) Tail() *list.Node[*Order] {
+// 	oq.ordersMu.RLock()
+// 	defer oq.ordersMu.RUnlock()
+// 	return oq.orders.Back()
+// }
 
 func (oq *OrderQueue) Volume() decimal.Decimal {
 	oq.volumeMu.RLock()
 	defer oq.volumeMu.RUnlock()
 	return oq.volume
+}
+
+func (oq *OrderQueue) SetVolume(volume decimal.Decimal) decimal.Decimal {
+	oq.volumeMu.Lock()
+	oq.volume = volume
+	oq.volumeMu.Unlock()
+	return volume
 }
 
 func (oq *OrderQueue) Append(o *Order) *list.Node[*Order] {

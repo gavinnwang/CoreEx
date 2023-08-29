@@ -73,14 +73,15 @@ func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume deci
 	var volumeLeft = o.Volume()
 
 	for volumeLeft.Sign() > 0 && os.Len() > 0 { // while the order is not fully filled and the opposite side has more limit orders
-
+		Log(fmt.Sprint("gonna call iter"))
 		oq, found := iter()
+		Log(fmt.Sprint("called iter"))
 		if !found {
 			Log(fmt.Sprintf("ERROR: price queue is not found: %s\n", oq))
 			continue
 		}
 
-		Log(fmt.Sprintf("os string: %v, oq: %v  volumeleft: %s", os, oq, volumeLeft))
+		Log(fmt.Sprintf("os string: %v, oq: %v  volumeleft: %s\n", os, oq, volumeLeft))
 		volumeLeft = ob.matchAtPriceLevel(oq, o)
 	}
 
@@ -88,6 +89,8 @@ func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume deci
 		// the order is not fully filled, add it to the market order list
 		Log(fmt.Sprintf("The order is not fully filled, add it to the market order list: %s", o.shortOrderID()))
 		ob.addMarketOrder(o)
+	} else {
+		Log(fmt.Sprintf("The order is fully filled: %s\n", o.shortOrderID()))
 	}
 	return o.orderID, nil
 }
@@ -95,7 +98,10 @@ func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume deci
 func (ob *OrderBook) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft decimal.Decimal) {
 	volumeLeft = o.Volume()
 
-	Log(fmt.Sprintf("Matching %s at price level %s", o.shortOrderID(), oq.Price()))
+	Log(fmt.Sprintf("Matching %s at price level %s\n", o.shortOrderID(), oq.Price()))
+
+	oq.priceLevelAccessMu.Lock()
+	defer oq.priceLevelAccessMu.Unlock()
 
 	for oq.Len() > 0 && volumeLeft.Sign() > 0 { // while the price level have more limit orders and the order is not fully filled
 
@@ -106,10 +112,10 @@ func (ob *OrderBook) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft dec
 
 		if volumeLeft.LessThan(bestOrder.Volume()) { // the best order will be partially filled
 
-			Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s", o.shortOrderID(), o.Volume(), o.Volume().Sub(volumeLeft), bestOrder.shortOrderID(), bestOrder.Volume(), bestOrder.Volume().Sub(volumeLeft)))
+			Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", o.shortOrderID(), o.Volume(), o.Volume().Sub(volumeLeft), bestOrder.shortOrderID(), bestOrder.Volume(), bestOrder.Volume().Sub(volumeLeft)))
 
 			matchedVolumeLeft := bestOrder.Volume().Sub(volumeLeft) // update order status. This change should reflect in order queue
-			oq.volume = oq.Volume().Sub(volumeLeft)
+			oq.SetVolume(oq.Volume().Sub(volumeLeft))
 
 			if o.Side() == Buy {
 				// ob.bids.volume = ob.bids.Volume().Sub(volumeLeft)
@@ -127,7 +133,7 @@ func (ob *OrderBook) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft dec
 		} else { // the best order will be completely filled
 			volumeLeft = volumeLeft.Sub(bestOrder.Volume())
 
-			Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s", o.shortOrderID(), o.Volume(), o.Volume().Sub(bestOrder.Volume()), bestOrder.shortOrderID(), bestOrder.Volume(), decimal.Zero))
+			Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", o.shortOrderID(), o.Volume(), o.Volume().Sub(bestOrder.Volume()), bestOrder.shortOrderID(), bestOrder.Volume(), decimal.Zero))
 
 			ob.fillAndRemoveLimitOrder(bestOrderNode)
 			o.setStatusToPartiallyFilled(volumeLeft)
@@ -147,7 +153,7 @@ func (ob *OrderBook) matchWithMarketOrders(marketOrders *list.List[*Order], orde
 
 		if orderVolume.LessThan(marketOrderVolume) { // the market order will be completely filled
 
-			Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s", order.shortOrderID(), order.Volume(), decimal.Zero, marketOrder.shortOrderID(), marketOrder.Volume(), marketOrder.Volume().Sub(orderVolume)))
+			Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", order.shortOrderID(), order.Volume(), decimal.Zero, marketOrder.shortOrderID(), marketOrder.Volume(), marketOrder.Volume().Sub(orderVolume)))
 
 			marketOrder.setStatusToPartiallyFilled(marketOrderVolume.Sub(orderVolume))
 
@@ -163,7 +169,7 @@ func (ob *OrderBook) matchWithMarketOrders(marketOrders *list.List[*Order], orde
 			break
 
 		} else {
-			Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s", order.shortOrderID(), order.Volume(), order.Volume().Sub(marketOrderVolume), marketOrder.shortOrderID(), marketOrder.Volume(), decimal.Zero))
+			Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", order.shortOrderID(), order.Volume(), order.Volume().Sub(marketOrderVolume), marketOrder.shortOrderID(), marketOrder.Volume(), decimal.Zero))
 
 			marketOrders.Remove(marketOrderNode)
 

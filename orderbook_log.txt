@@ -1,139 +1,763 @@
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Created limit order: 
-order 14e9:
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 6b59:
 	side: Buy
 	type: Limit
-	volume: 4
-	price: 12
-	time: 2023-08-29 23:05:43.436495 +0800 CST m=+0.001808001
-
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Created market order: 
-order ca9e:
-	side: Sell
-	type: Market
 	volume: 9
-	price: 0
-	time: 2023-08-29 23:05:43.436488 +0800 CST m=+0.001801084
+	price: 14
+	time: 2023-08-30 02:02:24.694972 +0800 CST m=+0.002002043
 
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Created limit order: 
-order ac46:
-	side: Buy
-	type: Limit
-	volume: 10
-	price: 13
-	time: 2023-08-29 23:05:43.436482 +0800 CST m=+0.001794542
-
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Created market order: 
-order 574d:
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: 6b59
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order ec15:
 	side: Sell
 	type: Market
-	volume: 4
+	volume: 8
 	price: 0
-	time: 2023-08-29 23:05:43.436516 +0800 CST m=+0.001828834
+	time: 2023-08-30 02:02:24.69492 +0800 CST m=+0.001949585
 
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: 14e9
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: hi
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: he
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: ca9e
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Limit order matching with market order: ac46
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: ac46: 10 -> 1 | ca9e: 9 -> 0
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: ac46
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: 574d
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: hi
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: he
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Created market order: 
-order 3d48:
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 14, queue: 
+queue: length: 1, price: 14, volume: 9, orders:, oq: 
+queue: length: 1, price: 14, volume: 9, orders:  volumeleft: 8
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching ec15 at price level 14
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching ec15 with 6b59
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: ec15: 8 -> 0 | 6b59: 9 -> 1
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: The order is fully filled: ec15
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 1339:
 	side: Sell
 	type: Market
-	volume: 10
+	volume: 1
 	price: 0
-	time: 2023-08-29 23:05:43.448045 +0800 CST m=+0.013357917
+	time: 2023-08-30 02:02:24.694912 +0800 CST m=+0.001942085
 
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Created limit order: 
-order e541:
-	side: Buy
-	type: Limit
-	volume: 4
-	price: 15
-	time: 2023-08-29 23:05:43.448065 +0800 CST m=+0.013377626
-
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Created limit order: 
-order 34d3:
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 06a5:
 	side: Buy
 	type: Limit
 	volume: 1
-	price: 11
-	time: 2023-08-29 23:05:43.448046 +0800 CST m=+0.013358501
+	price: 18
+	time: 2023-08-30 02:02:24.694969 +0800 CST m=+0.001998918
 
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Limit order matching with market order: e541
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Created market order: 
-order 8b8b:
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: 06a5
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 14, queue: 
+queue: length: 1, price: 14, volume: 1, orders:, oq: 
+queue: length: 1, price: 14, volume: 1, orders:  volumeleft: 1
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 1339 at price level 14
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 1339 with 6b59
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 1339: 1 -> 0 | 6b59: 1 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Remove price queue at price level 14
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: price level removed from tree at price level 14
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: OrderSide volume after remove: 9
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: The order is fully filled: 1339
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order e62e:
 	side: Sell
 	type: Market
-	volume: 9
+	volume: 8
 	price: 0
-	time: 2023-08-29 23:05:43.448131 +0800 CST m=+0.013443876
+	time: 2023-08-30 02:02:24.706258 +0800 CST m=+0.013288418
 
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: e541: 4 -> 0 | 574d: 4 -> 0
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: os string: 
-	price: 12, queue: 
-queue: length: 1, price: 12, volume: 4, orders:
-	price: 13, queue: 
-queue: length: 1, price: 13, volume: 1, orders:, oq: 
-queue: length: 1, price: 13, volume: 1, orders:  volumeleft: 10
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Matching 3d48 at price level 13
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: os string: 
-	price: 12, queue: 
-queue: length: 1, price: 12, volume: 4, orders:
-	price: 13, queue: 
-queue: length: 1, price: 13, volume: 1, orders:, oq: 
-queue: length: 1, price: 13, volume: 1, orders:  volumeleft: 9
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Matching 8b8b at price level 13
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: e541
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: hi
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: he
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: 34d3
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: hi
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: he
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Matching 3d48 with ac46
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Matching 8b8b with ac46
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: 3d48: 10 -> 9 | ac46: 1 -> 0
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: 8b8b: 9 -> 8 | ac46: 1 -> 0
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Remove price queue at price level 13
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: price level removed from tree at price level 13
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Remove price queue at price level 13
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: price level removed from tree at price level 13
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: OrderSide volume after remove: 5
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: OrderSide volume after remove: 4
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: os string: 
-	price: 11, queue: 
-queue: length: 1, price: 11, volume: 1, orders:
-	price: 12, queue: 
-queue: length: 1, price: 12, volume: 4, orders:, oq: 
-queue: length: 1, price: 15, volume: 0, orders:  volumeleft: 9
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Matching 3d48 at price level 15
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Matching 3d48 with e541
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: os string: 
-	price: 11, queue: 
-queue: length: 1, price: 11, volume: 1, orders:
-	price: 12, queue: 
-queue: length: 1, price: 12, volume: 4, orders:, oq: 
-queue: length: 1, price: 15, volume: 0, orders:  volumeleft: 8
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: 3d48: 9 -> 9 | e541: 0 -> 0
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Remove price queue at price level 15
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: price level removed from tree at price level 15
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: OrderSide volume after remove: 4
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Matching 8b8b at price level 15
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Error: MaxPriceQueue: price queue is empty: 
-queue: length: 0, price: 15, volume: 0, orders:
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 652c:
+	side: Buy
+	type: Limit
+	volume: 1
+	price: 14
+	time: 2023-08-30 02:02:24.70631 +0800 CST m=+0.013340293
 
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: Error: MaxPriceQueue: price queue is empty: 
-queue: length: 0, price: 15, volume: 0, orders:
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: 652c
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order a0b8:
+	side: Sell
+	type: Market
+	volume: 6
+	price: 0
+	time: 2023-08-30 02:02:24.706304 +0800 CST m=+0.013334043
 
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: erro: os: 
-	price: 11, queue: 
-queue: length: 1, price: 11, volume: 1, orders:
-	price: 12, queue: 
-queue: length: 1, price: 12, volume: 4, orders:
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 14, queue: 
+queue: length: 1, price: 14, volume: 1, orders:
+	price: 18, queue: 
+queue: length: 1, price: 18, volume: 1, orders:, oq: 
+queue: length: 1, price: 18, volume: 1, orders:  volumeleft: 6
 
-ORDERBOOK 2023/08/29 23:05:43 orderbook_logservice.go:34: 
-queue: length: 0, price: 15, volume: 0, orders:
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching a0b8 at price level 18
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching a0b8 with 06a5
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: a0b8: 6 -> 5 | 06a5: 1 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Remove price queue at price level 18
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: price level removed from tree at price level 18
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: OrderSide volume after remove: 9
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 14, queue: 
+queue: length: 1, price: 14, volume: 1, orders:, oq: 
+queue: length: 1, price: 14, volume: 1, orders:  volumeleft: 5
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching a0b8 at price level 14
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching a0b8 with 652c
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: a0b8: 5 -> 4 | 652c: 1 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Remove price queue at price level 14
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 18, queue: 
+queue: length: 1, price: 18, volume: 1, orders:, oq: 
+queue: length: 1, price: 18, volume: 1, orders:  volumeleft: 8
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: price level removed from tree at price level 14
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: OrderSide volume after remove: 8
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching e62e at price level 18
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: The order is not fully filled, add it to the market order list: e62e
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: The order is not fully filled, add it to the market order list: a0b8
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 66c1:
+	side: Buy
+	type: Limit
+	volume: 9
+	price: 13
+	time: 2023-08-30 02:02:24.706294 +0800 CST m=+0.013324085
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: 66c1
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 66c1: 9 -> 1 | e62e: 8 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 66c1: 1 -> 0 | a0b8: 4 -> 3
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order b44c:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 14
+	time: 2023-08-30 02:02:24.717431 +0800 CST m=+0.024461126
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: b44c
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: b44c: 10 -> 7 | a0b8: 3 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: b44c
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order c435:
+	side: Buy
+	type: Limit
+	volume: 5
+	price: 10
+	time: 2023-08-30 02:02:24.717428 +0800 CST m=+0.024458168
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: c435
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order b94b:
+	side: Sell
+	type: Market
+	volume: 5
+	price: 0
+	time: 2023-08-30 02:02:24.717444 +0800 CST m=+0.024473876
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 1337:
+	side: Sell
+	type: Market
+	volume: 4
+	price: 0
+	time: 2023-08-30 02:02:24.717448 +0800 CST m=+0.024478251
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 10, queue: 
+queue: length: 1, price: 10, volume: 5, orders:
+	price: 14, queue: 
+queue: length: 1, price: 14, volume: 7, orders:, oq: 
+queue: length: 1, price: 14, volume: 7, orders:  volumeleft: 5
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching b94b at price level 14
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching b94b with b44c
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 10, queue: 
+queue: length: 1, price: 10, volume: 5, orders:
+	price: 14, queue: 
+queue: length: 1, price: 14, volume: 7, orders:, oq: 
+queue: length: 1, price: 14, volume: 7, orders:  volumeleft: 4
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 1337 at price level 14
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: b94b: 5 -> 0 | b44c: 7 -> 2
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: The order is fully filled: b94b
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 1337 with b44c
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 1337: 4 -> 2 | b44c: 2 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Remove price queue at price level 14
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: price level removed from tree at price level 14
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: OrderSide volume after remove: 18
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 10, queue: 
+queue: length: 1, price: 10, volume: 5, orders:, oq: 
+queue: length: 1, price: 10, volume: 5, orders:  volumeleft: 2
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 1337 at price level 10
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 1337 with c435
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 1337: 2 -> 0 | c435: 5 -> 3
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: The order is fully filled: 1337
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 6336:
+	side: Sell
+	type: Market
+	volume: 2
+	price: 0
+	time: 2023-08-30 02:02:24.727957 +0800 CST m=+0.034987585
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 9696:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 10
+	time: 2023-08-30 02:02:24.727966 +0800 CST m=+0.034996043
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: 9696
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 8415:
+	side: Sell
+	type: Market
+	volume: 6
+	price: 0
+	time: 2023-08-30 02:02:24.727978 +0800 CST m=+0.035007751
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 55df:
+	side: Buy
+	type: Limit
+	volume: 1
+	price: 18
+	time: 2023-08-30 02:02:24.728003 +0800 CST m=+0.035033126
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: 55df
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 10, queue: 
+queue: length: 2, price: 10, volume: 13, orders:, oq: 
+queue: length: 2, price: 10, volume: 13, orders:  volumeleft: 2
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 6336 at price level 10
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 6336 with c435
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 6336: 2 -> 0 | c435: 3 -> 1
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: The order is fully filled: 6336
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 10, queue: 
+queue: length: 2, price: 10, volume: 13, orders:
+	price: 18, queue: 
+queue: length: 1, price: 18, volume: 1, orders:, oq: 
+queue: length: 1, price: 18, volume: 1, orders:  volumeleft: 6
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 8415 at price level 18
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 8415 with 55df
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 8415: 6 -> 5 | 55df: 1 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Remove price queue at price level 18
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: price level removed from tree at price level 18
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: OrderSide volume after remove: 28
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 10, queue: 
+queue: length: 2, price: 10, volume: 11, orders:, oq: 
+queue: length: 2, price: 10, volume: 11, orders:  volumeleft: 5
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 8415 at price level 10
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 8415 with c435
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 8415: 5 -> 4 | c435: 1 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: OrderSide volume after remove: 27
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 8415 with 9696
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 8415: 4 -> 0 | 9696: 10 -> 6
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: The order is fully filled: 8415
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order a5f1:
+	side: Sell
+	type: Market
+	volume: 10
+	price: 0
+	time: 2023-08-30 02:02:24.73902 +0800 CST m=+0.046049793
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 769e:
+	side: Buy
+	type: Limit
+	volume: 8
+	price: 14
+	time: 2023-08-30 02:02:24.739045 +0800 CST m=+0.046075418
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order a800:
+	side: Buy
+	type: Limit
+	volume: 1
+	price: 19
+	time: 2023-08-30 02:02:24.739057 +0800 CST m=+0.046087251
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 6585:
+	side: Sell
+	type: Market
+	volume: 6
+	price: 0
+	time: 2023-08-30 02:02:24.739097 +0800 CST m=+0.046126668
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 10, queue: 
+queue: length: 1, price: 10, volume: 6, orders:, oq: 
+queue: length: 1, price: 10, volume: 6, orders:  volumeleft: 6
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 6585 at price level 10
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 6585 with 9696
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 6585: 6 -> 0 | 9696: 6 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: 769e
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 10, queue: 
+queue: length: 1, price: 10, volume: 6, orders:, oq: 
+queue: length: 1, price: 10, volume: 6, orders:  volumeleft: 10
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching a5f1 at price level 10
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: a800
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Remove price queue at price level 10
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: price level removed from tree at price level 10
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: OrderSide volume after remove: 21
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: The order is fully filled: 6585
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 14, queue: 
+queue: length: 1, price: 14, volume: 8, orders:
+	price: 19, queue: 
+queue: length: 1, price: 19, volume: 1, orders:, oq: 
+queue: length: 1, price: 19, volume: 1, orders:  volumeleft: 10
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching a5f1 at price level 19
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching a5f1 with a800
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: a5f1: 10 -> 9 | a800: 1 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Remove price queue at price level 19
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: price level removed from tree at price level 19
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: OrderSide volume after remove: 29
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 14, queue: 
+queue: length: 1, price: 14, volume: 8, orders:, oq: 
+queue: length: 1, price: 14, volume: 8, orders:  volumeleft: 9
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching a5f1 at price level 14
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching a5f1 with 769e
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: a5f1: 9 -> 1 | 769e: 8 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Remove price queue at price level 14
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: price level removed from tree at price level 14
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: OrderSide volume after remove: 21
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: The order is not fully filled, add it to the market order list: a5f1
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 3c95:
+	side: Sell
+	type: Market
+	volume: 4
+	price: 0
+	time: 2023-08-30 02:02:24.752866 +0800 CST m=+0.059896001
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order a097:
+	side: Sell
+	type: Market
+	volume: 3
+	price: 0
+	time: 2023-08-30 02:02:24.752895 +0800 CST m=+0.059924835
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: a097
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: 3c95
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 8d96:
+	side: Buy
+	type: Limit
+	volume: 3
+	price: 17
+	time: 2023-08-30 02:02:24.752886 +0800 CST m=+0.059915793
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: 8d96
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 8d96: 3 -> 2 | a5f1: 1 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 920e:
+	side: Buy
+	type: Limit
+	volume: 2
+	price: 17
+	time: 2023-08-30 02:02:24.752876 +0800 CST m=+0.059905876
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 8d96: 2 -> 0 | 3c95: 4 -> 2
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: 920e
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 920e: 2 -> 0 | 3c95: 2 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 920e: 0 -> 0 | a097: 3 -> 3
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order b774:
+	side: Buy
+	type: Limit
+	volume: 2
+	price: 13
+	time: 2023-08-30 02:02:24.763972 +0800 CST m=+0.071002126
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: b774
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: b774: 2 -> 0 | a097: 3 -> 1
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order de28:
+	side: Buy
+	type: Limit
+	volume: 6
+	price: 10
+	time: 2023-08-30 02:02:24.763993 +0800 CST m=+0.071023126
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: de28
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order d477:
+	side: Sell
+	type: Market
+	volume: 3
+	price: 0
+	time: 2023-08-30 02:02:24.763986 +0800 CST m=+0.071016418
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 8f11:
+	side: Sell
+	type: Market
+	volume: 4
+	price: 0
+	time: 2023-08-30 02:02:24.763978 +0800 CST m=+0.071008293
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: de28: 6 -> 5 | a097: 1 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: de28
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: d477
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: 8f11
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 54f9:
+	side: Sell
+	type: Market
+	volume: 10
+	price: 0
+	time: 2023-08-30 02:02:24.775043 +0800 CST m=+0.082073043
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 10, queue: 
+queue: length: 1, price: 10, volume: 5, orders:, oq: 
+queue: length: 1, price: 10, volume: 5, orders:  volumeleft: 10
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 54f9 at price level 10
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 54f9 with de28
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 4b83:
+	side: Buy
+	type: Limit
+	volume: 3
+	price: 18
+	time: 2023-08-30 02:02:24.775093 +0800 CST m=+0.082122960
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: 4b83
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 6124:
+	side: Buy
+	type: Limit
+	volume: 2
+	price: 19
+	time: 2023-08-30 02:02:24.775053 +0800 CST m=+0.082083335
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 54f9: 10 -> 5 | de28: 5 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Remove price queue at price level 10
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 64a2:
+	side: Sell
+	type: Market
+	volume: 5
+	price: 0
+	time: 2023-08-30 02:02:24.775063 +0800 CST m=+0.082093293
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 4b83: 3 -> 0 | d477: 3 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 4b83: 0 -> 0 | 8f11: 4 -> 4
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: 6124
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 6124: 2 -> 0 | 8f11: 4 -> 2
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: price level removed from tree at price level 10
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: OrderSide volume after remove: 21
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: The order is not fully filled, add it to the market order list: 54f9
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: ERROR: price queue is not found: <nil>
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: The order is not fully filled, add it to the market order list: 64a2
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 2253:
+	side: Sell
+	type: Market
+	volume: 4
+	price: 0
+	time: 2023-08-30 02:02:24.786322 +0800 CST m=+0.093351793
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: 2253
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 6ce6:
+	side: Buy
+	type: Limit
+	volume: 4
+	price: 11
+	time: 2023-08-30 02:02:24.786331 +0800 CST m=+0.093360835
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: 6ce6
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 6ce6: 4 -> 2 | 8f11: 2 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 6ce6: 2 -> 0 | 54f9: 5 -> 3
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 74ee:
+	side: Sell
+	type: Market
+	volume: 5
+	price: 0
+	time: 2023-08-30 02:02:24.786344 +0800 CST m=+0.093374501
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: 74ee
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order eccd:
+	side: Buy
+	type: Limit
+	volume: 2
+	price: 10
+	time: 2023-08-30 02:02:24.786343 +0800 CST m=+0.093372668
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: eccd
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: eccd: 2 -> 0 | 54f9: 3 -> 1
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 13be:
+	side: Buy
+	type: Limit
+	volume: 1
+	price: 17
+	time: 2023-08-30 02:02:24.797389 +0800 CST m=+0.104419376
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: 13be
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 387d:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 14
+	time: 2023-08-30 02:02:24.797391 +0800 CST m=+0.104421418
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 8064:
+	side: Sell
+	type: Market
+	volume: 3
+	price: 0
+	time: 2023-08-30 02:02:24.797407 +0800 CST m=+0.104436668
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 13be: 1 -> 0 | 54f9: 1 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 13be: 0 -> 0 | 64a2: 5 -> 5
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order eeb8:
+	side: Sell
+	type: Market
+	volume: 3
+	price: 0
+	time: 2023-08-30 02:02:24.797426 +0800 CST m=+0.104456418
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: 387d
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 387d: 10 -> 5 | 64a2: 5 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 387d: 5 -> 1 | 2253: 4 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 387d: 1 -> 0 | 74ee: 5 -> 4
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: 8064
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: eeb8
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order cca6:
+	side: Sell
+	type: Market
+	volume: 3
+	price: 0
+	time: 2023-08-30 02:02:24.807788 +0800 CST m=+0.114818251
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 1b08:
+	side: Buy
+	type: Limit
+	volume: 7
+	price: 11
+	time: 2023-08-30 02:02:24.807826 +0800 CST m=+0.114856251
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: 1b08
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order cda7:
+	side: Buy
+	type: Limit
+	volume: 6
+	price: 18
+	time: 2023-08-30 02:02:24.807835 +0800 CST m=+0.114864710
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 1b08: 7 -> 3 | 74ee: 4 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 1b08: 3 -> 0 | 8064: 3 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 1b08: 0 -> 0 | eeb8: 3 -> 3
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: cca6
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order ada2:
+	side: Sell
+	type: Market
+	volume: 6
+	price: 0
+	time: 2023-08-30 02:02:24.807846 +0800 CST m=+0.114876168
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: cda7
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: cda7: 6 -> 3 | eeb8: 3 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: cda7: 3 -> 0 | cca6: 3 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: cda7
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, add the order to the market order list: ada2
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 5645:
+	side: Sell
+	type: Market
+	volume: 1
+	price: 0
+	time: 2023-08-30 02:02:24.818978 +0800 CST m=+0.126008085
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order dc49:
+	side: Buy
+	type: Limit
+	volume: 6
+	price: 17
+	time: 2023-08-30 02:02:24.818999 +0800 CST m=+0.126028876
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Limit order matching with market order: dc49
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: dc49: 6 -> 0 | ada2: 6 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: dc49
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created market order: 
+order 3fce:
+	side: Sell
+	type: Market
+	volume: 7
+	price: 0
+	time: 2023-08-30 02:02:24.818997 +0800 CST m=+0.126027418
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Created limit order: 
+order 9e7b:
+	side: Buy
+	type: Limit
+	volume: 1
+	price: 10
+	time: 2023-08-30 02:02:24.818988 +0800 CST m=+0.126018543
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: No limit orders in the opposite side, initialize order: 9e7b
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: called iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 10, queue: 
+queue: length: 1, price: 10, volume: 1, orders:
+	price: 17, queue: 
+queue: length: 1, price: 17, volume: 0, orders:, oq: 
+queue: length: 1, price: 18, volume: 0, orders:  volumeleft: 7
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 3fce at price level 18
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 3fce with cda7
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 3fce: 7 -> 7 | cda7: 0 -> 0
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Remove price queue at price level 18
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: os string: 
+	price: 17, queue: 
+queue: length: 1, price: 17, volume: 0, orders:
+	price: 18, queue: 
+queue: length: 1, price: 18, volume: 0, orders:, oq: 
+queue: length: 1, price: 18, volume: 0, orders:  volumeleft: 1
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Matching 5645 at price level 18
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Error: price level not removed from tree at price level 18
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: gonna call iter
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: Error: MaxPriceQueue: price queue is empty: 
+queue: length: 0, price: 18, volume: 0, orders:
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: erro: os: 
+	price: 10, queue: 
+queue: length: 1, price: 10, volume: 1, orders:
+	price: 17, queue: 
+queue: length: 1, price: 17, volume: 0, orders:
+
+ORDERBOOK 2023/08/30 02:02:24 orderbook_logservice.go:34: 
+queue: length: 0, price: 18, volume: 0, orders:

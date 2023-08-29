@@ -1,6 +1,10 @@
 package treemap
 
-import "golang.org/x/exp/constraints"
+import (
+	"fmt"
+
+	"golang.org/x/exp/constraints"
+)
 
 type TreeMap[Key, Value any] struct {
 	sentinel   *node[Key, Value]
@@ -180,17 +184,29 @@ func (t *TreeMap[Key, Value]) Remove(key Key) bool {
 		return false
 	}
 	if t.maxNode == z {
+		fmt.Println("gonna remove max node")
 		if z.left != nil {
 			t.maxNode = z.left
+			fmt.Println("max node is now left")
 		} else {
 			t.maxNode = z.parent
+			fmt.Println("max node is now parent")
+			if (t.maxNode == t.sentinel) {
+				fmt.Println("max node is now sentinel")
+			}
+			fmt.Printf("max node: %v\n", t.maxNode.value)
 		}
 	}
 	if t.minNode == z {
 		if z.right != nil {
 			t.minNode = z.right
+			fmt.Printf("min node: %v\n", t.minNode.value)
 		} else {
 			t.minNode = z.parent
+			if (t.minNode == t.sentinel) {
+				fmt.Println("min node is now sentinel")
+			}
+			fmt.Printf("min node: %v\n", t.minNode.value)
 		}
 	}
 	t.count--
@@ -359,6 +375,7 @@ func (t *TreeMap[Key, Value]) findNode(key Key) *node[Key, Value] {
 			return current
 		}
 	}
+	fmt.Printf("didnt findNode: %v\n", current)
 	return nil
 }
 
