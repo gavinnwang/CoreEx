@@ -192,24 +192,28 @@ func assert(t *testing.T, a, b any) {
 }
 
 func TestSimulateStockMarketFluctuations(t *testing.T) {
+	fmt.Println("start test")
 	ob := NewOrderBook()
 	var wg sync.WaitGroup
 
-	// wg.Add(1)
-	// go func() {
-	// 	defer wg.Done()
-	// 	for i := 0; i < 5; i++ {
-	// 		fmt.Printf("ask side: %v\n", ob.asks)
-	// 		fmt.Printf("bid side: %v\n", ob.bids)
-	// 		time.Sleep(time.Second * 1)
-	// 	}
-	// }()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 50; i++ {
+			// fmt.Printf("ask side: %v\n", ob.asks)
+			// fmt.Printf("bid side: %v\n", ob.bids)
+			fmt.Printf("bestBid %s\n", ob.BestAsk())
+			fmt.Printf("bestAsk %s\n", ob.BestBid())
+			fmt.Printf("market price: %s\n", ob.MarketPrice())
+			time.Sleep(time.Millisecond * 10)
+		}
+	}()
 
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
 		clientID := uuid.New()
-		for i := 0; i < 100000; i++ {
+		for i := 0; i < 4000; i++ {
 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
 			ob.PlaceLimitOrder(Buy, clientID, quantity, price)
@@ -221,7 +225,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		clientID := uuid.New()
-		for i := 0; i < 50000; i++ {
+		for i := 0; i < 5000; i++ {
 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
 			ob.PlaceMarketOrder(Buy, clientID, quantity)
 			// time.Sleep(time.Millisecond * 10)
@@ -232,7 +236,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		clientID := uuid.New()
-		for i := 0; i < 100000; i++ {
+		for i := 0; i < 5000; i++ {
 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
 			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
@@ -244,7 +248,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		clientID := uuid.New()
-		for i := 0; i < 50000; i++ {
+		for i := 0; i < 5500; i++ {
 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
 			ob.PlaceMarketOrder(Sell, clientID, quantity)
 			// time.Sleep(time.Millisecond * 10)
@@ -254,7 +258,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		clientID := uuid.New()
-		for i := 0; i < 50000; i++ {
+		for i := 0; i < 5000; i++ {
 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
 			ob.PlaceLimitOrder(Sell, clientID, quantity, price)

@@ -340,6 +340,27 @@ func (ob *OrderBook) addLimitOrder(o *Order) {
 	}
 }
 
+func (ob *OrderBook) BestBid() decimal.Decimal {
+	ob.sortedOrdersMu.RLock()
+	defer ob.sortedOrdersMu.RUnlock()
+	oq, found := ob.bids.MaxPriceQueue()
+	if !found {
+		return decimal.Zero
+	}
+	return oq.Price()
+}
+
+func (ob *OrderBook) BestAsk() decimal.Decimal {
+	ob.sortedOrdersMu.RLock()
+	defer ob.sortedOrdersMu.RUnlock()
+	oq, found := ob.asks.MinPriceQueue()
+	if !found {
+		return decimal.Zero
+	}
+	return oq.Price()
+}
+
+
 func (ob *OrderBook) MarketPrice() decimal.Decimal {
 	ob.marketPriceMu.RLock()
 	defer ob.marketPriceMu.RUnlock()
@@ -348,6 +369,7 @@ func (ob *OrderBook) MarketPrice() decimal.Decimal {
 
 func (ob *OrderBook) SetMarketPrice(price decimal.Decimal) {
 	ob.marketPriceMu.Lock()
+	Log(fmt.Sprintf("Set market price: %s", price))
 	ob.marketPrice = price
 	ob.marketPriceMu.Unlock()
 	// fmt.Println("market price: ", ob.marketPrice)

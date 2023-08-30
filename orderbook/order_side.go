@@ -190,6 +190,8 @@ func (os *OrderSide) Volume() decimal.Decimal {
 }
 
 // LessThan returns nearest OrderQueue with price less than given
+// deprecate this and replace with iter() 
+// TODO
 func (os *OrderSide) LessThan(price decimal.Decimal) *OrderQueue {
 	tree := os.priceTree.Tree
 	node := tree.Root

@@ -16,10 +16,11 @@ func main() {
 
 	ex := NewExchange()
 
-	// Start the Kafka consumer in a new goroutine.
-	go ex.consumeOrders(brokerList)
+	go ex.consumeAndPlaceOrders(brokerList) // consume and place orders to the orderbook
+	go ex.FetchMarketPrice()
+	go ex.FetchBestBids()
+	go ex.FetchBestAsks()
 
-	// Set up the HTTP server.
 	http.HandleFunc("/order", ex.PlaceOrderHandler(producer))
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
