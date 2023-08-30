@@ -3,6 +3,7 @@ package orderbook
 import (
 	// "fmt"
 	// "fmt"
+	"fmt"
 	list "github/wry-0313/exchange/linkedlist"
 	"log"
 	"sync"
@@ -50,8 +51,12 @@ func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume deci
 		return uuid.Nil, ErrInvalidVolume
 	}
 
+	if (side == Invalid) {
+		return uuid.Nil, ErrInvalidSide
+	}
+
 	o := NewOrder(side, clientID, Market, decimal.Zero, volume, true)
-	// Log(fmt.Sprintf("Created market order: %v", o))
+	Log(fmt.Sprintf("Created market order: %v", o))
 
 	var (
 		os   *OrderSide
@@ -116,7 +121,7 @@ func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume deci
 func (ob *OrderBook) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft decimal.Decimal) {
 	volumeLeft = o.Volume()
 
-	// Log(fmt.Sprintf("Matching %s at price level %s\n", o.shortOrderID(), oq.Price()))
+	Log(fmt.Sprintf("Matching %s at price level %s\n", o.shortOrderID(), oq.Price()))
 
 	ob.SetMarketPrice(oq.Price())
 
@@ -128,7 +133,7 @@ func (ob *OrderBook) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft dec
 		bestOrderNode := oq.Head()
 		bestOrder := oq.Head().Value
 
-		// Log(fmt.Sprintf("Matching %s with %s", o.shortOrderID(), bestOrder.shortOrderID()))
+		Log(fmt.Sprintf("Matching %s with %s", o.shortOrderID(), bestOrder.shortOrderID()))
 
 		if volumeLeft.LessThan(bestOrder.Volume()) { // the best order will be partially filled
 
@@ -232,10 +237,14 @@ func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, pric
 		return uuid.Nil, ErrInvalidPrice
 	}
 
+	if (side == Invalid) {
+		return uuid.Nil, ErrInvalidSide
+	}
+
 	volumeLeft := volume
 
 	o := NewOrder(side, clientID, Limit, price, volume, true)
-	// Log(fmt.Sprintf("Created limit order: %v", o))
+	Log(fmt.Sprintf("Created limit order: %v", o))
 
 	if o.Side() == Buy { // there are market orders waiting to be match
 
@@ -280,7 +289,7 @@ func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, pric
 	bestPrice, ok := iter()
 
 	if !ok {
-		// Log(fmt.Sprintf("No limit orders in the opposite side, initialize order: %s", o.shortOrderID()))
+		Log(fmt.Sprintf("No limit orders in the opposite side, initialize order: %s", o.shortOrderID()))
 		ob.addLimitOrder(o)
 		ob.sortedOrdersMu.Unlock()
 		return o.orderID, nil

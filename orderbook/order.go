@@ -18,20 +18,20 @@ type Order struct {
 	createdAt time.Time
 	orderType OrderType
 	status    OrderStatus
-	logs      *OrderLogs
+	// logs      *OrderLogs
 	price     decimal.Decimal
 	volume    decimal.Decimal
 	volumeMu  sync.RWMutex
 }
 
 func NewOrder(side Side, clientID uuid.UUID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order {
-	var ol *OrderLogs
-	switch orderType {
-	case Limit:
-		ol = NewLimitOrderLogs(volume, price)
-	case Market:
-		ol = NewMarketOrderLogs(volume)
-	}
+	// var ol *OrderLogs
+	// switch orderType {
+	// case Limit:
+	// 	ol = NewLimitOrderLogs(volume, price)
+	// case Market:
+	// 	ol = NewMarketOrderLogs(volume)
+	// }
 	return &Order{
 		side:      side,
 		orderID:   uuid.New(),
@@ -39,7 +39,7 @@ func NewOrder(side Side, clientID uuid.UUID, orderType OrderType, price, volume 
 		createdAt: time.Now(),
 		orderType: orderType,
 		status:    Open,
-		logs:      ol,
+		// logs:      ol,
 		price:     price,
 		volume:    volume,
 	}
@@ -55,9 +55,9 @@ func (o *Order) shortOrderID() string {
 	return o.orderID.String()[:4]
 }
 
-func (o *Order) Logs() *OrderLogs {
-	return o.logs
-}
+// func (o *Order) Logs() *OrderLogs {
+// 	return o.logs
+// }
 
 // Status returns status field copy
 func (o *Order) Status() OrderStatus {

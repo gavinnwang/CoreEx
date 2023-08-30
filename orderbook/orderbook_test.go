@@ -34,7 +34,7 @@ func TestPlaceMarketOrderAfterLimitConcurrent(t *testing.T) {
 	clientID := uuid.New()
 	// ch := make(chan int)
 	var wg sync.WaitGroup
-	orderID, err := ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10000), decimal.NewFromInt(10))
+	_, err := ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10000), decimal.NewFromInt(10))
 	if err != nil {
 		t.Error(err)
 	}
@@ -67,7 +67,7 @@ func TestPlaceMarketOrderAfterLimitConcurrent(t *testing.T) {
 	}()
 	wg.Wait()
 	fmt.Printf("max: %v\n", max)
-	fmt.Printf("order: %v\n", ob.activeOrders[orderID].Value.logs)
+	// fmt.Printf("order: %v\n", ob.activeOrders[orderID].Value.logs)
 	fmt.Printf("orderside volume %v\n", ob.bids.volume)
 }
 
@@ -209,7 +209,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		clientID := uuid.New()
-		for i := 0; i < 50000; i++ {
+		for i := 0; i < 100000; i++ {
 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
 			ob.PlaceLimitOrder(Buy, clientID, quantity, price)
@@ -232,7 +232,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		clientID := uuid.New()
-		for i := 0; i < 50000; i++ {
+		for i := 0; i < 100000; i++ {
 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
 			ob.PlaceLimitOrder(Sell, clientID, quantity, price)

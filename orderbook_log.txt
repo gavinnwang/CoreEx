@@ -1,0 +1,596 @@
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 1bdf:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668041 +0800 CST m=+0.158026876
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 1bdf
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 447b:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668531 +0800 CST m=+0.158516751
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 447b
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order d2fd:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668557 +0800 CST m=+0.158542293
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: d2fd
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 93ce:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668575 +0800 CST m=+0.158560459
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 93ce
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order c52a:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668593 +0800 CST m=+0.158578834
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: c52a
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 18ad:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668613 +0800 CST m=+0.158598834
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 18ad
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 7941:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668635 +0800 CST m=+0.158620793
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 7941
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 237a:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668651 +0800 CST m=+0.158636293
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 237a
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 7e2e:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.66867 +0800 CST m=+0.158655251
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 7e2e
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order e2d2:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668688 +0800 CST m=+0.158673584
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: e2d2
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 58ec:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668704 +0800 CST m=+0.158689126
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 58ec
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order b9f7:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668719 +0800 CST m=+0.158704084
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: b9f7
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 6965:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668735 +0800 CST m=+0.158720376
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 6965
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order a7b9:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668761 +0800 CST m=+0.158746126
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: a7b9
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order b88c:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668777 +0800 CST m=+0.158762793
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: b88c
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 95a4:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668792 +0800 CST m=+0.158777459
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 95a4
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 6406:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668806 +0800 CST m=+0.158791709
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 6406
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order f1c2:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668827 +0800 CST m=+0.158812168
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: f1c2
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order f0f6:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668841 +0800 CST m=+0.158826501
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: f0f6
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 09c8:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668856 +0800 CST m=+0.158841043
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 09c8
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 9081:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.66887 +0800 CST m=+0.158854959
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 9081
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 7d71:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668886 +0800 CST m=+0.158871376
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 7d71
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 5d60:
+	side: Buy
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668902 +0800 CST m=+0.158887668
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 5d60
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 7b2d:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668919 +0800 CST m=+0.158904251
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 7b2d at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 7b2d with 1bdf
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 7698:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668944 +0800 CST m=+0.158929084
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 7698 at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 7698 with 447b
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 66f0:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.668963 +0800 CST m=+0.158948209
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 66f0 at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 66f0 with d2fd
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order fe65:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.66899 +0800 CST m=+0.158975501
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching fe65 at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching fe65 with 93ce
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order d96e:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.66901 +0800 CST m=+0.158995251
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching d96e at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching d96e with c52a
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 65a1:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.669035 +0800 CST m=+0.159020543
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 65a1 at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 65a1 with 18ad
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 4867:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.669056 +0800 CST m=+0.159041334
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 4867 at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 4867 with 7941
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 7e6b:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.669077 +0800 CST m=+0.159062876
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 7e6b at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 7e6b with 237a
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order fed5:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.669097 +0800 CST m=+0.159082876
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching fed5 at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching fed5 with 7e2e
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 1dd9:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.669121 +0800 CST m=+0.159106626
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 1dd9 at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 1dd9 with e2d2
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order e54e:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.669142 +0800 CST m=+0.159127584
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching e54e at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching e54e with 58ec
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 38a2:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.669165 +0800 CST m=+0.159150584
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 38a2 at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 38a2 with b9f7
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 68af:
+	side: Sell
+	type: Limit
+	volume: 10
+	price: 23
+	time: 2023-08-30 17:02:12.669187 +0800 CST m=+0.159172793
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 68af at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 68af with 6965
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created market order: 
+order 254c:
+	side: Sell
+	type: Market
+	volume: 10
+	price: 0
+	time: 2023-08-30 17:02:12.669209 +0800 CST m=+0.159194668
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 254c at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 254c with a7b9
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created market order: 
+order 6c48:
+	side: Sell
+	type: Market
+	volume: 10
+	price: 0
+	time: 2023-08-30 17:02:12.669238 +0800 CST m=+0.159222876
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 6c48 at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 6c48 with b88c
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created market order: 
+order e8d1:
+	side: Sell
+	type: Market
+	volume: 10
+	price: 0
+	time: 2023-08-30 17:02:12.669264 +0800 CST m=+0.159248959
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching e8d1 at price level 23
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching e8d1 with 95a4
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 4549:
+	side: Buy
+	type: Limit
+	volume: 10000
+	price: 43
+	time: 2023-08-30 17:02:12.669284 +0800 CST m=+0.159269168
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 4549
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created market order: 
+order 7b74:
+	side: Sell
+	type: Market
+	volume: 1
+	price: 0
+	time: 2023-08-30 17:02:12.669302 +0800 CST m=+0.159286959
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 7b74 at price level 43
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 7b74 with 4549
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created market order: 
+order 2c3c:
+	side: Sell
+	type: Market
+	volume: 100
+	price: 0
+	time: 2023-08-30 17:02:12.669321 +0800 CST m=+0.159306709
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 2c3c at price level 43
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching 2c3c with 4549
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created market order: 
+order de79:
+	side: Sell
+	type: Market
+	volume: 100
+	price: 0
+	time: 2023-08-30 17:02:12.669339 +0800 CST m=+0.159324168
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching de79 at price level 43
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Matching de79 with 4549
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 2810:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:02:12.669359 +0800 CST m=+0.159344834
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 2810
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order dea5:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:02:12.669379 +0800 CST m=+0.159364668
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: dea5
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: Created limit order: 
+order 7272:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:02:12.669397 +0800 CST m=+0.159382584
+
+ORDERBOOK 2023/08/30 17:02:12 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 7272
+ORDERBOOK 2023/08/30 17:02:42 orderbook_log_service.go:34: Created limit order: 
+order 45bb:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:02:42.401502 +0800 CST m=+29.891152751
+
+ORDERBOOK 2023/08/30 17:02:42 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 45bb
+ORDERBOOK 2023/08/30 17:02:45 orderbook_log_service.go:34: Created limit order: 
+order 4b60:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:02:45.225675 +0800 CST m=+32.715293834
+
+ORDERBOOK 2023/08/30 17:02:45 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 4b60
+ORDERBOOK 2023/08/30 17:02:47 orderbook_log_service.go:34: Created limit order: 
+order d1f7:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:02:47.216926 +0800 CST m=+34.706521959
+
+ORDERBOOK 2023/08/30 17:02:47 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: d1f7
+ORDERBOOK 2023/08/30 17:02:51 orderbook_log_service.go:34: Created limit order: 
+order 5a4e:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:02:51.162512 +0800 CST m=+38.652064043
+
+ORDERBOOK 2023/08/30 17:02:51 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 5a4e
+ORDERBOOK 2023/08/30 17:02:52 orderbook_log_service.go:34: Created limit order: 
+order 9a69:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:02:52.86417 +0800 CST m=+40.353703001
+
+ORDERBOOK 2023/08/30 17:02:52 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 9a69
+ORDERBOOK 2023/08/30 17:02:55 orderbook_log_service.go:34: Created limit order: 
+order 21df:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:02:55.096549 +0800 CST m=+42.586056209
+
+ORDERBOOK 2023/08/30 17:02:55 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 21df
+ORDERBOOK 2023/08/30 17:02:57 orderbook_log_service.go:34: Created limit order: 
+order 5b19:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:02:57.22349 +0800 CST m=+44.712973876
+
+ORDERBOOK 2023/08/30 17:02:57 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 5b19
+ORDERBOOK 2023/08/30 17:02:58 orderbook_log_service.go:34: Created limit order: 
+order bcc8:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:02:58.971159 +0800 CST m=+46.460622959
+
+ORDERBOOK 2023/08/30 17:02:58 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: bcc8
+ORDERBOOK 2023/08/30 17:03:00 orderbook_log_service.go:34: Created limit order: 
+order 8d34:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:03:00.478497 +0800 CST m=+47.967943918
+
+ORDERBOOK 2023/08/30 17:03:00 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 8d34
+ORDERBOOK 2023/08/30 17:03:01 orderbook_log_service.go:34: Created limit order: 
+order bf50:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:03:01.727648 +0800 CST m=+49.217080459
+
+ORDERBOOK 2023/08/30 17:03:01 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: bf50
+ORDERBOOK 2023/08/30 17:03:03 orderbook_log_service.go:34: Created limit order: 
+order 8a7c:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:03:03.110678 +0800 CST m=+50.600094793
+
+ORDERBOOK 2023/08/30 17:03:03 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 8a7c
+ORDERBOOK 2023/08/30 17:03:04 orderbook_log_service.go:34: Created limit order: 
+order d995:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:03:04.282013 +0800 CST m=+51.771417459
+
+ORDERBOOK 2023/08/30 17:03:04 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: d995
+ORDERBOOK 2023/08/30 17:03:05 orderbook_log_service.go:34: Created limit order: 
+order 551e:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:03:05.328395 +0800 CST m=+52.817787168
+
+ORDERBOOK 2023/08/30 17:03:05 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 551e
+ORDERBOOK 2023/08/30 17:03:07 orderbook_log_service.go:34: Created limit order: 
+order 22cb:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:03:07.4356 +0800 CST m=+54.924968793
+
+ORDERBOOK 2023/08/30 17:03:07 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 22cb
+ORDERBOOK 2023/08/30 17:03:09 orderbook_log_service.go:34: Created limit order: 
+order 7c15:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:03:09.093484 +0800 CST m=+56.582834168
+
+ORDERBOOK 2023/08/30 17:03:09 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 7c15
+ORDERBOOK 2023/08/30 17:03:10 orderbook_log_service.go:34: Created limit order: 
+order 99e1:
+	side: Buy
+	type: Limit
+	volume: 100
+	price: 43
+	time: 2023-08-30 17:03:10.401987 +0800 CST m=+57.891321834
+
+ORDERBOOK 2023/08/30 17:03:10 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 99e1
