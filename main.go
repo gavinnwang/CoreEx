@@ -17,10 +17,11 @@ func main() {
 	ex := NewExchange()
 
 	go ex.consumeAndPlaceOrders(brokerList) // consume and place orders to the orderbook
-	go ex.FetchMarketPrice()
-	go ex.FetchBestBids()
-	go ex.FetchBestAsks()
+	go ex.FetchAndStoreMarketPrice()
+	go ex.FetchAndStoreBestBids()
+	go ex.FetchAndStoreBestAsks()
 
 	http.HandleFunc("/order", ex.PlaceOrderHandler(producer))
+	http.HandleFunc("/price", ex.StreamMarketPrice)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

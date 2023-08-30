@@ -11,6 +11,7 @@ import (
 	"github.com/IBM/sarama"
 	"github.com/go-redis/redis"
 	"github.com/google/uuid"
+	"github.com/gorilla/websocket"
 	"github.com/shopspring/decimal"
 )
 
@@ -128,29 +129,71 @@ func (ex *Exchange) consumeAndPlaceOrders(brokerList []string) {
 	}
 }
 
-func (ex *Exchange) FetchMarketPrice() {
+func (ex *Exchange) StreamMarketPrice(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer conn.Close()
+
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+
 	for {
-		p := ex.OrderBook.MarketPrice()
-		// timestamp := time.Now().Unix()
+		select {
+		case <-ticker.C:
+			p := ex.OrderBook.MarketPrice()
+			priceString := p.String()
 
-		// key := "market_price"
-		// rdb.Add(ctx, key, []redis.Z{{Score: float64(timestamp), Member: fakePrice}})
-
-		fmt.Printf("market price: %s\n", p)
-		time.Sleep(1 * time.Second)
+			if err := conn.WriteMessage(websocket.TextMessage, []byte(priceString)); err != nil {
+				log.Println(err)
+				return
+			}
+		}
 	}
 }
 
-func (ex *Exchange) FetchBestBids() {
+func (ex *Exchange) FetchAndStoreMarketPrice() {
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+
 	for {
-		fmt.Printf("best bids: %s\n", ex.OrderBook.BestBid())
-		time.Sleep(1 * time.Second)
+		select {
+		case <-ticker.C:
+			p := ex.OrderBook.MarketPrice()
+			timestamp := time.Now().Unix()
+			key := "market_price"
+			_, err := ex.rdb.Do("TS.ADD", key, timestamp, p.String()).Result()
+			if err != nil {
+				log.Fatalf("Could not add data to time series: %v", err)
+			} else {
+				fmt.Printf("Added market price data to time series: %s\n", p)
+			}
+		}
 	}
 }
 
-func (ex *Exchange) FetchBestAsks() {
+func (ex *Exchange) FetchAndStoreBestBids() {
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+
 	for {
-		fmt.Printf("best asks: %s\n", ex.OrderBook.BestAsk())
-		time.Sleep(1 * time.Second)
+		select {
+		case <-ticker.C:
+			fmt.Printf("best bids: %s\n", ex.OrderBook.BestBid())
+		}
+	}
+}
+
+func (ex *Exchange) FetchAndStoreBestAsks() {
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			fmt.Printf("best asks: %s\n", ex.OrderBook.BestAsk())
+		}
 	}
 }
