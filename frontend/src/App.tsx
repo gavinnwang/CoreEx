@@ -1,10 +1,10 @@
 import { createSignal, type Component, createEffect } from "solid-js";
 
 import logo from "./logo.svg";
-import styles from "./App.module.css";
+// import styles from "./App.module.css";
 
 const App: Component = () => {
-  const [price, setPrice] = createSignal(0);
+  const [price, setPrice] = createSignal<number | null>(null);
 
   createEffect(() => {
     const ws = new WebSocket("ws://localhost:8080/price");
@@ -28,10 +28,12 @@ const App: Component = () => {
     };
   });
   return (
-    <div class={styles.App}>
-      <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
-        <p>market price: {price()}</p>
+    <div class="flex bg-sky-700 justify-center pt-20 h-screen">
+      <header class="flex items-center flex-col">
+        <img src={logo} class="w-40 h-40" alt="logo" />
+        <p class="text-sky-200 italic underline-offset-4 underline">
+          market price: {price() ?? "price data not available"}
+        </p>
       </header>
     </div>
   );
