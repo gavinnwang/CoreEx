@@ -1,4 +1,4 @@
-package main
+package ws
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var upgrader = websocket.Upgrader{
+var Upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
@@ -14,4 +14,3 @@ var upgrader = websocket.Upgrader{
 		return true
 	},
 }
-

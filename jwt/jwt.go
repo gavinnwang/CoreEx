@@ -8,6 +8,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+// signiture = sign(encode(header (include metadata and algo used for signiture)) + encode(payload (include claims)))
+
 // Service is an interface that represents all the capabilities for the JWT service.
 type Service interface {
 	GenerateToken(userID string) (string, error)

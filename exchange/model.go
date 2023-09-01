@@ -1,4 +1,4 @@
-package main
+package exchange
 
 type OrderRequestParameter struct {
 	ClientID  string  `json:"client_id"`
