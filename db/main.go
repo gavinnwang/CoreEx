@@ -28,13 +28,13 @@ func main() {
 	defer db.Close()
 
 	// Create database
-	_, err = db.Exec("CREATE DATABASE IF NOT EXISTS test_db")
+	_, err = db.Exec("CREATE DATABASE IF NOT EXISTS exchange")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Use the created database
-	_, err = db.Exec("USE test_db")
+	_, err = db.Exec("USE exchange")
 	if err != nil {
 		log.Fatal(err)
 	}

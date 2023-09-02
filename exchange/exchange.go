@@ -191,7 +191,7 @@ func (ex *Exchange) worker(pc sarama.PartitionConsumer, wg *sync.WaitGroup) {
 // 				fmt.Printf("Added market price data to time series: %s\n", p)
 // 			}
 // 		}
-// 	}
+// 	 }
 // }
 
 func (ex *Exchange) FetchAndStoreBestBids() {
@@ -235,7 +235,7 @@ func (ex *Exchange) HandleStreamMarketPrice(w http.ResponseWriter, r *http.Reque
 			priceString := p.String()
 
 			if err := conn.WriteMessage(websocket.TextMessage, []byte(priceString)); err != nil {
-				log.Println(err)
+                log.Println("WriteMessage Error:", err)
 				return
 			}
 		}

@@ -1,13 +1,33 @@
 package db
 
-import "database/sql"
+import (
+	"database/sql"
+	"fmt"
+	"github/wry-0313/exchange/config"
 
-type db struct {
+	_ "github.com/go-sql-driver/mysql"
+)
+
+type DB struct {
 	db *sql.DB
 }
 
-// func (db *db) New() *db {
-// 	return &db{
-// 		db:
-// 	}
-// }
+func New(cfg config.DatabaseConfig) (*DB, error) {
+	dsn := buildDSN(cfg)
+	conn, err := sql.Open("mysql", dsn)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("Connected to database")
+	return &DB{
+		db: conn,
+	}, nil
+}
+
+func buildDSN(cfg config.DatabaseConfig) string {
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/",
+		cfg.User,
+		cfg.Password,
+		cfg.Host,
+		cfg.Port)
+}

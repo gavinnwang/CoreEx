@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"github/wry-0313/exchange/config"
+	"github/wry-0313/exchange/db"
 	"github/wry-0313/exchange/exchange"
 	"log"
 	"net/http"
@@ -13,9 +15,19 @@ import (
 
 
 func main() {
+
+	cfg, err := config.Load(".env")
+	if err != nil {
+		log.Fatalf("Could not load config: %v", err)
+	}
+
+	db, err := db.New(cfg.DB)
+	if err != nil {
+		log.Fatalf("Error connecting to database: %v", err)
+	}
 	
 	server := http.Server{
-		Addr: ":8080",
+		Addr: cfg.ServerPort,
 	}
 
 	exchangeService := exchange.NewExchange()
@@ -37,6 +49,6 @@ func main() {
 	if err := server.Shutdown(ctx); err != nil {
 		log.Fatalf("Server forced shutdown: %s", err)
 	}
-	
+
 	close(exchangeService.Shutdown) 
 }
