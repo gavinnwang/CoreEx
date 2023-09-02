@@ -5,6 +5,8 @@ import (
 	"github/wry-0313/exchange/config"
 	"github/wry-0313/exchange/db"
 	"github/wry-0313/exchange/exchange"
+	"github/wry-0313/exchange/user"
+	"github/wry-0313/exchange/validator.go"
 	"log"
 	"net/http"
 	"os"
@@ -15,6 +17,8 @@ import (
 
 
 func main() {
+
+	v := validator.New()
 
 	cfg, err := config.Load(".env")
 	if err != nil {
@@ -29,6 +33,14 @@ func main() {
 	server := http.Server{
 		Addr: cfg.ServerPort,
 	}
+
+	userRepo := user.NewRepository(db.DB)
+
+	userService := user.NewService(userRepo, v)
+
+	
+
+
 
 	exchangeService := exchange.NewExchange()
 	exchangeService.Run()

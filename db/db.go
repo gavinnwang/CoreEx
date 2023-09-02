@@ -9,7 +9,7 @@ import (
 )
 
 type DB struct {
-	db *sql.DB
+	DB *sql.DB
 }
 
 func New(cfg config.DatabaseConfig) (*DB, error) {
@@ -20,7 +20,7 @@ func New(cfg config.DatabaseConfig) (*DB, error) {
 	}
 	fmt.Println("Connected to database")
 	return &DB{
-		db: conn,
+		DB: conn,
 	}, nil
 }
 
