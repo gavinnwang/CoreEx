@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github/wry-0313/exchange/validator.go"
 
@@ -16,20 +17,24 @@ const (
 	keyDBUser     = "DB_USER"
 	keyDBPassword = "DB_PASSWORD"
 
+	keyEnv             = "ENV"
+	keyServerPort      = "SERVER_PORT"
+	keyJWTSecret       = "JWT_SIGNING_KEY"
+	keyJWTExpiration   = "JWT_EXPIRATION"
 	keyInternalNetwork = "INTERNAL_NETWORK"
-
-	keyEnv        = "ENV"
-	keyServerPort = "SERVER_PORT"
 
 	valEnvDev = "DEVELOPMENT"
 )
 
 type Config struct {
-	DB         DatabaseConfig
-	ServerPort string
+	DB            DatabaseConfig
+	ServerPort    string
+	JwtSecret     string
+	JwtExpiration int
 }
 
 func Load(file string) (*Config, error) {
+	os.Setenv("ENV", "DEVELOPMENT")
 	env := os.Getenv(keyEnv)
 	if env == valEnvDev {
 		// Load .env file if in development
@@ -41,14 +46,22 @@ func Load(file string) (*Config, error) {
 
 	databaseConfig, err := getDatabaseConfig()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error getting database config: %w", err)
 	}
 
 	serverPort := os.Getenv(keyServerPort)
+	jwtSecret := os.Getenv(keyJWTSecret)
+	jwtExpirationStr := os.Getenv(keyJWTExpiration)
 
+	jwtExpiration, err := strconv.Atoi(jwtExpirationStr)
+	if err != nil {
+		return nil, fmt.Errorf("invalid JWT expiration value: %w", err)
+	}
 	return &Config{
-		DB:         databaseConfig,
-		ServerPort: serverPort,
+		DB:            databaseConfig,
+		ServerPort:    serverPort,
+		JwtSecret:     jwtSecret,
+		JwtExpiration: jwtExpiration,
 	}, nil
 }
 
@@ -78,6 +91,7 @@ func getDatabaseConfig() (DatabaseConfig, error) {
 		User:     os.Getenv(keyDBUser),
 		Password: os.Getenv(keyDBPassword),
 	}
+	fmt.Printf("databaseConfig: %v\n", databaseConfig)
 
 	// This allows running tests from outside the docker network assuming your local
 	// development environment has ports exposed

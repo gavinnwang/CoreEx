@@ -3,6 +3,7 @@ package user
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"github/wry-0313/exchange/models"
 	// "github.com/google/uuid"
 )
@@ -17,7 +18,7 @@ type Repository interface {
 	CreateUser(user models.User) error
 
 	// GetUser(userID uuid.UUID) (models.User, error)
-	// GetUserByEmail(email string) (models.User, error)
+	GetUserByEmail(email string) (models.User, error)
 
 	// DeleteUser(userID uuid.UUID) error
 }
@@ -26,7 +27,7 @@ type repository struct {
 	db *sql.DB
 }
 
-func NewRepository(db *sql.DB) *repository {
+func NewRepository(db *sql.DB) Repository {
 	return &repository{
 		db: db,
 	}
@@ -41,11 +42,25 @@ func (r *repository) CreateUser(user models.User) error {
 	if exists {
 		return ErrEmailExists // Email already exists
 	}
+	fmt.Printf("User: %v\n", user)
 
-	_, err = r.db.Exec("INSERT INTO users (id, name, email, password, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)", user.ID, user.Name, user.Email, user.Password, user.CreatedAt, user.UpdatedAt)
+	_, err = r.db.Exec("INSERT INTO users (id, name, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)", user.ID, user.Name, user.Email, user.Password, user.CreatedAt, user.UpdatedAt)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+// GetUserByEmail returns a single user for a given email.
+func (r *repository) GetUserByEmail( email string) (models.User, error) {
+	var user models.User
+	err := r.db.QueryRow("SELECT * FROM users WHERE email = ?", email).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return models.User{}, ErrUserNotFound
+		}
+		return models.User{}, err
+	}
+	return user, nil
 }

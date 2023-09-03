@@ -18,16 +18,18 @@ func New(cfg config.DatabaseConfig) (*DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Connected to database")
+	fmt.Printf("Connected to database %s\n", dsn)
 	return &DB{
 		DB: conn,
 	}, nil
 }
 
 func buildDSN(cfg config.DatabaseConfig) string {
-	return fmt.Sprintf("%s:%s@tcp(%s:%s)/",
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%v?parseTime=true",
 		cfg.User,
 		cfg.Password,
 		cfg.Host,
-		cfg.Port)
+		cfg.Port,
+		cfg.Name,
+	)
 }

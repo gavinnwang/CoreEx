@@ -10,6 +10,8 @@ import (
 
 // signiture = sign(encode(header (include metadata and algo used for signiture)) + encode(payload (include claims)))
 
+// JWT tokens will have a unique identitfier jti (JWT ID) which will ensure that even if claims are the same the tokens will be distinc values
+
 // Service is an interface that represents all the capabilities for the JWT service.
 type Service interface {
 	GenerateToken(userID string) (string, error)
@@ -21,9 +23,9 @@ type service struct {
 	expiration int
 }
 
-// New creates a service with a provided JWT secret string and expiration (hourly) number. It implements
+// NewService creates a service with a provided JWT secret string and expiration (hourly) number. It implements
 // the JWT Service interface.
-func New(jwtSecret string, expiration int) *service {
+func NewService(jwtSecret string, expiration int) *service {
 	return &service{jwtSecret, expiration}
 }
 
@@ -38,6 +40,7 @@ func (s *service) GenerateToken(userID string) (string, error) {
 
 // VerifyToken parses and validates a jwt token. It returns the userID if the token is valid.
 func (s *service) VerifyToken(tokenString string) (string, error) {
+	// By having an anonymous function, we can customize the key provision and key validation steps and achieve separation of concerns
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])

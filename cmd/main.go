@@ -4,7 +4,10 @@ import (
 	"context"
 	"github/wry-0313/exchange/config"
 	"github/wry-0313/exchange/db"
+	"github/wry-0313/exchange/endpoint"
 	"github/wry-0313/exchange/exchange"
+	"github/wry-0313/exchange/jwt"
+	"github/wry-0313/exchange/middleware"
 	"github/wry-0313/exchange/user"
 	"github/wry-0313/exchange/validator.go"
 	"log"
@@ -13,12 +16,14 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/go-chi/chi/v5"
 )
 
 
 func main() {
 
-	v := validator.New()
+	validator := validator.New()
 
 	cfg, err := config.Load(".env")
 	if err != nil {
@@ -30,17 +35,12 @@ func main() {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
 	
+	// Setup server
+	r := chi.NewRouter()
 	server := http.Server{
-		Addr: cfg.ServerPort,
+		Addr:    cfg.ServerPort,
+		Handler: setupHandler(r, db, validator, cfg),
 	}
-
-	userRepo := user.NewRepository(db.DB)
-
-	userService := user.NewService(userRepo, v)
-
-	
-
-
 
 	exchangeService := exchange.NewExchange()
 	exchangeService.Run()
@@ -63,4 +63,43 @@ func main() {
 	}
 
 	close(exchangeService.Shutdown) 
+}
+
+// setupHandler sets up all the middleware and API routes for the server.
+func setupHandler(
+	r chi.Router,
+	db *db.DB,
+	v validator.Validate,
+	cfg *config.Config,
+) chi.Router {
+	// Set up middleware
+	r.Use(middleware.Cors())
+
+	// Set up repositories
+	userRepo := user.NewRepository(db.DB)
+
+	// Set up services
+	jwtService := jwt.NewService(cfg.JwtSecret, cfg.JwtExpiration)
+	userService := user.NewService(userRepo, v)
+
+	// rdb := ws.NewRedis(cfg.Rdb)
+
+
+
+	// Set up auth handler
+	authHandler := middleware.Auth(jwtService)
+
+	// Register handlers
+	userAPI.RegisterHandlers(r, authHandler)
+	authAPI.RegisterHandlers(r)
+
+	r.Get("/ping", handlePingCheck)
+
+	return r
+}
+
+func handlePingCheck(w http.ResponseWriter, _ *http.Request) {
+	endpoint.WriteWithStatus(w, http.StatusOK, struct {
+		Message string `json:"message"`
+	}{Message: "pong"})
 }

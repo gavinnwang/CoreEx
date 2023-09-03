@@ -21,7 +21,7 @@ type Service interface {
 	CreateUser(input CreateUserInput) (models.User, error)
 }
 
-func NewService(userRepo Repository, validator validator.Validate) *service {
+func NewService(userRepo Repository, validator validator.Validate) Service {
 	return &service{
 		userRepo: userRepo,
 		validator: validator,
