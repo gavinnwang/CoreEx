@@ -28,7 +28,6 @@ const Price: Component = () => {
   return (
     <div class="flex bg-sky-700 justify-start items-center flex-col gap-y-4 pt-20 h-screen">
       <header class="flex items-center flex-col">
-        {/* <img src={logo} class="w-40 h-40" alt="logo" /> */}
         <p class="text-sky-200 italic underline-offset-4">
           market price: {price() ?? "price data not available"}
         </p>

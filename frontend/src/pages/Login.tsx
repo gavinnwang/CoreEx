@@ -1,6 +1,5 @@
 import { A, useNavigate } from "@solidjs/router";
 import { createSignal, type Component } from "solid-js";
-import { createUser } from "../api/user";
 import { COOKIE_NAME_JWT_TOKEN } from "../constants";
 import Cookies from "js-cookie";
 import { APIError } from "../api";
@@ -60,12 +59,14 @@ const Login: Component = () => {
           placeholder="Email"
           onInput={(e) => setEmail(e.currentTarget.value)}
           class="border-b focus:outline-none"
+          required
         />
         <input
           type="password"
           placeholder="Password"
           onInput={(e) => setPassword(e.currentTarget.value)}
           class="border-b focus:outline-none"
+          required
         />
         <button class="hover:underline" type="submit" disabled={isLoading()}>
           {isLoading() ? "Loading..." : "Log In"}

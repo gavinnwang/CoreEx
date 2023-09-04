@@ -30,6 +30,8 @@ const Signup: Component = () => {
       Cookies.set(COOKIE_NAME_JWT_TOKEN, token, {
         path: "/",
         expires: expirationDate,
+        httpOnly: true,
+        secure: true,
       });
 
       // Refresh and navigate (assuming you have some refresh mechanism)
@@ -62,18 +64,22 @@ const Signup: Component = () => {
           placeholder="Name"
           onInput={(e) => setName(e.currentTarget.value)}
           class="border-b focus:outline-none"
+          min={2}
+          required
         />
         <input
           type="email"
           placeholder="Email"
           onInput={(e) => setEmail(e.currentTarget.value)}
           class="border-b focus:outline-none"
+          required
         />
         <input
           type="password"
           placeholder="Password"
           onInput={(e) => setPassword(e.currentTarget.value)}
           class="border-b focus:outline-none"
+          required
         />
         <button class="hover:underline" type="submit" disabled={isLoading()}>
           {isLoading() ? "Loading..." : "Sign Up"}
