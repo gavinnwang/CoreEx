@@ -33,7 +33,7 @@ func NewAPI(exchangeService Service) *API {
 func (api *API) HandlePlaceOrder(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	userID := middleware.UserIDFromContext(ctx)
-	fmt.Printf("user placed order: %v\n", userID[:4])
+	fmt.Printf("user requests to place order: %v\n", userID[:4])
 
 	var input PlaceOrderInput
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -51,6 +51,8 @@ func (api *API) HandlePlaceOrder(w http.ResponseWriter, r *http.Request) {
 		switch {
 		case validator.IsValidationError(err):
 			endpoint.WriteValidationErr(w, input, err)
+		case err == ErrInvalidSymbol:
+			endpoint.WriteWithError(w, http.StatusNoContent, err.Error())
 		default:
 			endpoint.WriteWithError(w, http.StatusInternalServerError, ErrMsgInternalServer)
 		}

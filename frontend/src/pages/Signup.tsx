@@ -1,10 +1,9 @@
 import { A, useNavigate } from "@solidjs/router";
 import { createSignal, type Component } from "solid-js";
 import { createUser } from "../api/user";
-import { COOKIE_NAME_JWT_TOKEN } from "../constants";
-import Cookies from "js-cookie";
 import { APIError } from "../api";
-import toast, { Toaster } from "solid-toast";
+import toast from "solid-toast";
+import { setSessionCookie } from "../lib/cookie";
 
 const Signup: Component = () => {
   const [name, setName] = createSignal("");
@@ -23,20 +22,12 @@ const Signup: Component = () => {
         password: password(),
         name: name(),
       });
+      
+      setSessionCookie(token);
+
       toast.success("Successfully created user " + name() + "!");
-      const expirationDate = new Date();
-      expirationDate.setDate(expirationDate.getDate() + 30);
-
-      Cookies.set(COOKIE_NAME_JWT_TOKEN, token, {
-        path: "/",
-        expires: expirationDate,
-        httpOnly: true,
-        secure: true,
-      });
-
-      // Refresh and navigate (assuming you have some refresh mechanism)
-      // router.refresh();
-      navigate("/price");
+      
+      navigate("/");
     } catch (error) {
       if (error instanceof APIError) {
         toast.error(error.message);
@@ -54,7 +45,6 @@ const Signup: Component = () => {
         home
       </A>
       Sign Up
-      <Toaster />
       <form
         onSubmit={handleSubmit}
         class="flex flex-col gap-y-3 border rounded-md p-4 shadow-sm"

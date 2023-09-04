@@ -16,14 +16,13 @@ import (
 )
 
 const (
-	kafkaTopic = "orders"
+	kafkaTopic   = "orders"
 	numConsumers = 3
 )
 
 var (
-	ErrSymbolNotFound = errors.New("symbol not found")
+	ErrInvalidSymbol = errors.New("symbol not found")
 )
-
 
 type Service interface {
 	PlaceOrder(input PlaceOrderInput) error
@@ -31,10 +30,10 @@ type Service interface {
 }
 
 type service struct {
-	validator validator.Validate
+	validator  validator.Validate
 	orderBooks map[string]*orderbook.OrderBook
-	producer  sarama.SyncProducer
-	Shutdown  chan struct{}
+	producer   sarama.SyncProducer
+	Shutdown   chan struct{}
 }
 
 func NewService(userRepo user.Repository, validator validator.Validate) Service {
@@ -48,10 +47,10 @@ func NewService(userRepo user.Repository, validator validator.Validate) Service 
 	orderBooks["AAPL"] = orderbook.NewOrderBook("AAPL")
 
 	return &service{
-		validator: validator,
+		validator:  validator,
 		orderBooks: orderBooks,
-		producer:  producer,
-		Shutdown:  make(chan struct{}),
+		producer:   producer,
+		Shutdown:   make(chan struct{}),
 	}
 }
 
@@ -60,15 +59,20 @@ func (s *service) PlaceOrder(input PlaceOrderInput) error {
 		return fmt.Errorf("service: validation error: %w", err)
 	}
 
+	_, ok := s.orderBooks[input.Symbol]
+	if !ok {
+		return ErrInvalidSymbol
+	}
+
 	inputJSON, err := json.Marshal(input)
-	if err != nil {	
+	if err != nil {
 		return fmt.Errorf("Failed to serialize order to JSON: %w", err)
 	}
 
 	// Produce the serialized Order object to Kafka
 	msg := &sarama.ProducerMessage{
 		Topic: kafkaTopic,
-		Value: sarama.ByteEncoder(inputJSON), 
+		Value: sarama.ByteEncoder(inputJSON),
 	}
 
 	_, _, err = s.producer.SendMessage(msg)
@@ -80,11 +84,11 @@ func (s *service) PlaceOrder(input PlaceOrderInput) error {
 }
 
 func (s *service) GetMarketPrice(symbol string) (decimal.Decimal, error) {
-	 ob, ok := s.orderBooks[symbol]
-	 if !ok {
-		 return decimal.Decimal{}, ErrSymbolNotFound
-	 }
-	 return ob.MarketPrice(), nil
+	ob, ok := s.orderBooks[symbol]
+	if !ok {
+		return decimal.Decimal{}, ErrInvalidSymbol
+	}
+	return ob.MarketPrice(), nil
 }
 
 func (s *service) RunConsumer(brokerList []string) {

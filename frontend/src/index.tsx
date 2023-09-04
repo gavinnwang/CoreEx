@@ -12,7 +12,7 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 }
 
 const Signup = lazy(() => import("./pages/Signup"));
-const Price = lazy(() => import("./pages/Price"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Login = lazy(() => import("./pages/Login"));
 
 render(
@@ -22,7 +22,7 @@ render(
         <Route path="/" component={App} />
         <Route path="/signup" component={Signup} />
         <Route path="/login" component={Login} />
-        <Route path="/price" component={Price} />
+        <Route path="/dashboard" component={Dashboard} />
       </Routes>
     </Router>
   ),
