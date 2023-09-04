@@ -61,7 +61,7 @@ func (s *service) PlaceOrder(input PlaceOrderInput) error {
 	}
 
 	inputJSON, err := json.Marshal(input)
-	if err != nil {
+	if err != nil {	
 		return fmt.Errorf("Failed to serialize order to JSON: %w", err)
 	}
 
@@ -95,7 +95,7 @@ func (s *service) RunConsumer(brokerList []string) {
 		log.Fatal("Failed to start consumer:", err)
 	}
 
-	log.Printf("Starting Kafka consumers at offest: %v", sarama.OffsetNewest)
+	fmt.Printf("Starting Kafka consumers at offest: %v", sarama.OffsetNewest)
 
 	pc, err := consumer.ConsumePartition(kafkaTopic, 0, sarama.OffsetNewest)
 	if err != nil {
@@ -103,7 +103,7 @@ func (s *service) RunConsumer(brokerList []string) {
 	}
 
 	defer func() {
-		log.Println("Closing consumer")
+		fmt.Println("Closing consumer")
 		if err := pc.Close(); err != nil {
 			panic(err)
 		}
@@ -145,6 +145,7 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup) {
 				fmt.Println("Failed to parse side:", error)
 				continue
 			}
+			fmt.Printf("Placing order: %v\n", order)
 			switch order.OrderType {
 			case "limit":
 				log.Println("Placing limit order")

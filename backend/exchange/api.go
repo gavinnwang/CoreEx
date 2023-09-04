@@ -6,6 +6,7 @@ import (
 	"github/wry-0313/exchange/endpoint"
 	"github/wry-0313/exchange/middleware"
 	"github/wry-0313/exchange/models"
+	"github/wry-0313/exchange/pkg/validator"
 	ws "github/wry-0313/exchange/websocket"
 	"log"
 	"net/http"
@@ -32,7 +33,7 @@ func NewAPI(exchangeService Service) *API {
 func (api *API) HandlePlaceOrder(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	userID := middleware.UserIDFromContext(ctx)
-	fmt.Printf("userID: %v\n", userID)
+	fmt.Printf("user placed order: %v\n", userID[:4])
 
 	var input PlaceOrderInput
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -46,9 +47,13 @@ func (api *API) HandlePlaceOrder(w http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 
-	err := api.exchangeService.PlaceOrder(input)
-	if err != nil {
-		endpoint.WriteWithError(w, http.StatusInternalServerError, ErrMsgInternalServer)
+	if err := api.exchangeService.PlaceOrder(input); err != nil {
+		switch {
+		case validator.IsValidationError(err):
+			endpoint.WriteValidationErr(w, input, err)
+		default:
+			endpoint.WriteWithError(w, http.StatusInternalServerError, ErrMsgInternalServer)
+		}
 		return
 	}
 	endpoint.WriteWithStatus(w, http.StatusOK, models.MessageResponse{Message: "Order placed"})
