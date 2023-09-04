@@ -14,7 +14,7 @@ import (
 type Order struct {
 	side      Side
 	orderID   uuid.UUID
-	clientID  uuid.UUID
+	userID  uuid.UUID
 	createdAt time.Time
 	orderType OrderType
 	status    OrderStatus
@@ -24,7 +24,7 @@ type Order struct {
 	volumeMu  sync.RWMutex
 }
 
-func NewOrder(side Side, clientID uuid.UUID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order {
+func NewOrder(side Side, userID uuid.UUID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order {
 	// var ol *OrderLogs
 	// switch orderType {
 	// case Limit:
@@ -35,7 +35,7 @@ func NewOrder(side Side, clientID uuid.UUID, orderType OrderType, price, volume 
 	return &Order{
 		side:      side,
 		orderID:   uuid.New(),
-		clientID:  clientID,
+		userID:  userID,
 		createdAt: time.Now(),
 		orderType: orderType,
 		status:    Open,
@@ -90,8 +90,8 @@ func (o *Order) OrderType() OrderType {
 	return o.orderType
 }
 
-func (o *Order) ClientID() uuid.UUID {
-	return o.clientID
+func (o *Order) UserID() uuid.UUID {
+	return o.userID
 }
 
 func (o *Order) setStatusToPartiallyFilled(remaining decimal.Decimal) {

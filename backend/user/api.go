@@ -94,7 +94,7 @@ func (api *API) HandleUpdateUserName(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	endpoint.WriteWithStatus(w, http.StatusOK, models.MessageResponse{Message: "User name updated successfully."})
+	endpoint.WriteWithStatus(w, http.StatusOK, models.MessageResponse{Message: "User name updated"})
 }
 
 // RegisterHandlers is a function that registers all the handlers for the user endpoints

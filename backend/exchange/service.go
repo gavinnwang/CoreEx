@@ -73,7 +73,7 @@ func (s *service) PlaceOrder(input PlaceOrderInput) error {
 
 	_, _, err = s.producer.SendMessage(msg)
 	if err != nil {
-		return fmt.Errorf("Failed to send message:", err)
+		return fmt.Errorf("Failed to send message: %w", err)
 	}
 
 	return nil
@@ -135,7 +135,7 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup) {
 				fmt.Println("Failed to deserialize order:", err)
 				continue
 			}
-			clientID, error := uuid.Parse(order.ClientID)
+			userID, error := uuid.Parse(order.UserID)
 			if error != nil {
 				fmt.Println("Failed to parse UUID:", error)
 				continue
@@ -148,14 +148,14 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup) {
 			switch order.OrderType {
 			case "limit":
 				log.Println("Placing limit order")
-				_, err := s.orderBooks[order.Symbol].PlaceLimitOrder(side, clientID, decimal.NewFromFloat(order.Volume), decimal.NewFromFloat(order.Price))
+				_, err := s.orderBooks[order.Symbol].PlaceLimitOrder(side, userID, decimal.NewFromFloat(order.Volume), decimal.NewFromFloat(order.Price))
 				if err != nil {
 					fmt.Println(err)
 					continue
 				}
 			case "market":
 				log.Println("Placing market order")
-				_, err := s.orderBooks[order.Symbol].PlaceMarketOrder(side, clientID, decimal.NewFromFloat(order.Volume))
+				_, err := s.orderBooks[order.Symbol].PlaceMarketOrder(side, userID, decimal.NewFromFloat(order.Volume))
 				if err != nil {
 					fmt.Println(err)
 					continue

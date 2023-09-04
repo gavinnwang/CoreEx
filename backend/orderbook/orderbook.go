@@ -48,7 +48,7 @@ func NewOrderBook(symbol string) *OrderBook {
 	}
 }
 
-func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume decimal.Decimal) (orderID uuid.UUID, err error) {
+func (ob *OrderBook) PlaceMarketOrder(side Side, userID uuid.UUID, volume decimal.Decimal) (orderID uuid.UUID, err error) {
 	if volume.Sign() <= 0 {
 		return uuid.Nil, ErrInvalidVolume
 	}
@@ -57,7 +57,7 @@ func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume deci
 		return uuid.Nil, ErrInvalidSide
 	}
 
-	o := NewOrder(side, clientID, Market, decimal.Zero, volume, true)
+	o := NewOrder(side, userID, Market, decimal.Zero, volume, true)
 	Log(fmt.Sprintf("Created market order: %v", o))
 
 	var (
@@ -229,7 +229,7 @@ func (ob *OrderBook) fillAndRemoveLimitOrder(n *list.Node[*Order]) *Order {
 	return o
 }
 
-func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, price decimal.Decimal) (orderID uuid.UUID, err error) {
+func (ob *OrderBook) PlaceLimitOrder(side Side, userID uuid.UUID, volume, price decimal.Decimal) (orderID uuid.UUID, err error) {
 	if volume.Sign() <= 0 {
 		return uuid.Nil, ErrInvalidVolume
 	}
@@ -244,7 +244,7 @@ func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, pric
 
 	volumeLeft := volume
 
-	o := NewOrder(side, clientID, Limit, price, volume, true)
+	o := NewOrder(side, userID, Limit, price, volume, true)
 	Log(fmt.Sprintf("Created limit order: %v", o))
 
 	if o.Side() == Buy { // there are market orders waiting to be match

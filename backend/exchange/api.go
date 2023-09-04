@@ -2,7 +2,10 @@ package exchange
 
 import (
 	"encoding/json"
+	"fmt"
 	"github/wry-0313/exchange/endpoint"
+	"github/wry-0313/exchange/middleware"
+	"github/wry-0313/exchange/models"
 	ws "github/wry-0313/exchange/websocket"
 	"log"
 	"net/http"
@@ -16,7 +19,6 @@ const (
 	ErrMsgInternalServer = "Internal server error"
 )
 
-
 type API struct {
 	exchangeService Service
 }
@@ -28,20 +30,28 @@ func NewAPI(exchangeService Service) *API {
 }
 
 func (api *API) HandlePlaceOrder(w http.ResponseWriter, r *http.Request) {
-	var order PlaceOrderInput
-	if err := json.NewDecoder(r.Body).Decode(&order); err != nil {
+	ctx := r.Context()
+	userID := middleware.UserIDFromContext(ctx)
+	fmt.Printf("userID: %v\n", userID)
+
+	var input PlaceOrderInput
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		log.Printf("handler: failed to decode request: %v\n", err)
 		endpoint.HandleDecodeErr(w, err)
 		return
 	}
 
+	// Set userID
+	input.UserID = userID
+
 	defer r.Body.Close()
 
-	err := api.exchangeService.PlaceOrder(order)
+	err := api.exchangeService.PlaceOrder(input)
 	if err != nil {
 		endpoint.WriteWithError(w, http.StatusInternalServerError, ErrMsgInternalServer)
 		return
 	}
+	endpoint.WriteWithStatus(w, http.StatusOK, models.MessageResponse{Message: "Order placed"})
 }
 
 func (api *API) HandleStreamMarketPrice(w http.ResponseWriter, r *http.Request) {
@@ -83,7 +93,11 @@ func (api *API) HandleStreamMarketPrice(w http.ResponseWriter, r *http.Request) 
 
 // RegisterHandlers is a function that registers all the handlers for the user endpoints
 func (api *API) RegisterHandlers(r chi.Router, authHandler func(http.Handler) http.Handler) {
+
 	r.Route("/order", func(r chi.Router) {
-		r.Post("/", api.HandlePlaceOrder)
+		r.Group(func(r chi.Router) {
+			r.Use(authHandler)
+			r.Post("/", api.HandlePlaceOrder)
+		})
 	})
 }

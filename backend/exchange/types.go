@@ -1,14 +1,14 @@
 package exchange
 
 type PlaceOrderInput struct {
-	ClientID  string  `json:"client_id"`
-	OrderType string  `json:"order_type"`
-	OrderSide string  `json:"order_side"`
-	Price     float64 `json:"price"`
-	Volume    float64 `json:"volume"`
-	Symbol    string  `json:"symbol"`
+	UserID    string  `json:"user_id" validate:"omitempty"`
+	OrderType string  `json:"order_type" validate:"required,oneof=market limit"`
+	OrderSide string  `json:"order_side" validate:"required,oneof=buy sell"`
+	Price     float64 `json:"price" validate:"required_if=OrderType limit"`
+	Volume    float64 `json:"volume" validate:"required"`
+	Symbol    string  `json:"symbol" validate:"required"`
 }
 
 type StreamPriceInput struct {
-	Symbol string `json:"symbol"`
+	Symbol string `json:"symbol" validate:"required"`
 }

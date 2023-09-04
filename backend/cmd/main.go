@@ -9,8 +9,9 @@ import (
 	"github/wry-0313/exchange/exchange"
 	"github/wry-0313/exchange/jwt"
 	"github/wry-0313/exchange/middleware"
-	"github/wry-0313/exchange/user"
+	"github/wry-0313/exchange/models"
 	"github/wry-0313/exchange/pkg/validator"
+	"github/wry-0313/exchange/user"
 	"log"
 	"net/http"
 	"os"
@@ -20,7 +21,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 )
-
 
 func main() {
 
@@ -35,16 +35,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
-	
+
 	// Setup server
 	r := chi.NewRouter()
 	server := http.Server{
 		Addr:    cfg.ServerPort,
 		Handler: setupHandler(r, db, validator, cfg),
 	}
-
-	exchangeService := exchange.NewExchange()
-	exchangeService.Run()
 
 	// Graceful shutdown
 	stop := make(chan os.Signal, 1)
@@ -63,7 +60,7 @@ func main() {
 		log.Fatalf("Server forced shutdown: %s", err)
 	}
 
-	close(exchangeService.Shutdown) 
+	// close(exchangeService.Shutdown)
 }
 
 // setupHandler sets up all the middleware and API routes for the server.
@@ -83,13 +80,14 @@ func setupHandler(
 	jwtService := jwt.NewService(cfg.JwtSecret, cfg.JwtExpiration)
 	authService := auth.NewService(userRepo, jwtService, v)
 	userService := user.NewService(userRepo, v)
+	exchangeService := exchange.NewService(userRepo, v)
 
 	// rdb := ws.NewRedis(cfg.Rdb)
 
 	// Set up API
 	userAPI := user.NewAPI(userService, jwtService, v)
 	authAPI := auth.NewAPI(authService, v)
-
+	exchangeAPI := exchange.NewAPI(exchangeService)
 
 	// Set up auth handler
 	authHandler := middleware.Auth(jwtService)
@@ -97,6 +95,7 @@ func setupHandler(
 	// Register handlers
 	userAPI.RegisterHandlers(r, authHandler)
 	authAPI.RegisterHandlers(r)
+	exchangeAPI.RegisterHandlers(r, authHandler)
 
 	r.Get("/ping", handlePingCheck)
 
@@ -104,7 +103,5 @@ func setupHandler(
 }
 
 func handlePingCheck(w http.ResponseWriter, _ *http.Request) {
-	endpoint.WriteWithStatus(w, http.StatusOK, struct {
-		Message string `json:"message"`
-	}{Message: "pong"})
+	endpoint.WriteWithStatus(w, http.StatusOK, models.MessageResponse{Message: "pong"})
 }
