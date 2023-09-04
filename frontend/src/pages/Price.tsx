@@ -1,9 +1,7 @@
 import { createSignal, type Component, createEffect } from "solid-js";
 
-import logo from "./logo.svg";
-// import styles from "./App.module.css";
 
-const App: Component = () => {
+const Price: Component = () => {
   const [price, setPrice] = createSignal<number | null>(null);
 
   createEffect(() => {
@@ -39,4 +37,4 @@ const App: Component = () => {
   );
 };
 
-export default App;
+export default Price;

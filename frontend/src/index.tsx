@@ -11,15 +11,17 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   );
 }
 
-const Auth = lazy(() => import("./pages/Auth"));
+const Signup = lazy(() => import("./pages/Signup"));
 const Price = lazy(() => import("./pages/Price"));
+const Login = lazy(() => import("./pages/Login"));
 
 render(
   () => (
     <Router>
       <Routes>
         <Route path="/" component={App} />
-        <Route path="/login" component={Auth} />
+        <Route path="/signup" component={Signup} />
+        <Route path="/login" component={Login} />
         <Route path="/price" component={Price} />
       </Routes>
     </Router>
