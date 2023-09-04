@@ -19,7 +19,7 @@ type service struct {
 
 type Service interface {
 	CreateUser(input CreateUserInput) (models.User, error)
-	UpdateUserName(email string, name string) error
+	UpdateUserName(userID, name string) error
 }
 
 func NewService(userRepo Repository, validator validator.Validate) Service {
@@ -64,13 +64,14 @@ func (s *service) CreateUser(input CreateUserInput) (models.User, error) {
 	return user, nil
 }
 
-func (s *service) UpdateUserName(email string, name string) error {
+func (s *service) UpdateUserName(userID, name string) error {
 	if err := s.validator.Var(name, "required"); err != nil {
 		return fmt.Errorf("service: validation error: %w", err)
 	}
 
 	name = toNameCase(name)
-	if err := s.userRepo.UpdateUserName(name, email); err != nil {
+
+	if err := s.userRepo.UpdateUserName(userID, name); err != nil {
 		return fmt.Errorf("service: failed updating user name: %w", err)
 	}
 	return nil

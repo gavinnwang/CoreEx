@@ -7,6 +7,7 @@ import (
 	"github/wry-0313/exchange/endpoint"
 	"github/wry-0313/exchange/jwt"
 	"github/wry-0313/exchange/middleware"
+	"github/wry-0313/exchange/models"
 	"github/wry-0313/exchange/validator.go"
 	"log"
 	"net/http"
@@ -72,7 +73,6 @@ func (api *API) HandleUpdateUserName(w http.ResponseWriter, r *http.Request) {
 	// context := r.Context()
 	ctx := r.Context()
 	userID := middleware.UserIDFromContext(ctx)
-	fmt.Printf("userID: %v\n", userID)
 
 	// Decode request
 	var input UpdateUserNameInput
@@ -90,14 +90,15 @@ func (api *API) HandleUpdateUserName(w http.ResponseWriter, r *http.Request) {
 			endpoint.WriteValidationErr(w, input, err)
 		case errors.Is(err, ErrUserNotFound):
 			endpoint.WriteWithError(w, http.StatusNotFound, ErrUserNotFound.Error())
+		case errors.Is(err, ErrUserNameSame):
+			endpoint.WriteWithError(w, http.StatusConflict, ErrUserNameSame.Error())
 		default:
-			fmt.Printf("err: %v", err)
 			endpoint.WriteWithError(w, http.StatusInternalServerError, ErrMsgInternalServer)
 		}
 		return
 	}
 
-	endpoint.WriteWithStatus(w, http.StatusOK, struct{}{})
+	endpoint.WriteWithStatus(w, http.StatusOK, models.MessageResponse{Message: "User name updated successfully."})
 }
 
 // RegisterHandlers is a function that registers all the handlers for the user endpoints

@@ -3,6 +3,7 @@ package endpoint
 import (
 	"encoding/json"
 	"fmt"
+	"github/wry-0313/exchange/models"
 	"github/wry-0313/exchange/validator.go"
 	"log"
 	"net/http"
@@ -43,6 +44,11 @@ func WriteWithStatus(w http.ResponseWriter, statusCode int, data interface{}) {
 
 	if data != nil {
 		if err := json.NewEncoder(w).Encode(data); err != nil {
+			log.Printf("Failed to encode API response into JSON: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	} else if statusCode == http.StatusOK {
+		if err := json.NewEncoder(w).Encode(models.MessageResponse{Message: "Success"}); err != nil {
 			log.Printf("Failed to encode API response into JSON: %v", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}

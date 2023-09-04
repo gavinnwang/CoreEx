@@ -5,22 +5,22 @@ import (
 	"errors"
 	"fmt"
 	"github/wry-0313/exchange/models"
-	// "github.com/google/uuid"
 )
 
 var (
 	ErrEmailExists          = errors.New("User with this email already exists")
 	ErrUserNotFound         = errors.New("User does not exist")
 	ErrVerificationNotFound = errors.New("Verification does not exist")
+	ErrUserNameSame         = errors.New("User name is the same")
 )
 
 type Repository interface {
 	CreateUser(user models.User) error
 
-	// GetUser(userID uuid.UUID) (models.User, error)
+	GetUser(userID string) (models.User, error)
 	GetUserByEmail(email string) (models.User, error)
 
-	UpdateUserName(name string, email string) error
+	UpdateUserName(userID, name string) error
 	// DeleteUser(userID uuid.UUID) error
 }
 
@@ -65,11 +65,30 @@ func (r *repository) GetUserByEmail(email string) (models.User, error) {
 	return user, nil
 }
 
-func (r *repository) UpdateUserName(name string, email string) error {
-	
-	_, err := r.db.Exec("UPDATE users SET name = ? WHERE email = ?", name, email)
+func (r *repository) UpdateUserName(userID, name string) error {
+	user, err := r.GetUser(userID)
+	if err != nil {
+		return err
+	}
+	if user.Name == name {
+		return ErrUserNameSame
+	}
+
+	_, err = r.db.Exec("UPDATE users SET name = ? WHERE id = ?", name, userID)
 	if err != nil {
 		return fmt.Errorf("repository: failed to update user name: %w", err)
 	}
 	return nil
+}
+
+func (r *repository) GetUser(userID string) (models.User, error) {
+	var user models.User
+	err := r.db.QueryRow("SELECT * FROM users WHERE id = ?", userID).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return models.User{}, ErrUserNotFound
+		}
+		return models.User{}, fmt.Errorf("repository: failed to get user: %w", err)
+	}
+	return user, nil
 }
