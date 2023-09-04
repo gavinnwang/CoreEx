@@ -23,6 +23,8 @@ const (
 	keyJWTExpiration   = "JWT_EXPIRATION"
 	keyInternalNetwork = "INTERNAL_NETWORK"
 
+	keyKafkaBrokers = "KAFKA_BROKERS"
+
 	ProdEnv = "PRODUCTION"
 	DevEnv  = "DEVELOPMENT"
 )
@@ -32,6 +34,7 @@ type Config struct {
 	ServerPort    string
 	JwtSecret     string
 	JwtExpiration int
+	KafkaBrokers  []string
 }
 
 func Load(file string) (*Config, error) {
@@ -57,11 +60,16 @@ func Load(file string) (*Config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid JWT expiration value: %w", err)
 	}
+
+	broker := os.Getenv(keyKafkaBrokers)
+	KafkaBrokers := []string{broker}
+
 	return &Config{
 		DB:            databaseConfig,
 		ServerPort:    serverPort,
 		JwtSecret:     jwtSecret,
 		JwtExpiration: jwtExpiration,
+		KafkaBrokers: KafkaBrokers,
 	}, nil
 }
 

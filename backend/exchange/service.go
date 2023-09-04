@@ -27,6 +27,7 @@ var (
 type Service interface {
 	PlaceOrder(input PlaceOrderInput) error
 	GetMarketPrice(symbol string) (decimal.Decimal, error)
+	RunConsumer(brokerList []string)
 }
 
 type service struct {
@@ -36,8 +37,8 @@ type service struct {
 	Shutdown   chan struct{}
 }
 
-func NewService(userRepo user.Repository, validator validator.Validate) Service {
-	producer, err := newProducer([]string{"localhost:9092"})
+func NewService(userRepo user.Repository, validator validator.Validate, brokerList []string) Service {
+	producer, err := newProducer(brokerList)
 	if err != nil {
 		log.Fatalf("Could not create producer: %v", err)
 	}
@@ -99,7 +100,7 @@ func (s *service) RunConsumer(brokerList []string) {
 		log.Fatal("Failed to start consumer:", err)
 	}
 
-	fmt.Printf("Starting Kafka consumers at offest: %v", sarama.OffsetNewest)
+	log.Printf("Starting Kafka consumers at offest: %v", sarama.OffsetNewest)
 
 	pc, err := consumer.ConsumePartition(kafkaTopic, 0, sarama.OffsetNewest)
 	if err != nil {
@@ -107,7 +108,7 @@ func (s *service) RunConsumer(brokerList []string) {
 	}
 
 	defer func() {
-		fmt.Println("Closing consumer")
+		log.Println("Closing consumer")
 		if err := pc.Close(); err != nil {
 			panic(err)
 		}
@@ -136,37 +137,35 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup) {
 			var order PlaceOrderInput
 			err := json.Unmarshal(msg.Value, &order)
 			if err != nil {
-				fmt.Println("Failed to deserialize order:", err)
+				log.Println("Failed to deserialize order:", err)
 				continue
 			}
 			userID, error := uuid.Parse(order.UserID)
 			if error != nil {
-				fmt.Println("Failed to parse UUID:", error)
+				log.Println("Failed to parse UUID:", error)
 				continue
 			}
 			side, error := orderbook.SideFromString(order.OrderSide)
 			if error != nil {
-				fmt.Println("Failed to parse side:", error)
+				log.Println("Failed to parse side:", error)
 				continue
 			}
-			fmt.Printf("Placing order: %v\n", order)
+			log.Printf("Consumer processing: %v\n", order)
 			switch order.OrderType {
 			case "limit":
-				log.Println("Placing limit order")
 				_, err := s.orderBooks[order.Symbol].PlaceLimitOrder(side, userID, decimal.NewFromFloat(order.Volume), decimal.NewFromFloat(order.Price))
 				if err != nil {
-					fmt.Println(err)
+					log.Println(err)
 					continue
 				}
 			case "market":
-				log.Println("Placing market order")
 				_, err := s.orderBooks[order.Symbol].PlaceMarketOrder(side, userID, decimal.NewFromFloat(order.Volume))
 				if err != nil {
-					fmt.Println(err)
+					log.Println(err)
 					continue
 				}
 			default:
-				fmt.Println("Invalid order type")
+				log.Println("Invalid order type")
 			}
 		case err := <-pc.Errors():
 			log.Println("Error consuming message: ", err)
@@ -191,7 +190,7 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup) {
 // 			if err != nil {
 // 				log.Fatalf("Could not add data to time series: %v", err)
 // 			} else {
-// 				fmt.Printf("Added market price data to time series: %s\n", p)
+// 				log.Printf("Added market price data to time series: %s\n", p)
 // 			}
 // 		}
 // 	 }
@@ -204,7 +203,7 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup) {
 // 	for {
 // 		select {
 // 		case <-ticker.C:
-// 			fmt.Printf("best bids: %s\n", ex.orderBook.BestBid())
+// 			log.Printf("best bids: %s\n", ex.orderBook.BestBid())
 // 		}
 // 	}
 // }
@@ -216,7 +215,7 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup) {
 // 	for {
 // 		select {
 // 		case <-ticker.C:
-// 			fmt.Printf("best asks: %s\n", ex.orderBook.BestAsk())
+// 			log.Printf("best asks: %s\n", ex.orderBook.BestAsk())
 // 		}
 // 	}
 // }

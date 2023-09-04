@@ -37,11 +37,16 @@ func main() {
 	}
 
 	// Setup server
-	r := chi.NewRouter()
+	mux := chi.NewRouter()
+	r, exchangeService := setupHandler(mux, db, validator, cfg)
 	server := http.Server{
 		Addr:    cfg.ServerPort,
-		Handler: setupHandler(r, db, validator, cfg),
+		Handler: r,
 	}
+
+	go func() {
+		exchangeService.RunConsumer(cfg.KafkaBrokers)
+	}()
 
 	// Graceful shutdown
 	stop := make(chan os.Signal, 1)
@@ -69,7 +74,7 @@ func setupHandler(
 	db *db.DB,
 	v validator.Validate,
 	cfg *config.Config,
-) chi.Router {
+) (chi.Router, exchange.Service) {
 	// Set up middleware
 	r.Use(middleware.Cors())
 
@@ -80,7 +85,7 @@ func setupHandler(
 	jwtService := jwt.NewService(cfg.JwtSecret, cfg.JwtExpiration)
 	authService := auth.NewService(userRepo, jwtService, v)
 	userService := user.NewService(userRepo, v)
-	exchangeService := exchange.NewService(userRepo, v)
+	exchangeService := exchange.NewService(userRepo, v, cfg.KafkaBrokers)
 
 	// rdb := ws.NewRedis(cfg.Rdb)
 
@@ -99,7 +104,7 @@ func setupHandler(
 
 	r.Get("/ping", handlePingCheck)
 
-	return r
+	return r, exchangeService
 }
 
 func handlePingCheck(w http.ResponseWriter, _ *http.Request) {
