@@ -1,4 +1,4 @@
-import SignInForm from "../components/SigninForm";
+import SignInForm from "../components/SignInForm";
 import Redirect from "../components/Redirect";
 
 export default function SignInPage() {

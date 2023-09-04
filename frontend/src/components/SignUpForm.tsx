@@ -48,6 +48,7 @@ export default function SignUpForm() {
         <input
           type="email"
           id="email"
+          autocomplete="email"
           class="input input-bordered w-full max-w-xs"
           onInput={(e) => setEmail(e.currentTarget.value)}
           required
@@ -60,6 +61,7 @@ export default function SignUpForm() {
         <input
           type="name"
           id="name"
+          autocomplete="username"
           class="input input-bordered w-full max-w-xs"
           onInput={(e) => setName(e.currentTarget.value)}
           required
@@ -72,6 +74,7 @@ export default function SignUpForm() {
         <input
           type="password"
           id="password"
+          autocomplete="current-password"
           class="input input-bordered w-full max-w-x"
           onInput={(e) => setPassword(e.currentTarget.value)}
           required

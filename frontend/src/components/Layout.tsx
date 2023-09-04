@@ -6,7 +6,7 @@ export default () => {
   return (
     <div class="pt-16">
       <Navbar />
-
+      <Toaster />
       <Outlet />
     </div>
   );

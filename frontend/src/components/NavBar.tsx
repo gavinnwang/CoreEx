@@ -29,16 +29,16 @@ async function getUser(token: string | undefined): Promise<User | null> {
 export default function Navbar() {
   createEffect(async () => {
     token(); // force reactivity. essentially forcing the effect to run when the token changes
-    const refreshToken = getToken();
-    const currentUser = await getUser(refreshToken);
-    setToken(refreshToken);
+    const localToken = getToken();
+    const currentUser = await getUser(localToken);
+    setToken(localToken);
     setUser(currentUser);
   });
 
   return (
     <div
       class="navbar fixed top-0 left-0 w-full bg-white shadow-md "
-      style={{ height: NAVBAR_HEIGHT_PX, "z-index": 10002 }}
+      style={{ height: NAVBAR_HEIGHT_PX}}
     >
       <WidthContainer>
         <div class="flex justify-between items-center w-full">

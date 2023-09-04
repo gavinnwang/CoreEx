@@ -1,12 +1,12 @@
 import { A, useNavigate } from "@solidjs/router";
 import { createSignal, type Component, createEffect } from "solid-js";
-import { COOKIE_NAME_JWT_TOKEN } from "../constants";
+import { COOKIE_NAME_JWT_TOKEN, NAVBAR_HEIGHT_PX } from "../constants";
 import Cookies from "js-cookie";
 
 const Price: Component = () => {
   const [price, setPrice] = createSignal<number | null>(null);
 
-    const navigator = useNavigate();
+  const navigator = useNavigate();
   createEffect(() => {
     const ws = new WebSocket("ws://localhost:8080/price");
     // Set up event listeners
@@ -29,8 +29,11 @@ const Price: Component = () => {
     };
   });
   return (
-    <div class="flex bg-sky-700 justify-start items-center flex-col gap-y-4 pt-20 h-screen">
-      <header class="gap-y-3 text-sky-200 flex items-center flex-col">
+    <div
+      class="hero bg-base-200"
+      style={{ height: `calc(100vh - ${NAVBAR_HEIGHT_PX})` }}
+    >
+      <header class="">
         <p class=" italic underline-offset-4">
           market price: {price() ?? "price data not available"}
         </p>

@@ -9,7 +9,7 @@ function setSessionCookie(token: string) {
     path: "/",
     expires: expirationDate,
     httpOnly: false,
-    secure: import.meta.env.ENV === "production",
+    secure: import.meta.env.VITE_ENV === "production",
   });
 }
 

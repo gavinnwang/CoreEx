@@ -42,6 +42,7 @@ export default function SignInForm() {
         <input
           type="email"
           id="email"
+        autocomplete="email"
           class="input input-bordered w-full max-w-xs"
           onInput={(e) => setEmail(e.currentTarget.value)}
           required
@@ -54,6 +55,7 @@ export default function SignInForm() {
         <input
           type="password"
           id="password"
+          autocomplete="current-password"
           class="input input-bordered w-full max-w-x"
           onInput={(e) => setPassword(e.currentTarget.value)}
           required
