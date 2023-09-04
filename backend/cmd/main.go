@@ -45,7 +45,7 @@ func main() {
 	}
 
 	go func() {
-		exchangeService.RunConsumer(cfg.KafkaBrokers)
+		exchangeService.StartConsumers(cfg.KafkaBrokers)
 	}()
 
 	// Graceful shutdown
@@ -65,7 +65,7 @@ func main() {
 		log.Fatalf("Server forced shutdown: %s", err)
 	}
 
-	// close(exchangeService.Shutdown)
+	exchangeService.ShutdownConsumers()
 }
 
 // setupHandler sets up all the middleware and API routes for the server.

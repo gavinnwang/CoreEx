@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github/wry-0313/exchange/config"
+	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -18,7 +19,7 @@ func New(cfg config.DatabaseConfig) (*DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("Connected to database %s\n", dsn)
+	log.Printf("Connected to database %s\n", dsn)
 	return &DB{
 		DB: conn,
 	}, nil

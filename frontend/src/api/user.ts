@@ -1,4 +1,4 @@
-import { sendPostRequest } from ".";
+import { sendGetRequest, sendPostRequest } from ".";
 import { BASE_URL } from "../constants";
 
 export type User = {
@@ -27,4 +27,9 @@ export async function createUser(
 ): Promise<CreateUserResponse> {
   const url = `${BASE_URL}/users`;
   return sendPostRequest<CreateUserResponse>(url, params);
+}
+
+export async function getUserByJwt(jwtToken: string): Promise<User> {
+  const url = `${BASE_URL}/users/me`;
+  return sendGetRequest<User>(url, jwtToken);
 }

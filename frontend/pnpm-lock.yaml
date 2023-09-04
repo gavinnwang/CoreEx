@@ -8,6 +8,9 @@ dependencies:
   '@solidjs/router':
     specifier: ^0.8.3
     version: 0.8.3(solid-js@1.7.6)
+  gradient-avatar:
+    specifier: ^1.0.2
+    version: 1.0.2
   js-cookie:
     specifier: ^3.0.5
     version: 3.0.5
@@ -28,6 +31,9 @@ devDependencies:
   autoprefixer:
     specifier: ^10.4.15
     version: 10.4.15(postcss@8.4.29)
+  daisyui:
+    specifier: ^3.6.5
+    version: 3.6.5
   postcss:
     specifier: ^8.4.29
     version: 8.4.29
@@ -1028,6 +1034,10 @@ packages:
     resolution: {integrity: sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==}
     dev: true
 
+  /colord@2.9.3:
+    resolution: {integrity: sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==}
+    dev: true
+
   /commander@4.1.1:
     resolution: {integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==}
     engines: {node: '>= 6'}
@@ -1041,6 +1051,13 @@ packages:
     resolution: {integrity: sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==}
     dev: true
 
+  /css-selector-tokenizer@0.8.0:
+    resolution: {integrity: sha512-Jd6Ig3/pe62/qe5SBPTN8h8LeUg/pT4lLgtavPf7updwwHpvFzxvOQBHYj2LZDMjUnBzgvIUSjRcf6oT5HzHFg==}
+    dependencies:
+      cssesc: 3.0.0
+      fastparse: 1.1.2
+    dev: true
+
   /cssesc@3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
@@ -1049,6 +1066,19 @@ packages:
 
   /csstype@3.1.2:
     resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
+
+  /daisyui@3.6.5:
+    resolution: {integrity: sha512-1yPTKlCf1usfSsUaTvu5l/Fi8TEchy8H9/rAtvPMwWd++ifl56ASnaDQfHZhl9lnPtCWj/mWicrwL7aaNz53KA==}
+    engines: {node: '>=16.9.0'}
+    dependencies:
+      colord: 2.9.3
+      css-selector-tokenizer: 0.8.0
+      postcss: 8.4.29
+      postcss-js: 4.0.1(postcss@8.4.29)
+      tailwindcss: 3.3.3
+    transitivePeerDependencies:
+      - ts-node
+    dev: true
 
   /debug@4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
@@ -1129,6 +1159,10 @@ packages:
       micromatch: 4.0.5
     dev: true
 
+  /fastparse@1.1.2:
+    resolution: {integrity: sha512-483XLLxTVIwWK3QTrMGRqUfUpoOs/0hbQrl2oz4J0pAcm3A3bu84wxTFqGqkJzewCLdME38xJLJAxBABfQT8sQ==}
+    dev: true
+
   /fastq@1.15.0:
     resolution: {integrity: sha512-wBrocU2LCXXa+lWBt8RoIRD89Fi8OdABODa/kEnyeyjS5aZO5/GNvI5sEINADqP/h8M29UHTHUb53sUu5Ihqdw==}
     dependencies:
@@ -1197,6 +1231,15 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
+  /gradient-avatar@1.0.2:
+    resolution: {integrity: sha512-Od9KI2YImV60wnsvU/u6GEyBm2fiHUUHgiLySE243GYl/T/tiJMJ5QYey8o7tepugmlnUGQRaCItHv19UnUjUg==}
+    engines: {node: '>=8'}
+    dependencies:
+      hsl-rgb: 1.0.0
+      hsl-triad: 1.0.0
+      string-hash: 1.1.3
+    dev: false
+
   /has-flag@3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==}
     engines: {node: '>=4'}
@@ -1208,6 +1251,16 @@ packages:
     dependencies:
       function-bind: 1.1.1
     dev: true
+
+  /hsl-rgb@1.0.0:
+    resolution: {integrity: sha512-cNq+7sfwzSDoiG/jiu8wZpOmjScUZrMKiI33tH3aQ1MZsXWQd0yJjMpPwu2OZFYa4D/bOT1aCbB5gS1kOqFx1A==}
+    engines: {node: '>=8'}
+    dev: false
+
+  /hsl-triad@1.0.0:
+    resolution: {integrity: sha512-PKnjrMugS6sHC5dVh4VQZYOHEKG2QILjVwbpEtNjEV19RyswuIxrIiGhumVJjya/FjK/p9gX6+zRMXFGTvaQAA==}
+    engines: {node: '>=8'}
+    dev: false
 
   /html-entities@2.3.3:
     resolution: {integrity: sha512-DV5Ln36z34NNTDgnz0EWGBLZENelNAtkiFA4kyNOG2tDI6Mz1uSWiq1wAKdyjnJwyDiDO7Fa2SO1CTxPXL8VxA==}
@@ -1582,6 +1635,10 @@ packages:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /string-hash@1.1.3:
+    resolution: {integrity: sha512-kJUvRUFK49aub+a7T1nNE66EJbZBMnBgoC1UbCZ5n6bsZKBRga4KgBRTMn/pFkeCZSYtNeSyMxPDM0AXWELk2A==}
+    dev: false
 
   /sucrase@3.34.0:
     resolution: {integrity: sha512-70/LQEZ07TEcxiU2dz51FKaE6hCTWC6vr7FOk3Gr0U60C3shtAN+H+BFr9XlYe5xqf3RA8nrc+VIwzCfnxuXJw==}

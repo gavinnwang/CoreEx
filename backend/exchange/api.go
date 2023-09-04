@@ -2,7 +2,7 @@ package exchange
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"github/wry-0313/exchange/endpoint"
 	"github/wry-0313/exchange/middleware"
 	"github/wry-0313/exchange/models"
@@ -33,7 +33,7 @@ func NewAPI(exchangeService Service) *API {
 func (api *API) HandlePlaceOrder(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	userID := middleware.UserIDFromContext(ctx)
-	fmt.Printf("user requests to place order: %v\n", userID[:4])
+	log.Printf("API: user requests to place order: %v\n", userID[:4])
 
 	var input PlaceOrderInput
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -51,8 +51,8 @@ func (api *API) HandlePlaceOrder(w http.ResponseWriter, r *http.Request) {
 		switch {
 		case validator.IsValidationError(err):
 			endpoint.WriteValidationErr(w, input, err)
-		case err == ErrInvalidSymbol:
-			endpoint.WriteWithError(w, http.StatusNoContent, err.Error())
+		case errors.Is(err, ErrInvalidSymbol):
+			endpoint.WriteWithError(w, http.StatusBadRequest, err.Error())
 		default:
 			endpoint.WriteWithError(w, http.StatusInternalServerError, ErrMsgInternalServer)
 		}

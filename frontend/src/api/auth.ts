@@ -1,16 +1,16 @@
 import { sendPostRequest } from './index';
 import { BASE_URL } from '../constants';
 
-export type LoginParams = {
+export type SignInParams = {
   email: string;
   password: string;
 };
 
-type LoginResponse = {
+type SignInResponse = {
   token: string;
 };
 
-export async function login(params: LoginParams): Promise<LoginResponse> {
+export async function signin(params: SignInParams): Promise<SignInResponse> {
   const url = `${BASE_URL}/auth/login`;
-  return sendPostRequest<LoginResponse>(url, params);
+  return sendPostRequest<SignInResponse>(url, params);
 }

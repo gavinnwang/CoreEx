@@ -13,6 +13,35 @@ export class APIError extends Error {
   }
 }
 
+export async function sendGetRequest<T>(url: string, authToken?: string): Promise<T> {
+  try {
+    const headers: Record<string, string> = {};
+
+    if (authToken) {
+      headers['Authorization'] = `Bearer ${authToken}`;
+    }
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: headers,
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      const errorData: APIErrorResponse = await response.json();
+      throw new APIError(errorData.message, errorData.status);
+    }
+
+    const data: T = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+}
+
+
 export async function sendPostRequest<T>(
   url: string,
   body: object,

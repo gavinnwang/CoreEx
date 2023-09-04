@@ -1,7 +1,6 @@
 package list
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -19,6 +18,5 @@ func Test(t *testing.T) {
 	for list.Len() != 0 {
 		list.Remove(list.Front())
 	}
-	fmt.Printf("list: %v\n", list)
 }
 

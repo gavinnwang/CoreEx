@@ -3,6 +3,7 @@ import App from "./App";
 import "./assets/global.css";
 import { Route, Router, Routes } from "@solidjs/router";
 import { lazy } from "solid-js";
+import Layout from "./components/Layout";
 const root = document.getElementById("root");
 
 if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
@@ -11,18 +12,24 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   );
 }
 
-const Signup = lazy(() => import("./pages/Signup"));
+const SignUpPage = lazy(() => import("./pages/Signup"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
-const Login = lazy(() => import("./pages/Login"));
+const SignInPage = lazy(() => import("./pages/SignIn"));
+const AuthLayout = lazy(() => import("./components/AuthLayout"));
 
 render(
   () => (
     <Router>
       <Routes>
-        <Route path="/" component={App} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/login" component={Login} />
-        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/" component={Layout}>
+          <Route path="/" component={App} />
+          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/" component={AuthLayout}>
+          <Route path="/signup" component={SignUpPage} />
+          <Route path="/signin" component={SignInPage} />
+
+          </Route>
+        </Route>
       </Routes>
     </Router>
   ),

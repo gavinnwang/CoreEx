@@ -5,8 +5,8 @@ import { APIError } from "../api";
 import toast from "solid-toast";
 import { setSessionCookie } from "../lib/cookie";
 
-const Signup: Component = () => {
-  const [name, setName] = createSignal("");
+export default function SignUpPage() { 
+  const[name, setName] = createSignal("");
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
 
@@ -41,7 +41,7 @@ const Signup: Component = () => {
 
   return (
     <div class="flex justify-start items-center flex-col gap-y-4 pt-20 h-screen">
-      <A class="hover:underline" href="/">
+      <A class="btn" href="/">
         home
       </A>
       Sign Up
@@ -71,15 +71,13 @@ const Signup: Component = () => {
           class="border-b focus:outline-none"
           required
         />
-        <button class="hover:underline" type="submit" disabled={isLoading()}>
+        <button class="btn" type="submit" disabled={isLoading()}>
           {isLoading() ? "Loading..." : "Sign Up"}
         </button>
       </form>
-      <A href="/login" class="hover:underline">
+      <A href="/signin" class="btn">
         Already have an account?{" "}
       </A>
     </div>
   );
 };
-
-export default Signup;

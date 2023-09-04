@@ -21,13 +21,14 @@ const (
 )
 
 var (
-	ErrInvalidSymbol = errors.New("symbol not found")
+	ErrInvalidSymbol = errors.New("Symbol not found")
 )
 
 type Service interface {
 	PlaceOrder(input PlaceOrderInput) error
 	GetMarketPrice(symbol string) (decimal.Decimal, error)
-	RunConsumer(brokerList []string)
+	StartConsumers(brokerList []string)
+	ShutdownConsumers()
 }
 
 type service struct {
@@ -60,10 +61,12 @@ func (s *service) PlaceOrder(input PlaceOrderInput) error {
 		return fmt.Errorf("service: validation error: %w", err)
 	}
 
+	// Check the validity of the input symbol
 	_, ok := s.orderBooks[input.Symbol]
 	if !ok {
 		return ErrInvalidSymbol
 	}
+
 
 	inputJSON, err := json.Marshal(input)
 	if err != nil {
@@ -92,7 +95,7 @@ func (s *service) GetMarketPrice(symbol string) (decimal.Decimal, error) {
 	return ob.MarketPrice(), nil
 }
 
-func (s *service) RunConsumer(brokerList []string) {
+func (s *service) StartConsumers(brokerList []string) {
 	config := sarama.NewConfig()
 	config.Consumer.Return.Errors = true
 	consumer, err := sarama.NewConsumer(brokerList, config)
@@ -174,6 +177,10 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup) {
 			return
 		}
 	}
+}
+
+func (s *service) ShutdownConsumers() {
+	close(s.Shutdown)
 }
 
 // func (ex *Exchange) FetchAndStoreMarketPrice() {

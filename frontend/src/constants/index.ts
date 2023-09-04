@@ -4,3 +4,5 @@ export const ENV = {
   DEVELOPMENT: 'development',
   PRODUCTION: 'production',
 };
+export const NAVBAR_HEIGHT = 64;
+export const NAVBAR_HEIGHT_PX = `${NAVBAR_HEIGHT}px`;

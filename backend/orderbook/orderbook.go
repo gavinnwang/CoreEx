@@ -372,7 +372,6 @@ func (ob *OrderBook) SetMarketPrice(price decimal.Decimal) {
 	Log(fmt.Sprintf("Set market price: %s", price))
 	ob.marketPrice = price
 	ob.marketPriceMu.Unlock()
-	// fmt.Println("market price: ", ob.marketPrice)
 
 	// release the stop orders that are triggered by the new market price
 }
