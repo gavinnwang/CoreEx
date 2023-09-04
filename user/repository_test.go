@@ -23,7 +23,10 @@ func TestRepository(t *testing.T) {
 
 	userRepo := NewRepository(db.DB)
 
-	email := "testing@gmail.com"
+	db.DB.Exec("Update users set name = 'Gng' where email = 'gavinwang313@gmail.com'")
+	
+
+	email := "gavinwang313@gmail.com"
 	// password := "test_password"
 	// err = userRepo.CreateUser(models.User{
 	// 	Name:      "Test User",

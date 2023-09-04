@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github/wry-0313/exchange/auth"
 	"github/wry-0313/exchange/config"
 	"github/wry-0313/exchange/db"
 	"github/wry-0313/exchange/endpoint"
@@ -80,10 +81,14 @@ func setupHandler(
 
 	// Set up services
 	jwtService := jwt.NewService(cfg.JwtSecret, cfg.JwtExpiration)
+	authService := auth.NewService(userRepo, jwtService, v)
 	userService := user.NewService(userRepo, v)
 
 	// rdb := ws.NewRedis(cfg.Rdb)
 
+	// Set up API
+	userAPI := user.NewAPI(userService, jwtService, v)
+	authAPI := auth.NewAPI(authService, v)
 
 
 	// Set up auth handler

@@ -19,6 +19,7 @@ type service struct {
 
 type Service interface {
 	CreateUser(input CreateUserInput) (models.User, error)
+	UpdateUserName(email string, name string) error
 }
 
 func NewService(userRepo Repository, validator validator.Validate) Service {
@@ -61,6 +62,18 @@ func (s *service) CreateUser(input CreateUserInput) (models.User, error) {
 	// Hide password
 	user.Password = nil
 	return user, nil
+}
+
+func (s *service) UpdateUserName(email string, name string) error {
+	if err := s.validator.Var(name, "required"); err != nil {
+		return fmt.Errorf("service: validation error: %w", err)
+	}
+
+	name = toNameCase(name)
+	if err := s.userRepo.UpdateUserName(name, email); err != nil {
+		return fmt.Errorf("service: failed updating user name: %w", err)
+	}
+	return nil
 }
 
 // toNameCase creates a regular expression to match word boundaries and convert them to name case

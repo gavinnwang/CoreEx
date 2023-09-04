@@ -35,6 +35,7 @@ const App: Component = () => {
           market price: {price() ?? "price data not available"}
         </p>
       </header>
+      
     </div>
   );
 };

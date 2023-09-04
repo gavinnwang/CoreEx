@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 )
 
 const (
@@ -19,6 +19,14 @@ const (
 type API struct {
 	authService Service 
 	validator validator.Validate
+}
+
+// NewAPI creates a new intance of the API struct.
+func NewAPI(authService Service, validator validator.Validate) API {
+	return API{
+		authService: authService,
+		validator:   validator,
+	}
 }
 
 // HandleLogin handles a user's login request. It returns a token in the response

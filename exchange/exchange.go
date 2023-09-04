@@ -26,14 +26,14 @@ const numWorkers = 4
 const topic = "orders"
 
 func NewExchange() *Exchange {
-	producer, err := newProducer([]string{"localhost:9092"})
-	if err != nil {
-		log.Fatalf("Could not create producer: %v", err)
-	}
+	// producer, err := newProducer([]string{"localhost:9092"})
+	// if err != nil {
+	// 	log.Fatalf("Could not create producer: %v", err)
+	// }
 
 	return &Exchange{
 		orderBook: orderbook.NewOrderBook(),
-		producer:  producer,
+		// producer:  producer,
 		Shutdown:  make(chan struct{}),
 	}
 }
@@ -42,10 +42,10 @@ func (ex *Exchange) Run() {
 	http.HandleFunc("/order", ex.PlaceOrderHandler())
 	http.HandleFunc("/price", ex.HandleStreamMarketPrice)
 
-	go ex.RunConsumer([]string{"localhost:9092"})
+	// go ex.RunConsumer([]string{"localhost:9092"})
 
-	go ex.FetchAndStoreBestBids()
-	go ex.FetchAndStoreBestAsks()
+	// go ex.FetchAndStoreBestBids()
+	// go ex.FetchAndStoreBestAsks()
 }
 
 func (ex *Exchange) PlaceOrderHandler() http.HandlerFunc {

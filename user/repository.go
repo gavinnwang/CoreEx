@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	ErrEmailExists = errors.New("User with this email already exists")
-	ErrUserNotFound = errors.New("User does not exist")
+	ErrEmailExists          = errors.New("User with this email already exists")
+	ErrUserNotFound         = errors.New("User does not exist")
 	ErrVerificationNotFound = errors.New("Verification does not exist")
 )
 
@@ -20,6 +20,7 @@ type Repository interface {
 	// GetUser(userID uuid.UUID) (models.User, error)
 	GetUserByEmail(email string) (models.User, error)
 
+	UpdateUserName(name string, email string) error
 	// DeleteUser(userID uuid.UUID) error
 }
 
@@ -37,12 +38,11 @@ func (r *repository) CreateUser(user models.User) error {
 	var exists bool
 	err := r.db.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE email = ?)", user.Email).Scan(&exists)
 	if err != nil && err != sql.ErrNoRows {
-		return err // something went wrong with the query
+		return fmt.Errorf("repository: failed to check if user exists: %w", err)
 	}
 	if exists {
 		return ErrEmailExists // Email already exists
 	}
-	fmt.Printf("User: %v\n", user)
 
 	_, err = r.db.Exec("INSERT INTO users (id, name, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)", user.ID, user.Name, user.Email, user.Password, user.CreatedAt, user.UpdatedAt)
 	if err != nil {
@@ -53,14 +53,23 @@ func (r *repository) CreateUser(user models.User) error {
 }
 
 // GetUserByEmail returns a single user for a given email.
-func (r *repository) GetUserByEmail( email string) (models.User, error) {
+func (r *repository) GetUserByEmail(email string) (models.User, error) {
 	var user models.User
 	err := r.db.QueryRow("SELECT * FROM users WHERE email = ?", email).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return models.User{}, ErrUserNotFound
 		}
-		return models.User{}, err
+		return models.User{}, fmt.Errorf("repository: failed to get user: %w", err)
 	}
 	return user, nil
+}
+
+func (r *repository) UpdateUserName(name string, email string) error {
+	
+	_, err := r.db.Exec("UPDATE users SET name = ? WHERE email = ?", name, email)
+	if err != nil {
+		return fmt.Errorf("repository: failed to update user name: %w", err)
+	}
+	return nil
 }
