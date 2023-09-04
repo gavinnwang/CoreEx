@@ -21,7 +21,6 @@ type Repository interface {
 	GetUserByEmail(email string) (models.User, error)
 
 	UpdateUserName(userID, name string) error
-	// DeleteUser(userID uuid.UUID) error
 }
 
 type repository struct {

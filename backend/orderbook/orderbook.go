@@ -4,7 +4,7 @@ import (
 	// "fmt"
 	// "fmt"
 	"fmt"
-	list "github/wry-0313/exchange/linkedlist"
+	list "github/wry-0313/exchange/dsa/linkedlist"
 	"log"
 	"sync"
 
@@ -13,6 +13,7 @@ import (
 )
 
 type OrderBook struct {
+	symbol       string
 	activeOrders map[uuid.UUID]*list.Node[*Order] // orderID -> *Order for quick acctions such as update or cancel
 	ordersMu     sync.RWMutex
 
@@ -31,12 +32,13 @@ type OrderBook struct {
 	sortedOrdersMu sync.RWMutex
 }
 
-func NewOrderBook() *OrderBook {
+func NewOrderBook(symbol string) *OrderBook {
 	err := InitializeLogService("orderbook_log.txt")
 	if err != nil {
 		log.Fatalf("Could not initialize log service: %v", err)
 	}
 	return &OrderBook{
+		symbol:           symbol,
 		activeOrders:     map[uuid.UUID]*list.Node[*Order]{},
 		bids:             NewOrderSide(),
 		asks:             NewOrderSide(),
@@ -51,7 +53,7 @@ func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume deci
 		return uuid.Nil, ErrInvalidVolume
 	}
 
-	if (side == Invalid) {
+	if side == Invalid {
 		return uuid.Nil, ErrInvalidSide
 	}
 
@@ -100,13 +102,12 @@ func (ob *OrderBook) PlaceMarketOrder(side Side, clientID uuid.UUID, volume deci
 		// ob.sortedOrdersMu.RUnlock()
 
 		// Log(fmt.Sprintf("os string: %v, oq: %v  volumeleft: %s\n", os, oq, volumeLeft))
-		
+
 		// ob.sortedOrdersMu.Lock()
 		volumeLeft = ob.matchAtPriceLevel(oq, o)
 		// ob.sortedOrdersMu.Unlock()
 	}
 	ob.sortedOrdersMu.Unlock()
-
 
 	if volumeLeft.Sign() > 0 {
 		// the order is not fully filled, add it to the market order list
@@ -237,7 +238,7 @@ func (ob *OrderBook) PlaceLimitOrder(side Side, clientID uuid.UUID, volume, pric
 		return uuid.Nil, ErrInvalidPrice
 	}
 
-	if (side == Invalid) {
+	if side == Invalid {
 		return uuid.Nil, ErrInvalidSide
 	}
 
@@ -360,7 +361,6 @@ func (ob *OrderBook) BestAsk() decimal.Decimal {
 	return oq.Price()
 }
 
-
 func (ob *OrderBook) MarketPrice() decimal.Decimal {
 	ob.marketPriceMu.RLock()
 	defer ob.marketPriceMu.RUnlock()
@@ -375,4 +375,8 @@ func (ob *OrderBook) SetMarketPrice(price decimal.Decimal) {
 	// fmt.Println("market price: ", ob.marketPrice)
 
 	// release the stop orders that are triggered by the new market price
+}
+
+func (ob *OrderBook) Symbol() string {
+	return ob.symbol
 }

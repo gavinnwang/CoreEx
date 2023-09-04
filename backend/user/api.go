@@ -15,10 +15,7 @@ import (
 )
 
 const (
-	// ErrMsgInternalServer is an error message for unexpected errors
 	ErrMsgInternalServer = "Internal server error"
-	// ErrMsgInvalidSearchParam is an error message for an invalid search query parameter
-	ErrMsgInvalidSearchParam = `Invalid or missing search param. Try using "email".`
 )
 
 type API struct {

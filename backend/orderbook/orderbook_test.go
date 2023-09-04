@@ -13,7 +13,7 @@ import (
 )
 
 func TestPlaceMarketOrderAfterLimit(t *testing.T) {
-	ob := NewOrderBook()
+	ob := NewOrderBook("AAPL")
 	clientID := uuid.New()
 	for i := 0; i < 2; i++ {
 		ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10000), decimal.NewFromInt(10))
@@ -30,7 +30,7 @@ func TestPlaceMarketOrderAfterLimit(t *testing.T) {
 }
 
 func TestPlaceMarketOrderAfterLimitConcurrent(t *testing.T) {
-	ob := NewOrderBook()
+	ob := NewOrderBook("AAPL")
 	clientID := uuid.New()
 	// ch := make(chan int)
 	var wg sync.WaitGroup
@@ -72,7 +72,7 @@ func TestPlaceMarketOrderAfterLimitConcurrent(t *testing.T) {
 }
 
 func TestMarketOrderPartialFill(t *testing.T) {
-	ob := NewOrderBook()
+	ob := NewOrderBook("AAPL")
 	clientID := uuid.New()
 	_, err := ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
 	if err != nil {
@@ -87,7 +87,7 @@ func TestMarketOrderPartialFill(t *testing.T) {
 }
 
 func TestMarketOrderVolumeAndDepth(t *testing.T) {
-	ob := NewOrderBook()
+	ob := NewOrderBook("AAPL")
 	clientID := uuid.New()
 	_, err := ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(15))
 	if err != nil {
@@ -132,7 +132,7 @@ func TestMarketOrderVolumeAndDepth(t *testing.T) {
 }
 
 func TestLimitOrderFilling(t *testing.T) {
-	ob := NewOrderBook()
+	ob := NewOrderBook("AAPL")
 	clientID := uuid.New()
 	_, err := ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(15))
 	if err != nil {
@@ -193,7 +193,7 @@ func assert(t *testing.T, a, b any) {
 
 func TestSimulateStockMarketFluctuations(t *testing.T) {
 	fmt.Println("start test")
-	ob := NewOrderBook()
+	ob := NewOrderBook("AAPL")
 	var wg sync.WaitGroup
 
 	wg.Add(1)
