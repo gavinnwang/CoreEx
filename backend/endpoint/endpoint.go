@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github/wry-0313/exchange/models"
-	"github/wry-0313/exchange/validator"
+	"github/wry-0313/exchange/pkg/validator"
 	"log"
 	"net/http"
 )

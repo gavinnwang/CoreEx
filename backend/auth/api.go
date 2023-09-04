@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github/wry-0313/exchange/endpoint"
-	"github/wry-0313/exchange/validator"
+	"github/wry-0313/exchange/pkg/validator"
 	"log"
 	"net/http"
 

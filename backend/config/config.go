@@ -5,7 +5,7 @@ import (
 	"os"
 	"strconv"
 
-	"github/wry-0313/exchange/validator"
+	"github/wry-0313/exchange/pkg/validator"
 
 	"github.com/joho/godotenv"
 )

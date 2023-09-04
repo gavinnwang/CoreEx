@@ -3,8 +3,8 @@ package user
 import (
 	"fmt"
 	"github/wry-0313/exchange/models"
-	"github/wry-0313/exchange/security"
-	"github/wry-0313/exchange/validator"
+	"github/wry-0313/exchange/pkg/security"
+	"github/wry-0313/exchange/pkg/validator"
 	"regexp"
 	"strings"
 	"time"

@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"github/wry-0313/exchange/jwt"
-	"github/wry-0313/exchange/security"
+	"github/wry-0313/exchange/pkg/security"
 	"github/wry-0313/exchange/user"
-	"github/wry-0313/exchange/validator"
+	"github/wry-0313/exchange/pkg/validator"
 )
 
 var (
