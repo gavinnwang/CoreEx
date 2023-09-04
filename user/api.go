@@ -3,7 +3,6 @@ package user
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github/wry-0313/exchange/endpoint"
 	"github/wry-0313/exchange/jwt"
 	"github/wry-0313/exchange/middleware"
