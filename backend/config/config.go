@@ -23,7 +23,8 @@ const (
 	keyJWTExpiration   = "JWT_EXPIRATION"
 	keyInternalNetwork = "INTERNAL_NETWORK"
 
-	valEnvDev = "DEVELOPMENT"
+	ProdEnv = "PRODUCTION"
+	DevEnv  = "DEVELOPMENT"
 )
 
 type Config struct {
@@ -34,9 +35,8 @@ type Config struct {
 }
 
 func Load(file string) (*Config, error) {
-	os.Setenv("ENV", "DEVELOPMENT")
 	env := os.Getenv(keyEnv)
-	if env == valEnvDev {
+	if env != ProdEnv {
 		// Load .env file if in development
 		err := godotenv.Load(file)
 		if err != nil {

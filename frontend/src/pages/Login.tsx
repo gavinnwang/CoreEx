@@ -16,6 +16,7 @@ const Login: Component = () => {
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
       const { token } = await login({
         email: email(),
@@ -24,9 +25,12 @@ const Login: Component = () => {
       const expirationDate = new Date();
       expirationDate.setDate(expirationDate.getDate() + 30);
 
+      toast.success("Logged in successfully");
       Cookies.set(COOKIE_NAME_JWT_TOKEN, token, {
         path: "/",
         expires: expirationDate,
+        httpOnly: true,
+        secure: true,
       });
 
       // Refresh and navigate (assuming you have some refresh mechanism)
