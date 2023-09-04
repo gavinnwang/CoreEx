@@ -1,12 +1,13 @@
-import { useNavigate } from "@solidjs/router";
-import { createSignal } from "solid-js";
-import { setSessionCookie } from "../lib/cookie";
-import { signin } from "../api/auth";
+import { A, useNavigate } from "@solidjs/router";
+import { createSignal, type Component } from "solid-js";
+import { createUser } from "../api/user";
 import { APIError } from "../api";
-import { toast } from "solid-toast";
+import toast from "solid-toast";
+import { setSessionCookie } from "../lib/cookie";
 import { setToken } from "../store";
 
-export default function SignInForm() {
+export default function SignUpForm() {
+  const [name, setName] = createSignal("");
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
 
@@ -16,12 +17,17 @@ export default function SignInForm() {
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
-      const { token } = await signin({ email: email(), password: password() });
+      const { jwt_token: token } = await createUser({
+        email: email(),
+        password: password(),
+        name: name(),
+      });
+
       setSessionCookie(token);
-      setToken(token)
-      toast.success("Logged in successfully");
+      setToken(token);
+      toast.success("Successfully created user " + name() + "!");
+
       navigate("/");
     } catch (error) {
       if (error instanceof APIError) {
@@ -49,6 +55,18 @@ export default function SignInForm() {
       </div>
       <div class="form-control">
         <label class="label">
+          <span class="label-text text-stone-600">Name</span>
+        </label>
+        <input
+          type="name"
+          id="name"
+          class="input input-bordered w-full max-w-xs"
+          onInput={(e) => setName(e.currentTarget.value)}
+          required
+        />
+      </div>
+      <div class="form-control">
+        <label class="label">
           <span class="label-text  text-stone-600">Password</span>
         </label>
         <input
@@ -60,8 +78,8 @@ export default function SignInForm() {
         />
       </div>
       <div class="form-control mt-6">
-        <button type="submit" class="btn btn-primary" disabled={isLoading()}>
-          {isLoading() ? "Signing in..." : "Sign in"}
+        <button type="submit" class="btn btn-secondary" disabled={isLoading()}>
+          {isLoading() ? "Signing in..." : "Sign up"}
         </button>
       </div>
     </form>

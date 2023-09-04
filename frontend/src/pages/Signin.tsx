@@ -7,6 +7,7 @@ export default function SignInPage() {
       <div class="card-body space-y-3">
         <div class="card-title text-2xl">Sign in</div>
         <SignInForm />
+        <div class="divider">OR</div>
         <Redirect
           url="/signup"
           redirectText="Don't have an account?"

@@ -14,7 +14,7 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 
 const SignUpPage = lazy(() => import("./pages/Signup"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
-const SignInPage = lazy(() => import("./pages/SignIn"));
+const SignInPage = lazy(() => import("./pages/Signin"));
 const AuthLayout = lazy(() => import("./components/AuthLayout"));
 
 render(

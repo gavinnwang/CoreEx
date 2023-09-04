@@ -11,7 +11,7 @@ export default function AuthLayout() {
   return (
     <div style={{ height: `calc(100vh - ${NAVBAR_HEIGHT_PX})` }}>
       <Centered>
-        <Outlet/>
+        <Outlet />
       </Centered>
     </div>
   );
