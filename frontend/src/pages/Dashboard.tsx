@@ -2,11 +2,10 @@ import { createSignal, type Component, createEffect } from "solid-js";
 import { BASE_URL, NAVBAR_HEIGHT_PX } from "../constants";
 import PlaceOrderForm from "../components/PlaceOrderForm";
 import CandleGraph from "../components/CandleGraph";
-import toast from "solid-toast";
 
 const Price: Component = () => {
   const [price, setPrice] = createSignal<number | null>(null);
-  const [fetchPriceError, setFetchPriceError] = createSignal(false);
+  const [fetchErrorMsg, setFetchErrorMsg] = createSignal<string | null>(null);
 
   createEffect(() => {
     const url = `ws://${BASE_URL}/ws`;
@@ -25,14 +24,18 @@ const Price: Component = () => {
 
     ws.addEventListener("error", (error) => {
       console.error("WebSocket Error:", error);
-      setFetchPriceError(true);
-      toast.error("Error fetching price");
+      setFetchErrorMsg("Something went wrong.");
     });
 
     ws.addEventListener("message", (event) => {
       const res = event.data;
       const resData: ResponseGetMarketPrice = JSON.parse(res);
-      setPrice(resData.result ? resData.result.price : null);
+      if (resData.success) {
+        setPrice(resData.result ? resData.result.price : null);
+      } else {
+        setFetchErrorMsg(resData.error_message ?? "Something went wrong.");
+        setPrice(null);
+      }
     });
 
     return () => {
@@ -40,15 +43,16 @@ const Price: Component = () => {
       ws.close();
     };
   });
+
   return (
-    <div
-      class="bg-base-200"
-      style={{ height: `calc(100vh - ${NAVBAR_HEIGHT_PX})` }}
-    >
-      <p class="italic">
-        market price:
-        {fetchPriceError() ? "something went wrong" : price() ?? "loading..."}
-      </p>
+    <div style={{ height: `calc(100vh - ${NAVBAR_HEIGHT_PX})` }} class="p-5">
+      <div class="text-xl font-semibold py-4">
+        {fetchErrorMsg()
+          ? fetchErrorMsg()
+          : price() !== null
+          ? `AAPL price: \$${price()}`
+          : "loading..."}
+      </div>
       <PlaceOrderForm />
       <CandleGraph />
     </div>

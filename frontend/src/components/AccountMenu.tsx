@@ -4,6 +4,7 @@ import { COOKIE_NAME_JWT_TOKEN } from "../constants";
 import { User } from "../api/user";
 import { JSX } from "solid-js";
 import { ChevDown } from "./icons/ChevDown";
+import { setToken, setUser } from "../store";
 
 export default function AccountMenu({
   user,
@@ -16,8 +17,8 @@ export default function AccountMenu({
 
   const handleLogout = () => {
     Cookies.remove(COOKIE_NAME_JWT_TOKEN);
+    setToken(undefined)
     navigator("/");
-    window.location.reload();
   };
 
   return (

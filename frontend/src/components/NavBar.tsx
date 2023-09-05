@@ -2,7 +2,7 @@ import { A } from "@solidjs/router";
 import { User, getUserByJwt } from "../api/user";
 import { COOKIE_NAME_JWT_TOKEN, NAVBAR_HEIGHT_PX } from "../constants";
 import WidthContainer from "./WidthContainer";
-import { Resource, createEffect } from "solid-js";
+import { createEffect } from "solid-js";
 import Avatar from "./Avatar";
 import AccountMenu from "./AccountMenu";
 import LogoText from "./Logo";
@@ -28,11 +28,18 @@ async function getUser(token: string | undefined): Promise<User | null> {
 
 export default function Navbar() {
   createEffect(async () => {
-    token(); // force reactivity. essentially forcing the effect to run when the token changes
-    const localToken = getToken();
-    const currentUser = await getUser(localToken);
-    setToken(localToken);
-    setUser(currentUser);
+    token()
+    const t = getToken()
+    if (!t) {
+      setToken(undefined);
+      setUser(null);
+      return;
+    }
+    const currentUser = await getUser(t);
+    if (currentUser) {
+      setUser(currentUser);
+      setToken(t)
+    }
   });
 
   return (

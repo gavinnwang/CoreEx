@@ -25,9 +25,8 @@ render(
           <Route path="/" component={App} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/" component={AuthLayout}>
-          <Route path="/signup" component={SignUpPage} />
-          <Route path="/signin" component={SignInPage} />
-
+            <Route path="/signup" component={SignUpPage} />
+            <Route path="/signin" component={SignInPage} />
           </Route>
         </Route>
       </Routes>

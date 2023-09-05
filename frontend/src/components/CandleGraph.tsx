@@ -7,7 +7,6 @@ export default function CandleGraph() {
     chart: {
       id: "solidchart-example",
     },
-
   });
   const [series] = createSignal(list);
 

@@ -17,7 +17,6 @@ export async function placeOrder(
   token: string
 )  {
   const url = `http://${BASE_URL}/orders`;
-  console.log("token: ", token);
   return sendPostRequest<MsgResponse>(url, params, token);
 }
 
