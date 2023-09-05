@@ -37,8 +37,8 @@ export default function Navbar() {
 
   return (
     <div
-      class="navbar fixed top-0 left-0 w-full bg-white shadow-md "
-      style={{ height: NAVBAR_HEIGHT_PX}}
+      class="navbar fixed top-0 left-0 w-full bg-white shadow-md"
+      style={{ height: NAVBAR_HEIGHT_PX }}
     >
       <WidthContainer>
         <div class="flex justify-between items-center w-full">

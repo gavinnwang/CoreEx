@@ -11,6 +11,6 @@ type SignInResponse = {
 };
 
 export async function signin(params: SignInParams): Promise<SignInResponse> {
-  const url = `${BASE_URL}/auth/login`;
+  const url = `http://${BASE_URL}/auth/login`;
   return sendPostRequest<SignInResponse>(url, params);
 }

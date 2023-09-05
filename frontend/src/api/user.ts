@@ -25,11 +25,11 @@ export type CreateUserResponse = {
 export async function createUser(
   params: CreateUserParams
 ): Promise<CreateUserResponse> {
-  const url = `${BASE_URL}/users`;
+  const url = `http://${BASE_URL}/users`;
   return sendPostRequest<CreateUserResponse>(url, params);
 }
 
 export async function getUserByJwt(jwtToken: string): Promise<User> {
-  const url = `${BASE_URL}/users/me`;
+  const url = `http://${BASE_URL}/users/me`;
   return sendGetRequest<User>(url, jwtToken);
 }

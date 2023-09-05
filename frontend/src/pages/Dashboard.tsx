@@ -1,25 +1,32 @@
-import { A, useNavigate } from "@solidjs/router";
+import { useNavigate } from "@solidjs/router";
 import { createSignal, type Component, createEffect } from "solid-js";
-import { COOKIE_NAME_JWT_TOKEN, NAVBAR_HEIGHT_PX } from "../constants";
-import Cookies from "js-cookie";
+import { BASE_URL, NAVBAR_HEIGHT_PX } from "../constants";
 
 const Price: Component = () => {
   const [price, setPrice] = createSignal<number | null>(null);
 
   const navigator = useNavigate();
   createEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080/price");
+    const url = `ws://${BASE_URL}/ws`;
+    const ws = new WebSocket(url);
     // Set up event listeners
     ws.addEventListener("open", () => {
       console.log("WebSocket connection opened");
+      const payload : ParamsStreamPrice = {
+        event: "exchange.stream_price",
+        params: {
+          symbol: "AAPL",
+        },
+      };
+      ws.send(JSON.stringify(payload));
     });
 
     ws.addEventListener("message", (event) => {
-      const receivedMessage = event.data;
-      console.log("Received:", receivedMessage);
+      const res = event.data;
+      const resData : ResponseGetMarketPrice = JSON.parse(res);
 
       // Update state with the latest message
-      setPrice(receivedMessage);
+      setPrice(resData.result ? resData.result.price : null);
     });
 
     // Clean up: Close the WebSocket connection when this effect is destroyed

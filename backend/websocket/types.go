@@ -2,19 +2,6 @@ package ws
 
 import "encoding/json"
 
-// Request is a struct that describes the shape of every message request.
-type Request struct {
-	Event  string          `json:"event"`
-	Params json.RawMessage `json:"params"`
-}
-
-// ResponseBase represents the base response structure.
-type ResponseBase struct {
-	Event        string `json:"event"`
-	Success      bool   `json:"success"`
-	ErrorMessage string `json:"error_message,omitempty"`
-}
-
 const (
 
 	// Events
@@ -38,6 +25,19 @@ const (
 	// ErrMsgInternalServer indicates an internal server error.
 	ErrMsgInternalServer = "Internal server error."
 )
+
+// Request is a struct that describes the shape of every message request.
+type Request struct {
+	Event  string          `json:"event"`
+	Params json.RawMessage `json:"params"`
+}
+
+// ResponseBase represents the base response structure.
+type ResponseBase struct {
+	Event        string `json:"event"`
+	Success      bool   `json:"success"`
+	ErrorMessage string `json:"error_message,omitempty"`
+}
 
 // ParamsStreamPrice contains the parameter for the stream_price event.
 type ParamsStreamPrice struct {
