@@ -1,18 +1,20 @@
-import { useNavigate } from "@solidjs/router";
 import { createSignal, type Component, createEffect } from "solid-js";
 import { BASE_URL, NAVBAR_HEIGHT_PX } from "../constants";
+import PlaceOrderForm from "../components/PlaceOrderForm";
+import CandleGraph from "../components/CandleGraph";
+import toast from "solid-toast";
 
 const Price: Component = () => {
   const [price, setPrice] = createSignal<number | null>(null);
+  const [fetchPriceError, setFetchPriceError] = createSignal(false);
 
-  const navigator = useNavigate();
   createEffect(() => {
     const url = `ws://${BASE_URL}/ws`;
     const ws = new WebSocket(url);
-    // Set up event listeners
+
     ws.addEventListener("open", () => {
       console.log("WebSocket connection opened");
-      const payload : ParamsStreamPrice = {
+      const payload: ParamsStreamPrice = {
         event: "exchange.stream_price",
         params: {
           symbol: "AAPL",
@@ -21,15 +23,18 @@ const Price: Component = () => {
       ws.send(JSON.stringify(payload));
     });
 
+    ws.addEventListener("error", (error) => {
+      console.error("WebSocket Error:", error);
+      setFetchPriceError(true);
+      toast.error("Error fetching price");
+    });
+
     ws.addEventListener("message", (event) => {
       const res = event.data;
-      const resData : ResponseGetMarketPrice = JSON.parse(res);
-
-      // Update state with the latest message
+      const resData: ResponseGetMarketPrice = JSON.parse(res);
       setPrice(resData.result ? resData.result.price : null);
     });
 
-    // Clean up: Close the WebSocket connection when this effect is destroyed
     return () => {
       console.log("WebSocket connection closed");
       ws.close();
@@ -37,14 +42,15 @@ const Price: Component = () => {
   });
   return (
     <div
-      class="hero bg-base-200"
+      class="bg-base-200"
       style={{ height: `calc(100vh - ${NAVBAR_HEIGHT_PX})` }}
     >
-      <header class="">
-        <p class=" italic underline-offset-4">
-          market price: {price() ?? "price data not available"}
-        </p>
-      </header>
+      <p class="italic">
+        market price:
+        {fetchPriceError() ? "something went wrong" : price() ?? "loading..."}
+      </p>
+      <PlaceOrderForm />
+      <CandleGraph />
     </div>
   );
 };

@@ -94,7 +94,7 @@ func (api *API) HandleUpdateUserName(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	endpoint.WriteWithStatus(w, http.StatusOK, models.MessageResponse{Message: "User name updated"})
+	endpoint.WriteWithStatus(w, http.StatusOK, models.SuccessResponse{Message: "User name updated"})
 }
 
 func (api *API) HandleGetUserFromJWT(w http.ResponseWriter, r *http.Request) {

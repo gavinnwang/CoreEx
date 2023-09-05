@@ -75,3 +75,8 @@ export async function sendPostRequest<T>(
     throw error;
   }
 }
+
+export type MsgResponse = {
+  status: string,
+  message: string,
+}

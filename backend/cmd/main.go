@@ -111,5 +111,5 @@ func setupHandler(
 }
 
 func handlePingCheck(w http.ResponseWriter, _ *http.Request) {
-	endpoint.WriteWithStatus(w, http.StatusOK, models.MessageResponse{Message: "pong"})
+	endpoint.WriteWithStatus(w, http.StatusOK, models.SuccessResponse{Message: "pong"})
 }

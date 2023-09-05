@@ -48,7 +48,7 @@ func WriteWithStatus(w http.ResponseWriter, statusCode int, data interface{}) {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	} else if statusCode == http.StatusOK {
-		if err := json.NewEncoder(w).Encode(models.MessageResponse{Message: "Success."}); err != nil {
+		if err := json.NewEncoder(w).Encode(models.SuccessResponse{Message: "Success."}); err != nil {
 			log.Printf("Failed to encode API response into JSON: %v", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}

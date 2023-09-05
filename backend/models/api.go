@@ -1,5 +1,6 @@
 package models
 
-type MessageResponse struct {
+type SuccessResponse struct {
 	Message string `json:"message"`
 }
+

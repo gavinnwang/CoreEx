@@ -6,7 +6,11 @@ export default () => {
   return (
     <div class="pt-16">
       <Navbar />
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          position: "top-center",
+        }}
+      />
       <Outlet />
     </div>
   );

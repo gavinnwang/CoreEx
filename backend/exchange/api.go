@@ -7,9 +7,11 @@ import (
 	"github/wry-0313/exchange/middleware"
 	"github/wry-0313/exchange/models"
 	"github/wry-0313/exchange/pkg/validator"
+
 	// ws "github/wry-0313/exchange/websocket"
 	"log"
 	"net/http"
+
 	// "time"
 
 	"github.com/go-chi/chi/v5"
@@ -58,7 +60,7 @@ func (api *API) HandlePlaceOrder(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	endpoint.WriteWithStatus(w, http.StatusOK, models.MessageResponse{Message: "Order placed"})
+	endpoint.WriteWithStatus(w, http.StatusOK, models.SuccessResponse{Message: "Order placed"})
 }
 
 // func (api *API) HandleStreamMarketPrice(w http.ResponseWriter, r *http.Request) {
