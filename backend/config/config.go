@@ -18,6 +18,9 @@ const (
 	keyDBUser     = "DB_USER"
 	keyDBPassword = "DB_PASSWORD"
 
+	keyRedisHost = "REDIS_HOST"
+	keyRedisPort = "REDIS_PORT"
+
 	keyEnv             = "ENV"
 	keyServerPort      = "SERVER_PORT"
 	keyJWTSecret       = "JWT_SIGNING_KEY"
@@ -36,6 +39,7 @@ type Config struct {
 	JwtSecret     string
 	JwtExpiration int
 	KafkaBrokers  []string
+	Rdb           RedisConfig
 }
 
 func Load(file string) (*Config, error) {
@@ -65,13 +69,48 @@ func Load(file string) (*Config, error) {
 	broker := os.Getenv(keyKafkaBrokers)
 	KafkaBrokers := []string{broker}
 
+	rdbConfig, err := getRedisConfig()
+	if err != nil {
+		return nil, err
+	}
+
 	return &Config{
 		DB:            databaseConfig,
 		ServerPort:    serverPort,
 		JwtSecret:     jwtSecret,
 		JwtExpiration: jwtExpiration,
-		KafkaBrokers: KafkaBrokers,
+		KafkaBrokers:  KafkaBrokers,
+		Rdb:           rdbConfig,
 	}, nil
+}
+
+// RedisConfig represents the config for connecting to Redis PubSub
+type RedisConfig struct {
+	Host string `validate:"required"`
+	Port string `validate:"required"`
+}
+
+// Validate checks that all values are properly loaded into the redis config.
+func (rdbConfig *RedisConfig) Validate() error {
+	validate := validator.New()
+	if err := validate.Struct(rdbConfig); err != nil {
+		return fmt.Errorf("missing redis env var: %v", err)
+	}
+	return nil
+}
+
+func getRedisConfig() (RedisConfig, error) {
+	rdbConfig := RedisConfig{
+		Host: os.Getenv(keyRedisHost),
+		Port: os.Getenv(keyRedisPort),
+	}
+
+	// validate all redis params are available
+	if err := rdbConfig.Validate(); err != nil {
+		return RedisConfig{}, err
+	}
+
+	return rdbConfig, nil
 }
 
 // DatabaseConfig encapsulates all the config values for the database.

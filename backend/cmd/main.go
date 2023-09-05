@@ -12,6 +12,7 @@ import (
 	"github/wry-0313/exchange/models"
 	"github/wry-0313/exchange/pkg/validator"
 	"github/wry-0313/exchange/user"
+	ws "github/wry-0313/exchange/websocket"
 	"log"
 	"net/http"
 	"os"
@@ -93,6 +94,7 @@ func setupHandler(
 	userAPI := user.NewAPI(userService, jwtService, v)
 	authAPI := auth.NewAPI(authService, v)
 	exchangeAPI := exchange.NewAPI(exchangeService)
+	websocket := ws.NewWebSocket(exchangeService)
 
 	// Set up auth handler
 	authHandler := middleware.Auth(jwtService)
@@ -101,6 +103,7 @@ func setupHandler(
 	userAPI.RegisterHandlers(r, authHandler)
 	authAPI.RegisterHandlers(r)
 	exchangeAPI.RegisterHandlers(r, authHandler)
+	websocket.RegisterHandlers(r)
 
 	r.Get("/ping", handlePingCheck)
 

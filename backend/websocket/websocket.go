@@ -1,16 +1,13 @@
 package ws
 
-import (
-	"net/http"
+import "github/wry-0313/exchange/exchange"
 
-	"github.com/gorilla/websocket"
-)
+type WebSocket struct {
+	exchangeService exchange.Service
+}
 
-var Upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	CheckOrigin: func(r *http.Request) bool {
-		// Allow all origins 
-		return true
-	},
+func NewWebSocket(exchangeService exchange.Service) *WebSocket {
+	return &WebSocket{
+		exchangeService: exchangeService,
+	}
 }

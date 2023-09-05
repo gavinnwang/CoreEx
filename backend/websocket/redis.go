@@ -2,21 +2,17 @@ package ws
 
 import (
 	"context"
-	"log"
+	"fmt"
+	"github/wry-0313/exchange/config"
 
 	"github.com/go-redis/redis"
 )
 
 var ctx = context.Background()
 
-func NewRedis() *redis.Client {
+func NewRedis(cfg config.RedisConfig) *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr: fmt.Sprintf("%v:%v", cfg.Host, cfg.Port),
 	})
-	_, err := rdb.Ping().Result()
-	if err != nil {
-		log.Fatalf("Could not connect to Redis: %v", err)
-	}
-
 	return rdb
 }

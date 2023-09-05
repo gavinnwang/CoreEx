@@ -9,6 +9,6 @@ type PlaceOrderInput struct {
 	Symbol    string  `json:"symbol" validate:"required"`
 }
 
-type StreamPriceInput struct {
+type StreamPriceParams struct {
 	Symbol string `json:"symbol" validate:"required"`
 }
