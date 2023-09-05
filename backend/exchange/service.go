@@ -127,7 +127,7 @@ func (s *service) StartConsumers(brokerList []string) {
 	}
 
 	defer func() {
-		log.Println("Closing consumer")
+		log.Println("Closing consumer partition")
 		if err := pc.Close(); err != nil {
 			panic(err)
 		}
@@ -138,13 +138,13 @@ func (s *service) StartConsumers(brokerList []string) {
 	for w := 1; w <= numConsumers; w++ {
 		wg.Add(1)
 		log.Println("Starting consumer", w)
-		go s.consumer(pc, &wg)
+		go s.consumer(pc, &wg, w)
 	}
 
 	wg.Wait()
 }
 
-func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup) {
+func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup, index int) {
 	defer wg.Done()
 	for {
 		select {
@@ -189,13 +189,14 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup) {
 		case err := <-pc.Errors():
 			log.Println("Error consuming message: ", err)
 		case <-s.Shutdown:
-			log.Println("Shutting down consumer")
+			log.Printf("Shutting down consumer %d\n", index)
 			return
 		}
 	}
 }
 
 func (s *service) ShutdownConsumers() {
+	log.Println("Shutting down consumers called")
 	close(s.Shutdown)
 }
 

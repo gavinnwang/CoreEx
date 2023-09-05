@@ -60,13 +60,15 @@ func main() {
 	}()
 
 	<-stop
+	
+	exchangeService.ShutdownConsumers() // First shut down kafka consumers 
+
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
 		log.Fatalf("Server forced shutdown: %s", err)
 	}
 
-	exchangeService.ShutdownConsumers()
 }
 
 // setupHandler sets up all the middleware and API routes for the server.

@@ -55,7 +55,7 @@ const Price: Component = () => {
     >
       <div class="flex flex-col gap-y-5 ">
         <PlaceOrderForm />
-        <div class="flex flex-row gap-x-5">
+        <div class="flex flex-col gap-y-5 md:flex-row md:gap-x-5">
           <SymbolInfoTable
             symbolInfo={symbolInfo}
             fetchErrorMsg={fetchErrorMsg}
