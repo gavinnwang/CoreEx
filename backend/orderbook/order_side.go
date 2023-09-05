@@ -85,7 +85,7 @@ func (os *OrderSide) Append(o *Order) *list.Node[*Order] {
 	os.numOrders++
 	os.numOrdersMu.Unlock()
 	// os.volume = os.volume.Add(o.Volume())
-	os.SetVolume(os.Volume().Add(o.Volume()))
+	os.AddVolumeBy(o.Volume())
 	return priceQueue.Append(o)
 }
 
@@ -130,7 +130,7 @@ func (os *OrderSide) Remove(n *list.Node[*Order]) *Order {
 	os.numOrders--
 	os.numOrdersMu.Unlock()
 	// os.volume = os.volume.Sub(o.Volume())
-	os.SetVolume(os.Volume().Sub(o.Volume()))
+	os.SubVolumeBy(o.Volume())
 	// Log(fmt.Sprintf("OrderSide volume after remove: %s", os.Volume()))
 	return o
 }
@@ -177,10 +177,22 @@ func (os *OrderSide) MinPriceQueue() (*OrderQueue, bool) {
 	return nil, false
 }
 
-func (os *OrderSide) SetVolume(volume decimal.Decimal) {
+// func (os *OrderSide) SetVolume(volume decimal.Decimal) {
+// 	os.volumeMu.Lock()
+// 	defer os.volumeMu.Unlock()
+// 	os.volume = volume
+// }
+
+func (os *OrderSide) AddVolumeBy(volume decimal.Decimal) {
 	os.volumeMu.Lock()
 	defer os.volumeMu.Unlock()
-	os.volume = volume
+	os.volume = os.volume.Add(volume)
+}
+
+func (os *OrderSide) SubVolumeBy(volume decimal.Decimal) {
+	os.volumeMu.Lock()
+	defer os.volumeMu.Unlock()
+	os.volume = os.volume.Sub(volume)
 }
 
 func (os *OrderSide) Volume() decimal.Decimal {

@@ -26,7 +26,8 @@ var (
 
 type Service interface {
 	PlaceOrder(input PlaceOrderInput) error
-	GetMarketPrice(symbol string) (decimal.Decimal, error)
+	GetMarketPrice(symbol string) (float64, error)
+	GetSymbolInfo(symbol string) (SymbolInfoResponse, error)
 	StartConsumers(brokerList []string)
 	ShutdownConsumers()
 }
@@ -67,7 +68,6 @@ func (s *service) PlaceOrder(input PlaceOrderInput) error {
 		return ErrInvalidSymbol
 	}
 
-
 	inputJSON, err := json.Marshal(input)
 	if err != nil {
 		return fmt.Errorf("Failed to serialize order to JSON: %w", err)
@@ -87,12 +87,28 @@ func (s *service) PlaceOrder(input PlaceOrderInput) error {
 	return nil
 }
 
-func (s *service) GetMarketPrice(symbol string) (decimal.Decimal, error) {
+func (s *service) GetMarketPrice(symbol string) (float64, error) {
 	ob, ok := s.orderBooks[symbol]
 	if !ok {
-		return decimal.Decimal{}, ErrInvalidSymbol
+		return 0, ErrInvalidSymbol
 	}
-	return ob.MarketPrice(), nil
+	return ob.MarketPrice().InexactFloat64(), nil
+}
+
+func (s *service) GetSymbolInfo(symbol string) (SymbolInfoResponse, error) {
+	ob, ok := s.orderBooks[symbol]
+	if !ok {
+		return SymbolInfoResponse{}, ErrInvalidSymbol
+	}
+	return SymbolInfoResponse{
+		Symbol:      symbol,
+		AskVolume:   ob.AskVolume().InexactFloat64(),
+		BidVolume:   ob.BidVolume().InexactFloat64(),
+		BestAsk:     ob.BestAsk().InexactFloat64(),
+		BestBid:     ob.BestBid().InexactFloat64(),
+		Price: ob.MarketPrice().InexactFloat64(),
+	}, nil
+
 }
 
 func (s *service) StartConsumers(brokerList []string) {

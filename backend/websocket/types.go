@@ -1,11 +1,16 @@
 package ws
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"github/wry-0313/exchange/exchange"
+)
 
 const (
 
 	// Events
 	EventStreamMarketPrice = "exchange.stream_price"
+
+	EventStreamSymbolInfo = "exchange.stream_info"
 
 	// CloseReasonBadEvent indicates that the event field has an incorrect type.
 	CloseReasonBadEvent = "The event field is an incorrect type."
@@ -39,14 +44,19 @@ type ResponseBase struct {
 	ErrorMessage string `json:"error_message,omitempty"`
 }
 
-// ParamsStreamPrice contains the parameter for the stream_price event.
-type ParamsStreamPrice struct {
+// ParamsSymbol contains the parameter symbol and is used for handlers that only needs the symbol
+type ParamsSymbol struct {
 	Symbol string `json:"symbol" validate:"required"`
 }
 
 type ResponseGetMarketPrice struct {
 	ResponseBase
 	Result ResultGetMarketPrice `json:"result,omitempty"`
+}
+
+type ResponseGetSymbolInfo struct {
+	ResponseBase
+	Result exchange.SymbolInfoResponse `json:"result,omitempty"`
 }
 
 // ResultBoardConnect contains the result of board connection.

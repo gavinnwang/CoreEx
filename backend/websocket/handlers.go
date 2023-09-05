@@ -45,14 +45,67 @@ func (ws *WebSocket) HandleConnection(w http.ResponseWriter, r *http.Request) {
 	go client.readPump()
 }
 
+func handleStreamSymbolInfo(c *Client, msgReq Request) {
+
+	var params ParamsSymbol
+	if err := UnmarshalParams(msgReq, &params, c); err != nil {
+		return
+	}
+	symbol := params.Symbol
+
+	// Create a new ticker that fires every second.
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+
+	stopChan := make(chan struct{})
+
+	// Run the ticker in a separate goroutine.
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				symbolInfo, err := c.ws.exchangeService.GetSymbolInfo(symbol)
+				if err != nil {
+					log.Printf("Failed to get symbol info: %v", err)
+					sendErrorMessage(c, buildErrorResponse(msgReq, ErrMsgInternalServer))
+					return
+				}
+
+				// Broacast successful message response
+				msgRes := ResponseGetSymbolInfo{
+					ResponseBase: ResponseBase{
+						Event:   EventStreamSymbolInfo,
+						Success: true,
+					},
+					Result: symbolInfo,
+				}
+
+				msgResBytes, err := json.Marshal(msgRes)
+				if err := handleMarshalError(err, "handleStreamSymbolInfo", c); err != nil {
+					return
+				}
+				c.send <- msgResBytes
+			case <-stopChan:
+				log.Println("Stopping stream symbol info ticker")
+				return
+			}
+		}
+	}()
+
+	// Wait for the client to close the connection or any other stop condition.
+	for {
+		_, _, err := c.conn.ReadMessage()
+		if err != nil {
+			// Stop the ticker if the client has disconnected.
+			stopChan <- struct{}{}
+			return
+		}
+	}
+}
+
 func handleStreamMarketPrice(c *Client, msgReq Request) {
-	// user := c.user
-	// if user.ID.String() == "" {
-	// 	closeConnection(c, websocket.ClosePolicyViolation, CloseReasonUnauthorized)
-	// 	return
-	// }
-	
-	var params ParamsStreamPrice
+
+	var params ParamsSymbol
 	if err := UnmarshalParams(msgReq, &params, c); err != nil {
 		return
 	}
@@ -78,8 +131,6 @@ func handleStreamMarketPrice(c *Client, msgReq Request) {
 					return
 				}
 
-				priceFloat, _ := price.Float64()
-
 				// Broacast successful message response
 				msgRes := ResponseGetMarketPrice{
 					ResponseBase: ResponseBase{
@@ -88,12 +139,12 @@ func handleStreamMarketPrice(c *Client, msgReq Request) {
 					},
 					Result: ResultGetMarketPrice{
 						Symbol: symbol,
-						Price:  priceFloat,
+						Price:  price,
 					},
 				}
 
 				msgResBytes, err := json.Marshal(msgRes)
-				if err := handleMarshalError(err, "handleBoardConnect", c); err != nil {
+				if err := handleMarshalError(err, "handleStreamMarketPrice", c); err != nil {
 					return
 				}
 				c.send <- msgResBytes
@@ -113,7 +164,6 @@ func handleStreamMarketPrice(c *Client, msgReq Request) {
 			return
 		}
 	}
-
 }
 
 // unmarshalParams is a helper function that unmarshals a message request's params and sends

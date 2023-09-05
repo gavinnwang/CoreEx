@@ -200,10 +200,10 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		for i := 0; i < 50; i++ {
-			// fmt.Printf("ask side: %v\n", ob.asks)
-			// fmt.Printf("bid side: %v\n", ob.bids)
-			fmt.Printf("bestBid %s\n", ob.BestAsk())
-			fmt.Printf("bestAsk %s\n", ob.BestBid())
+			fmt.Printf("ask volume %s\n", ob.AskVolume())
+			fmt.Printf("bid volume %s\n", ob.BidVolume())
+			fmt.Printf("bestBid %s\n", ob.BestBid())
+			fmt.Printf("bestAsk %s\n", ob.BestAsk())
 			fmt.Printf("market price: %s\n", ob.MarketPrice())
 			time.Sleep(time.Millisecond * 10)
 		}

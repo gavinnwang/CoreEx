@@ -144,9 +144,9 @@ func (ob *OrderBook) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft dec
 			oq.SetVolume(oq.Volume().Sub(volumeLeft))
 
 			if o.Side() == Buy {
-				ob.bids.SetVolume(ob.bids.Volume().Sub(volumeLeft))
+				ob.asks.SubVolumeBy(volumeLeft)
 			} else {
-				ob.asks.SetVolume(ob.asks.Volume().Sub(volumeLeft))
+				ob.bids.SubVolumeBy(volumeLeft)
 			}
 
 			bestOrder.setStatusToPartiallyFilled(matchedVolumeLeft)
@@ -185,10 +185,10 @@ func (ob *OrderBook) matchWithMarketOrders(marketOrders *list.List[*Order], orde
 
 			if order.Side() == Buy {
 				// ob.asks.volume = ob.asks.volume.Sub(orderVolume)
-				ob.asks.SetVolume(ob.asks.Volume().Sub(orderVolume))
+				ob.asks.SubVolumeBy(orderVolume)
 			} else {
 				// ob.bids.volume = ob.bids.volume.Sub(orderVolume)
-				ob.bids.SetVolume(ob.bids.Volume().Sub(orderVolume))
+				ob.bids.SubVolumeBy(orderVolume)
 			}
 
 			order.setStatusToFilled()
@@ -201,10 +201,10 @@ func (ob *OrderBook) matchWithMarketOrders(marketOrders *list.List[*Order], orde
 
 			if order.Side() == Buy {
 				// ob.asks.volume = ob.asks.volume.Sub(marketOrderVolume)
-				ob.asks.SetVolume(ob.asks.Volume().Sub(marketOrderVolume))
+				ob.asks.SubVolumeBy(marketOrderVolume)
 			} else {
 				// ob.bids.volume = ob.bids.volume.Sub(marketOrderVolume)
-				ob.bids.SetVolume(ob.bids.Volume().Sub(marketOrderVolume))
+				ob.bids.SubVolumeBy(marketOrderVolume)
 			}
 
 			order.setStatusToPartiallyFilled(orderVolume.Sub(marketOrderVolume))
@@ -316,12 +316,12 @@ func (ob *OrderBook) addMarketOrder(o *Order) {
 		ob.marketBuyMu.Lock() // Lock the mutex
 		ob.marketBuyOrders.PushBack(o)
 		ob.marketBuyMu.Unlock() // Unlock the mutex
-		ob.bids.SetVolume(ob.bids.Volume().Add(o.Volume()))
+		ob.bids.AddVolumeBy(o.Volume())
 	} else {
 		ob.marketSellMu.Lock() // Lock the mutex
 		ob.marketSellOrders.PushBack(o)
 		ob.marketSellMu.Unlock() // Unlock the mutex
-		ob.asks.SetVolume(ob.asks.Volume().Add(o.Volume()))
+		ob.asks.AddVolumeBy(o.Volume())
 	}
 }
 
@@ -339,6 +339,14 @@ func (ob *OrderBook) addLimitOrder(o *Order) {
 		ob.activeOrders[o.OrderID()] = n
 		ob.ordersMu.Unlock()
 	}
+}
+
+func (ob *OrderBook) AskVolume() decimal.Decimal {
+	return ob.asks.Volume()
+}
+
+func (ob *OrderBook) BidVolume() decimal.Decimal {
+	return ob.bids.Volume()
 }
 
 func (ob *OrderBook) BestBid() decimal.Decimal {
