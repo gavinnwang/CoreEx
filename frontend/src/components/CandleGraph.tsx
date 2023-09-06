@@ -12,8 +12,8 @@ export default function CandleGraph() {
 
   return (
     <SolidApexCharts
-      width="500"
-      type="candlestick"
+      width="800"
+      type="line"
       options={options()}
       series={series()}
     />

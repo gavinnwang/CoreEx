@@ -19,7 +19,7 @@ func New(cfg config.DatabaseConfig) (*DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Connected to database %s\n", dsn)
+	log.Println("Connected to database ")
 	return &DB{
 		DB: conn,
 	}, nil

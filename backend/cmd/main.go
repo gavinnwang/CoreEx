@@ -39,7 +39,7 @@ func main() {
 
 	// Setup server
 	mux := chi.NewRouter()
-	r, exchangeService := setupHandler(mux, db, validator, cfg)
+	r, exchangeService := setupHandlerAndService(mux, db, validator, cfg)
 	server := http.Server{
 		Addr:    cfg.ServerPort,
 		Handler: r,
@@ -60,8 +60,8 @@ func main() {
 	}()
 
 	<-stop
-	
-	exchangeService.ShutdownConsumers() // First shut down kafka consumers 
+
+	exchangeService.ShutdownConsumers() // First shut down kafka consumers
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -71,8 +71,8 @@ func main() {
 
 }
 
-// setupHandler sets up all the middleware and API routes for the server.
-func setupHandler(
+// setupHandlerAndService sets up all the middleware and API routes for the server. It will also return certain services that require additional instructions.
+func setupHandlerAndService(
 	r chi.Router,
 	db *db.DB,
 	v validator.Validate,

@@ -59,7 +59,6 @@ const Price: Component = () => {
           <SymbolInfoTable
             symbolInfo={symbolInfo}
             fetchErrorMsg={fetchErrorMsg}
-            className=""
           />
           <CandleGraph />
         </div>

@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 
@@ -139,7 +138,6 @@ func getDatabaseConfig() (DatabaseConfig, error) {
 		User:     os.Getenv(keyDBUser),
 		Password: os.Getenv(keyDBPassword),
 	}
-	log.Printf("databaseConfig: %v\n", databaseConfig)
 
 	// This allows running tests from outside the docker network assuming your local
 	// development environment has ports exposed
