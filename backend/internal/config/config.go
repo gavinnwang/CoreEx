@@ -28,8 +28,8 @@ const (
 
 	keyKafkaBrokers = "KAFKA_BROKERS"
 
-	ProdEnv = "PRODUCTION"
-	DevEnv  = "DEVELOPMENT"
+	ProdEnv = "production"
+	DevEnv  = "development"
 )
 
 type Config struct {
