@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github/wry-0313/exchange/internal/config"
-	"github/wry-0313/exchange/internal/db"
+	"github/wry-0313/exchange/db"
 	"github/wry-0313/exchange/internal/endpoint"
 	"github/wry-0313/exchange/internal/auth"
 	"github/wry-0313/exchange/internal/exchange"
@@ -46,6 +46,8 @@ func main() {
 	}
 
 	go func() {
+		// log.Println("Starting Kafka consumers in 10 seconds...")
+		// time.Sleep(10 * time.Second)
 		exchangeService.StartConsumers(cfg.KafkaBrokers)
 	}()
 

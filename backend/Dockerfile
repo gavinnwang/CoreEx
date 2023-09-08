@@ -17,7 +17,5 @@ COPY . .
 RUN go build -o /app/main ./cmd/main.go
 
 EXPOSE 8080
-EXPOSE 9092
-
 
 CMD [ "./start.sh" ] 

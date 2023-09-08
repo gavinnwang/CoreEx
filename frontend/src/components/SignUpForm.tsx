@@ -33,7 +33,7 @@ export default function SignUpForm() {
       if (error instanceof APIError) {
         toast.error(error.message);
       } else {
-        toast.error("An unknown error occurred");
+        toast.error("Failed to connect to the server.");
       }
     } finally {
       setIsLoading(false);

@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github/wry-0313/exchange/internal/user"
 	"github/wry-0313/exchange/internal/orderbook"
+	"github/wry-0313/exchange/internal/user"
 	"github/wry-0313/exchange/pkg/validator"
 	"log"
 	"sync"
+	"time"
 
 	"github.com/IBM/sarama"
 	"github.com/google/uuid"
@@ -40,6 +41,9 @@ type service struct {
 }
 
 func NewService(userRepo user.Repository, validator validator.Validate, brokerList []string) Service {
+	log.Println("Waiting 1 seconds for kafka service to elect an leader...")
+	time.Sleep(1 * time.Second)
+	// Create a new exchange service
 	producer, err := newProducer(brokerList)
 	if err != nil {
 		log.Fatalf("Could not create producer: %v", err)
@@ -199,47 +203,3 @@ func (s *service) ShutdownConsumers() {
 	log.Println("Shutting down consumers called")
 	close(s.Shutdown)
 }
-
-// func (ex *Exchange) FetchAndStoreMarketPrice() {
-// 	ticker := time.NewTicker(1 * time.Second)
-// 	defer ticker.Stop()
-
-// 	for {
-// 		select {
-// 		case <-ticker.C:
-// 			p := ex.OrderBook.MarketPrice()
-// 			timestamp := time.Now().Unix()
-// 			key := "market_price"
-// 			_, err := ex.rdb.Do("TS.ADD", key, timestamp, p.String()).Result()
-// 			if err != nil {
-// 				log.Fatalf("Could not add data to time series: %v", err)
-// 			} else {
-// 				log.Printf("Added market price data to time series: %s\n", p)
-// 			}
-// 		}
-// 	 }
-// }
-
-// func (ex *Exchange) FetchAndStoreBestBids() {
-// 	ticker := time.NewTicker(1 * time.Second)
-// 	defer ticker.Stop()
-
-// 	for {
-// 		select {
-// 		case <-ticker.C:
-// 			log.Printf("best bids: %s\n", ex.orderBook.BestBid())
-// 		}
-// 	}
-// }
-
-// func (ex *Exchange) FetchAndStoreBestAsks() {
-// 	ticker := time.NewTicker(1 * time.Second)
-// 	defer ticker.Stop()
-
-// 	for {
-// 		select {
-// 		case <-ticker.C:
-// 			log.Printf("best asks: %s\n", ex.orderBook.BestAsk())
-// 		}
-// 	}
-// }

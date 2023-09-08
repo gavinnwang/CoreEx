@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github/wry-0313/exchange/internal/models"
+	"log"
 )
 
 var (
@@ -47,6 +48,8 @@ func (r *repository) CreateUser(user models.User) error {
 	if err != nil {
 		return err
 	}
+
+	log.Printf("User created successfully: %s\n", user.ID)
 
 	return nil
 }

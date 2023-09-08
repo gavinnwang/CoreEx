@@ -47,6 +47,7 @@ func (api *API) HandleCreateUser(w http.ResponseWriter, r *http.Request) {
 	// Create user and handle errors
 	user, err := api.userService.CreateUser(input)
 	if err != nil {
+		log.Printf("handler: failed to create user: %v\n", err)
 		switch {
 		case validator.IsValidationError(err):
 			endpoint.WriteValidationErr(w, input, err)

@@ -14,14 +14,14 @@ import (
 type Order struct {
 	side      Side
 	orderID   uuid.UUID
-	userID  uuid.UUID
-	createdAt time.Time
+	userID    uuid.UUID
+	createdAt int64 // Unix timestamp
 	orderType OrderType
 	status    OrderStatus
 	// logs      *OrderLogs
-	price     decimal.Decimal
-	volume    decimal.Decimal
-	volumeMu  sync.RWMutex
+	price    decimal.Decimal
+	volume   decimal.Decimal
+	volumeMu sync.RWMutex
 }
 
 func NewOrder(side Side, userID uuid.UUID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order {
@@ -35,13 +35,13 @@ func NewOrder(side Side, userID uuid.UUID, orderType OrderType, price, volume de
 	return &Order{
 		side:      side,
 		orderID:   uuid.New(),
-		userID:  userID,
-		createdAt: time.Now(),
+		userID:    userID,
+		createdAt: time.Now().Unix(),
 		orderType: orderType,
 		status:    Open,
 		// logs:      ol,
-		price:     price,
-		volume:    volume,
+		price:  price,
+		volume: volume,
 	}
 }
 
@@ -82,7 +82,7 @@ func (o *Order) Price() decimal.Decimal {
 }
 
 // Time returns timestamp field copy in Unix
-func (o *Order) CreatedAt() time.Time {
+func (o *Order) CreatedAt() int64 {
 	return o.createdAt
 }
 
@@ -117,7 +117,7 @@ func (o *Order) setStatusToFilled() {
 
 // String implements Stringer interface
 func (o *Order) String() string {
-	return fmt.Sprintf("\norder %s:\n\tside: %s\n\ttype: %s\n\tvolume: %s\n\tprice: %s\n\ttime: %s\n", o.shortOrderID(), o.Side(), o.OrderType(), o.Volume(), o.Price(), o.CreatedAt())
+	return fmt.Sprintf("\norder %s:\n\tside: %s\n\ttype: %s\n\tvolume: %s\n\tprice: %s\n\ttime: %d\n", o.shortOrderID(), o.Side(), o.OrderType(), o.Volume(), o.Price(), o.CreatedAt())
 }
 
 // // MarshalJSON implements json.Marshaler interface
