@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github/wry-0313/exchange/internal/config"
 	"log"
-	"time"
+	// "time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -15,8 +15,8 @@ type DB struct {
 }
 
 func New(cfg config.DatabaseConfig) (*DB, error) {
-	log.Println("Waiting 3 seconds for database to start...")
-	time.Sleep(3 * time.Second)
+	// log.Println("Waiting 5 seconds for database to start...")
+	// time.Sleep(5 * time.Second)
 	dsn := buildDSN(cfg)
 	conn, err := sql.Open("mysql", dsn)
 	log.Printf("Connecting to database...%s\n", dsn)

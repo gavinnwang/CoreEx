@@ -29,7 +29,10 @@ services:
     environment:
       - INTERNAL_NETWORK=true
     depends_on:
-      - kafka
+      kafka:
+        condition: service_started
+      db: 
+        condition: service_healthy
   db:
     image: mysql:latest
     restart: always
@@ -41,3 +44,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=mysql
       - MYSQL_DATABASE=exchange
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 20s
+      timeout: 20s
+      retries: 10

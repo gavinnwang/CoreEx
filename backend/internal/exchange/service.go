@@ -9,7 +9,7 @@ import (
 	"github/wry-0313/exchange/pkg/validator"
 	"log"
 	"sync"
-	"time"
+	// "time"
 
 	"github.com/IBM/sarama"
 	"github.com/google/uuid"
@@ -41,8 +41,8 @@ type service struct {
 }
 
 func NewService(userRepo user.Repository, validator validator.Validate, brokerList []string) Service {
-	log.Println("Waiting 1 seconds for kafka service to elect an leader...")
-	time.Sleep(1 * time.Second)
+	// log.Println("Waiting 1 seconds for kafka service to elect an leader...")
+	// time.Sleep(1 * time.Second)
 	// Create a new exchange service
 	producer, err := newProducer(brokerList)
 	if err != nil {

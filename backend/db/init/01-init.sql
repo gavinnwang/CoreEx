@@ -14,15 +14,15 @@ CREATE TABLE IF NOT EXISTS stocks (
     stock_id MEDIUMINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     symbol VARCHAR(10) UNIQUE NOT NULL,
     name VARCHAR(50) NOT NULL,
-    current_price DECIMAL(10, 2) NOT NULL,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE if NOT EXISTS stock_price_history (
-    history_id INT PRIMARY KEY AUTO_INCREMENT,
+    history_id INT AUTO_INCREMENT,
     stock_id MEDIUMINT UNSIGNED NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     recorded_at BIGINT NOT NULL,
     FOREIGN KEY (stock_id) REFERENCES Stocks(stock_id),
-    INDEX (recorded_at)
+    INDEX (recorded_at),
+    INDEX idx_stock_time(stock_id, recorded_at DESC)
 );
