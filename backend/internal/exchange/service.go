@@ -35,7 +35,7 @@ type Service interface {
 
 type service struct {
 	validator  validator.Validate
-	orderBooks map[string]*orderbook.OrderBook
+	orderBooks map[string]orderbook.Service
 	producer   sarama.SyncProducer
 	Shutdown   chan struct{}
 }
@@ -50,8 +50,8 @@ func NewService(userRepo user.Repository, validator validator.Validate, brokerLi
 	}
 
 	// set up AAPl orderbok
-	orderBooks := make(map[string]*orderbook.OrderBook)
-	orderBooks["AAPL"] = orderbook.NewOrderBook("AAPL")
+	orderBooks := make(map[string]orderbook.Service)
+	orderBooks["AAPL"] = orderbook.NewService("AAPL")
 
 	return &service{
 		validator:  validator,
