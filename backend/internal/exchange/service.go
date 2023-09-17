@@ -35,25 +35,23 @@ type Service interface {
 
 type service struct {
 	validator  validator.Validate
-	orderBooks map[string]orderbook.Service
+	obServices map[string]orderbook.Service
 	producer   sarama.SyncProducer
 	Shutdown   chan struct{}
+	userRepo   user.Repository
 
 }
 
-func NewService(, , validator validator.Validate, brokerList []string) Service {
+func NewService(userRepo user.Repository, obServices map[string]orderbook.Service, validator validator.Validate, brokerList []string) Service {
 	producer, err := newProducer(brokerList)
 	if err != nil {
 		log.Fatalf("Could not create producer: %v", err)
 	}
 
-	// set up AAPl orderbok
-	orderBooks := make(map[string]orderbook.Service)
-	orderBooks["AAPL"] = orderbook.NewService("AAPL", obRepo)
 
 	return &service{
 		validator:  validator,
-		orderBooks: orderBooks,
+		obServices: obServices,
 		producer:   producer,
 		Shutdown:   make(chan struct{}),
 		userRepo:   userRepo,
@@ -66,7 +64,7 @@ func (s *service) PlaceOrder(input PlaceOrderInput) error {
 	}
 
 	// Check the validity of the input symbol
-	_, ok := s.orderBooks[input.Symbol]
+	_, ok := s.obServices[input.Symbol]
 	if !ok {
 		return ErrInvalidSymbol
 	}
@@ -91,7 +89,7 @@ func (s *service) PlaceOrder(input PlaceOrderInput) error {
 }
 
 func (s *service) GetMarketPrice(symbol string) (float64, error) {
-	ob, ok := s.orderBooks[symbol]
+	ob, ok := s.obServices[symbol]
 	if !ok {
 		return 0, ErrInvalidSymbol
 	}
@@ -99,7 +97,7 @@ func (s *service) GetMarketPrice(symbol string) (float64, error) {
 }
 
 func (s *service) GetSymbolInfo(symbol string) (SymbolInfoResponse, error) {
-	ob, ok := s.orderBooks[symbol]
+	ob, ok := s.obServices[symbol]
 	if !ok {
 		return SymbolInfoResponse{}, ErrInvalidSymbol
 	}
@@ -175,13 +173,13 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup, inde
 			log.Printf("Consumer processing: %v\n", order)
 			switch order.OrderType {
 			case "limit":
-				_, err := s.orderBooks[order.Symbol].PlaceLimitOrder(side, userID, decimal.NewFromFloat(order.Volume), decimal.NewFromFloat(order.Price))
+				_, err := s.obServices[order.Symbol].PlaceLimitOrder(side, userID, decimal.NewFromFloat(order.Volume), decimal.NewFromFloat(order.Price))
 				if err != nil {
 					log.Println(err)
 					continue
 				}
 			case "market":
-				_, err := s.orderBooks[order.Symbol].PlaceMarketOrder(side, userID, decimal.NewFromFloat(order.Volume))
+				_, err := s.obServices[order.Symbol].PlaceMarketOrder(side, userID, decimal.NewFromFloat(order.Volume))
 				if err != nil {
 					log.Println(err)
 					continue

@@ -96,7 +96,7 @@ func setupHandlerAndService(
 	obServices := make(map[string]orderbook.Service)
 	obServices["AAPL"] = orderbook.NewService("AAPL", obRepo)
 
-	exchangeService := exchange.NewService(userRepo, , v, cfg.KafkaBrokers)
+	exchangeService := exchange.NewService(userRepo, obServices, v, cfg.KafkaBrokers)
 
 	// rdb := ws.NewRedis(cfg.Rdb)
 
