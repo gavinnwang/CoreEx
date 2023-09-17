@@ -39,13 +39,16 @@ type service struct {
 	bids *OrderSide // limit buy orders
 
 	sortedOrdersMu sync.RWMutex
+
+	obRepo Repository
 }
 
-func NewService(symbol string) Service {
+func NewService(symbol string, obRepo Repository) Service {
 	err := InitializeLogService("orderbook_log.txt")
 	if err != nil {
 		log.Fatalf("Could not initialize log service: %v", err)
 	}
+
 	return &service{
 		symbol:           symbol,
 		activeOrders:     map[uuid.UUID]*list.Node[*Order]{},
@@ -54,6 +57,7 @@ func NewService(symbol string) Service {
 		marketBuyOrders:  list.New[*Order](),
 		marketSellOrders: list.New[*Order](),
 		marketPrice:      decimal.Zero,
+		obRepo:           obRepo,
 	}
 }
 

@@ -38,12 +38,10 @@ type service struct {
 	orderBooks map[string]orderbook.Service
 	producer   sarama.SyncProducer
 	Shutdown   chan struct{}
+
 }
 
-func NewService(userRepo user.Repository, validator validator.Validate, brokerList []string) Service {
-	// log.Println("Waiting 1 seconds for kafka service to elect an leader...")
-	// time.Sleep(1 * time.Second)
-	// Create a new exchange service
+func NewService(, , validator validator.Validate, brokerList []string) Service {
 	producer, err := newProducer(brokerList)
 	if err != nil {
 		log.Fatalf("Could not create producer: %v", err)
@@ -51,13 +49,14 @@ func NewService(userRepo user.Repository, validator validator.Validate, brokerLi
 
 	// set up AAPl orderbok
 	orderBooks := make(map[string]orderbook.Service)
-	orderBooks["AAPL"] = orderbook.NewService("AAPL")
+	orderBooks["AAPL"] = orderbook.NewService("AAPL", obRepo)
 
 	return &service{
 		validator:  validator,
 		orderBooks: orderBooks,
 		producer:   producer,
 		Shutdown:   make(chan struct{}),
+		userRepo:   userRepo,
 	}
 }
 

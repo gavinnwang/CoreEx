@@ -2,16 +2,17 @@ package main
 
 import (
 	"context"
-	"github/wry-0313/exchange/internal/config"
 	"github/wry-0313/exchange/db"
-	"github/wry-0313/exchange/internal/endpoint"
 	"github/wry-0313/exchange/internal/auth"
+	"github/wry-0313/exchange/internal/config"
+	"github/wry-0313/exchange/internal/endpoint"
 	"github/wry-0313/exchange/internal/exchange"
 	"github/wry-0313/exchange/internal/jwt"
 	"github/wry-0313/exchange/internal/middleware"
+	"github/wry-0313/exchange/internal/models"
+	"github/wry-0313/exchange/internal/orderbook"
 	"github/wry-0313/exchange/internal/user"
 	ws "github/wry-0313/exchange/internal/websocket"
-	"github/wry-0313/exchange/internal/models"
 	"github/wry-0313/exchange/pkg/validator"
 	"log"
 	"net/http"
@@ -85,12 +86,17 @@ func setupHandlerAndService(
 
 	// Set up repositories
 	userRepo := user.NewRepository(db.DB)
+	obRepo := orderbook.NewRepository(db.DB)
 
 	// Set up services
 	jwtService := jwt.NewService(cfg.JwtSecret, cfg.JwtExpiration)
 	authService := auth.NewService(userRepo, jwtService, v)
 	userService := user.NewService(userRepo, v)
-	exchangeService := exchange.NewService(userRepo, v, cfg.KafkaBrokers)
+
+	obServices := make(map[string]orderbook.Service)
+	obServices["AAPL"] = orderbook.NewService("AAPL", obRepo)
+
+	exchangeService := exchange.NewService(userRepo, , v, cfg.KafkaBrokers)
 
 	// rdb := ws.NewRedis(cfg.Rdb)
 

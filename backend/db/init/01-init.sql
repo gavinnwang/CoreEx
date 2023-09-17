@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS stocks (
     stock_id INT PRIMARY KEY AUTO_INCREMENT,
     symbol VARCHAR(10) UNIQUE NOT NULL,
     name VARCHAR(50) NOT NULL,
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    INDEX idx_stock_symbol(symbol)
 );
 
 CREATE TABLE if NOT EXISTS stock_price_history (
