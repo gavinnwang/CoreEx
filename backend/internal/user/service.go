@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 )
 
 type service struct {
@@ -36,11 +35,11 @@ func (s *service) CreateUser(input CreateUserInput) (models.User, error) {
 	}
 
 	// Prepare user input
-	id := uuid.New()
+	// id := uuid.New()
 	name := toNameCase(input.Name)
 	now := time.Now()
 	user := models.User{
-		ID:        id,
+		// ID:        id,
 		Name:      name,
 		Email:     input.Email,
 		CreatedAt: now,

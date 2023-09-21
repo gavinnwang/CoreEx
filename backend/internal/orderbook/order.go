@@ -13,35 +13,26 @@ import (
 
 type Order struct {
 	side      Side
-	orderID   uuid.UUID
-	userID    uuid.UUID
-	createdAt int64 // Unix timestamp
+	orderID   int64 
+	userID    int64 
 	orderType OrderType
 	status    OrderStatus
-	// logs      *OrderLogs
-	price    decimal.Decimal
-	volume   decimal.Decimal
-	volumeMu sync.RWMutex
+	price     decimal.Decimal
+	volume    decimal.Decimal
+	createdAt time.Time
+	volumeMu  sync.RWMutex
 }
 
 func NewOrder(side Side, userID uuid.UUID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order {
-	// var ol *OrderLogs
-	// switch orderType {
-	// case Limit:
-	// 	ol = NewLimitOrderLogs(volume, price)
-	// case Market:
-	// 	ol = NewMarketOrderLogs(volume)
-	// }
 	return &Order{
 		side:      side,
 		orderID:   uuid.New(),
 		userID:    userID,
-		createdAt: time.Now().Unix(),
 		orderType: orderType,
 		status:    Open,
-		// logs:      ol,
-		price:  price,
-		volume: volume,
+		price:     price,
+		volume:    volume,
+		createdAt: time.Now(),
 	}
 }
 
@@ -54,10 +45,6 @@ func (o *Order) OrderID() uuid.UUID {
 func (o *Order) shortOrderID() string {
 	return o.orderID.String()[:4]
 }
-
-// func (o *Order) Logs() *OrderLogs {
-// 	return o.logs
-// }
 
 // Status returns status field copy
 func (o *Order) Status() OrderStatus {
@@ -79,11 +66,6 @@ func (o *Order) Volume() decimal.Decimal {
 // Price returns price field copy
 func (o *Order) Price() decimal.Decimal {
 	return o.price
-}
-
-// Time returns timestamp field copy in Unix
-func (o *Order) CreatedAt() int64 {
-	return o.createdAt
 }
 
 func (o *Order) OrderType() OrderType {
@@ -111,13 +93,13 @@ func (o *Order) setStatusToFilled() {
 	// o.AppendLog("Order fully filled.")
 }
 
-// func (o *Order) AppendLog(logMsg string) {
-// 	o.logs.Log(logMsg)
-// }
+func (o *Order) CreatedAt() time.Time {
+	return o.createdAt
+}
 
 // String implements Stringer interface
 func (o *Order) String() string {
-	return fmt.Sprintf("\norder %s:\n\tside: %s\n\ttype: %s\n\tvolume: %s\n\tprice: %s\n\ttime: %d\n", o.shortOrderID(), o.Side(), o.OrderType(), o.Volume(), o.Price(), o.CreatedAt())
+	return fmt.Sprintf("\norder %s:\n\tside: %s\n\ttype: %s\n\tvolume: %s\n\tprice: %s\n\ttime: %d\n", o.shortOrderID(), o.Side(), o.OrderType(), o.Volume(), o.Price(), o.CreatedAt().String())
 }
 
 // // MarshalJSON implements json.Marshaler interface

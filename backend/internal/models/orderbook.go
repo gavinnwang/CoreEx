@@ -1,11 +1,8 @@
 package models
 
-import "time"
-
 type Stock struct {
-	ID          int       `json:"id"`
-	Symbol      string    `json:"symbol"`
-	Name        string    `json:"name"`
+	ID     int    `json:"id"`
+	Symbol string `json:"symbol"`
 }
 
 type StockPriceHistory struct {
@@ -18,22 +15,19 @@ type StockPriceHistory struct {
 }
 
 type Order struct {
-	ID          int       `json:"id"`
-	UserID      int       `json:"user_id"`
-	StockID     int       `json:"stock_id"`
-	OrderType   string    `json:"order_type"`
-	OrderStatus string    `json:"order_status"`
-	Quantity    float64   `json:"quantity"`
-	Price       float64   `json:"price"`
-	CreatedAt   time.Time `json:"created_at,omitempty"`
-	UpdatedAt   time.Time `json:"updated_at,omitempty"`
+	StockID     int     `json:"stock_id"`
+	OrderType   string  `json:"order_type"`
+	OrderStatus string  `json:"order_status"`
+	Volume      float64 `json:"volume"`
+	Price       float64 `json:"price"`
+	OrderSide   string  `json:"order_side"`
 }
 
 type Transaction struct {
 	ID              int     `json:"id"`
 	UserID          int     `json:"user_id"`
 	StockID         int     `json:"stock_id"`
-	Quantity        float64 `json:"quantity"`
+	Volume          float64 `json:"volume"`
 	Price           float64 `json:"price"`
 	TransactionType string  `json:"transaction_type"`
 }

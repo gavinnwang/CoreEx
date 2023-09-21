@@ -2,6 +2,7 @@ package orderbook
 
 import (
 	"fmt"
+	"github/wry-0313/exchange/internal/models"
 	list "github/wry-0313/exchange/pkg/dsa/linkedlist"
 	"log"
 	"sync"
@@ -49,6 +50,15 @@ func NewService(symbol string, obRepo Repository) Service {
 		log.Fatalf("Could not initialize log service: %v", err)
 	}
 
+	stock := models.Stock{
+		Symbol: symbol,
+	}
+	
+	err = obRepo.CreateStock(stock)
+	if err != nil {
+		log.Fatalf("Could not create stock: %v", err)
+	}
+
 	return &service{
 		symbol:           symbol,
 		activeOrders:     map[uuid.UUID]*list.Node[*Order]{},
@@ -71,6 +81,7 @@ func (s *service) PlaceMarketOrder(side Side, userID uuid.UUID, volume decimal.D
 	}
 
 	o := NewOrder(side, userID, Market, decimal.Zero, volume, true)
+	s.obRepo.CreateOrder(o)
 	Log(fmt.Sprintf("Created market order: %v", o))
 
 	var (

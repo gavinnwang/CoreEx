@@ -22,7 +22,7 @@ func (s Side) String() string {
 }
 
 func SideFromString(s string) (Side, error) {
-	
+
 	switch s {
 	case "buy":
 		return Buy, nil

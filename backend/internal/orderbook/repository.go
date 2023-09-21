@@ -13,6 +13,7 @@ type repository struct {
 
 type Repository interface {
 	CreateStock(stock models.Stock) error
+	CreateOrder(order *Order) error
 }
 
 func NewRepository(db *sql.DB) Repository {
@@ -32,11 +33,25 @@ func (r *repository) CreateStock(stock models.Stock) error {
 		return nil
 	}
 
-	_, err = r.db.Exec("INSERT INTO stocks (symbol, name) VALUES (?, ?)", stock.Symbol, stock.Name)
+	_, err = r.db.Exec("INSERT INTO stocks (symbol) VALUES (?)", stock.Symbol)
 	if err != nil {
 		return err
 	}
 
 	log.Printf("Stock created successfully: %s\n", stock.Symbol)
+	return nil
+}
+
+func (r *repository) CreateOrder(order *Order) error {
+	orderSide := order.side.String()
+    orderStatus := order.status.String()
+	
+	sql := `
+    INSERT INTO orders (user_id, order_side, order_status, volume, price, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    `
+    _, err := r.db.Exec(sql, order.userID, orderSide, orderStatus, order.volume, order.price, order.createdAt)
+
+
 	return nil
 }
