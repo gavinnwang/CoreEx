@@ -9,10 +9,11 @@ import (
 	"github/wry-0313/exchange/pkg/validator"
 	"log"
 	"sync"
+
 	// "time"
 
 	"github.com/IBM/sarama"
-	"github.com/google/uuid"
+	"github.com/oklog/ulid/v2"
 	"github.com/shopspring/decimal"
 )
 
@@ -160,9 +161,9 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup, inde
 				log.Println("Failed to deserialize order:", err)
 				continue
 			}
-			userID, error := uuid.Parse(order.UserID)
+			userID, error := ulid.Parse(order.UserID)
 			if error != nil {
-				log.Println("Failed to parse UUID:", error)
+				log.Println("Failed to parse ULID:", error)
 				continue
 			}
 			side, error := orderbook.SideFromString(order.OrderSide)

@@ -7,14 +7,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/google/uuid"
+	"github.com/oklog/ulid/v2"
 	"github.com/shopspring/decimal"
 )
 
 type Order struct {
 	side      Side
-	orderID   int64 
-	userID    int64 
+	orderID   ulid.ULID
+	userID    ulid.ULID
 	orderType OrderType
 	status    OrderStatus
 	price     decimal.Decimal
@@ -23,10 +23,10 @@ type Order struct {
 	volumeMu  sync.RWMutex
 }
 
-func NewOrder(side Side, userID uuid.UUID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order {
+func NewOrder(side Side, userID ulid.ULID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order {
 	return &Order{
 		side:      side,
-		orderID:   uuid.New(),
+		orderID:   ulid.Make(),
 		userID:    userID,
 		orderType: orderType,
 		status:    Open,
@@ -37,7 +37,7 @@ func NewOrder(side Side, userID uuid.UUID, orderType OrderType, price, volume de
 }
 
 // ID returns orderID field copy
-func (o *Order) OrderID() uuid.UUID {
+func (o *Order) OrderID() ulid.ULID {
 	return o.orderID
 }
 
@@ -72,7 +72,7 @@ func (o *Order) OrderType() OrderType {
 	return o.orderType
 }
 
-func (o *Order) UserID() uuid.UUID {
+func (o *Order) UserID() ulid.ULID {
 	return o.userID
 }
 
@@ -99,49 +99,6 @@ func (o *Order) CreatedAt() time.Time {
 
 // String implements Stringer interface
 func (o *Order) String() string {
-	return fmt.Sprintf("\norder %s:\n\tside: %s\n\ttype: %s\n\tvolume: %s\n\tprice: %s\n\ttime: %d\n", o.shortOrderID(), o.Side(), o.OrderType(), o.Volume(), o.Price(), o.CreatedAt().String())
+	return fmt.Sprintf("\norder %s:\n\tside: %s\n\ttype: %s\n\tvolume: %s\n\tprice: %s\n\ttime: %s\n", o.shortOrderID(), o.Side(), o.OrderType(), o.Volume(), o.Price(), o.CreatedAt().String())
 }
 
-// // MarshalJSON implements json.Marshaler interface
-// func (o *Order) MarshalJSON() ([]byte, error) {
-// 	return json.Marshal(
-// 		&struct {
-// 			S         Side            `json:"side"`
-// 			OrderID   string          `json:"orderID"`
-// 			Timestamp time.Time       `json:"timestamp"`
-// 			Volume    decimal.Decimal `json:"volume"`
-// 			Price     decimal.Decimal `json:"price"`
-// 		}{
-// 			S:         o.Side(),
-// 			OrderID:   o.OrderID(),
-// 			Timestamp: o.Time(),
-// 			Volume:    o.Volume(),
-// 			Price:     o.Price(),
-// 		},
-// 	)
-// }
-
-// // UnmarshalJSON implements json.Unmarshaler interface
-// func (o *Order) UnmarshalJSON(data []byte) error {
-// 	obj := struct {
-// 		S         Side            `json:"side"`
-// 		OrderID   string          `json:"orderID"`
-// 		Timestamp time.Time       `json:"timestamp"`
-// 		Volume    decimal.Decimal `json:"volume"`
-// 		Price     decimal.Decimal `json:"price"`
-// 	}{}
-
-// 	if err := json.Unmarshal(data, &obj); err != nil {
-// 		return err
-// 	}
-// 	orderID, err := uuid.Parse(obj.OrderID)
-// 	if err != nil {
-// 		log.Fatalf("failed to parse UUID: %v", err)
-// 	}
-// 	o.orderID = orderID
-// 	o.side = obj.S
-// 	o.timestamp = obj.Timestamp
-// 	o.volume = obj.Volume
-// 	o.price = obj.Price
-// 	return nil
-// }

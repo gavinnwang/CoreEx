@@ -3,11 +3,11 @@ package models
 import (
 	"time"
 
-	"github.com/google/uuid"
+	"github.com/oklog/ulid/v2"
 )
 
 type User struct {
-	ID        uuid.UUID `json:"id"`
+	ID        ulid.ULID `json:"id"`
 	Name      string    `json:"name"`
 	Email     *string   `json:"email"`
 	Password  *string   `json:"password,omitempty"`

@@ -7,13 +7,13 @@ import (
 	"log"
 	"sync"
 
-	"github.com/google/uuid"
+	"github.com/oklog/ulid/v2"
 	"github.com/shopspring/decimal"
 )
 
 type Service interface {
-	PlaceMarketOrder(side Side, userID uuid.UUID, volume decimal.Decimal) (orderID uuid.UUID, err error)
-	PlaceLimitOrder(side Side, userID uuid.UUID, volume, price decimal.Decimal) (orderID uuid.UUID, err error)
+	PlaceMarketOrder(side Side, userID ulid.ULID, volume decimal.Decimal) (orderID ulid.ULID, err error)
+	PlaceLimitOrder(side Side, userID ulid.ULID, volume, price decimal.Decimal) (orderID ulid.ULID, err error)
 	AskVolume() decimal.Decimal
 	BidVolume() decimal.Decimal
 	BestBid() decimal.Decimal
@@ -24,7 +24,7 @@ type Service interface {
 
 type service struct {
 	symbol       string
-	activeOrders map[uuid.UUID]*list.Node[*Order] // orderID -> *Order for quick acctions such as update or cancel
+	activeOrders map[ulid.ULID]*list.Node[*Order] // orderID -> *Order for quick acctions such as update or cancel
 	ordersMu     sync.RWMutex
 
 	marketPrice   decimal.Decimal
@@ -53,7 +53,7 @@ func NewService(symbol string, obRepo Repository) Service {
 	stock := models.Stock{
 		Symbol: symbol,
 	}
-	
+
 	err = obRepo.CreateStock(stock)
 	if err != nil {
 		log.Fatalf("Could not create stock: %v", err)
@@ -61,7 +61,7 @@ func NewService(symbol string, obRepo Repository) Service {
 
 	return &service{
 		symbol:           symbol,
-		activeOrders:     map[uuid.UUID]*list.Node[*Order]{},
+		activeOrders:     map[ulid.ULID]*list.Node[*Order]{},
 		bids:             NewOrderSide(),
 		asks:             NewOrderSide(),
 		marketBuyOrders:  list.New[*Order](),
@@ -71,13 +71,13 @@ func NewService(symbol string, obRepo Repository) Service {
 	}
 }
 
-func (s *service) PlaceMarketOrder(side Side, userID uuid.UUID, volume decimal.Decimal) (orderID uuid.UUID, err error) {
+func (s *service) PlaceMarketOrder(side Side, userID ulid.ULID, volume decimal.Decimal) (orderID ulid.ULID, err error) {
 	if volume.Sign() <= 0 {
-		return uuid.Nil, ErrInvalidVolume
+		return ulid.ULID{}, ErrInvalidVolume
 	}
 
 	if side == Invalid {
-		return uuid.Nil, ErrInvalidSide
+		return ulid.ULID{}, ErrInvalidSide
 	}
 
 	o := NewOrder(side, userID, Market, decimal.Zero, volume, true)
@@ -231,17 +231,17 @@ func (s *service) fillAndRemoveLimitOrder(n *list.Node[*Order]) *Order {
 	return o
 }
 
-func (s *service) PlaceLimitOrder(side Side, userID uuid.UUID, volume, price decimal.Decimal) (orderID uuid.UUID, err error) {
+func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price decimal.Decimal) (orderID ulid.ULID, err error) {
 	if volume.Sign() <= 0 {
-		return uuid.Nil, ErrInvalidVolume
+		return ulid.ULID{}, ErrInvalidVolume
 	}
 
 	if price.Sign() <= 0 {
-		return uuid.Nil, ErrInvalidPrice
+		return ulid.ULID{}, ErrInvalidPrice
 	}
 
 	if side == Invalid {
-		return uuid.Nil, ErrInvalidSide
+		return ulid.ULID{}, ErrInvalidSide
 	}
 
 	volumeLeft := volume

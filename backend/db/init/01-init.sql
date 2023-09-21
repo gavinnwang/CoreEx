@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS exchange;
 USE exchange;
 
 CREATE TABLE IF NOT EXISTS users (
-    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id VARCHAR(26) PRIMARY KEY,
     name VARCHAR(50),
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
@@ -29,7 +29,7 @@ CREATE TABLE if NOT EXISTS stock_price_history (
 
 CREATE TABLE if NOT EXISTS orders (
     order_id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT NOT NULL,
+    user_id VARCHAR(26),
     stock_id INT NOT NULL,
     order_side ENUM('Buy', 'Sell') NOT NULL,
     order_status ENUM('Open', 'Filled', 'PartiallyFilled', 'Rejected') NOT NULL,

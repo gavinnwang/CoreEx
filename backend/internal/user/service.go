@@ -8,7 +8,6 @@ import (
 	"regexp"
 	"strings"
 	"time"
-
 )
 
 type service struct {
@@ -35,7 +34,7 @@ func (s *service) CreateUser(input CreateUserInput) (models.User, error) {
 	}
 
 	// Prepare user input
-	// id := uuid.New()
+	// id := ulid.Make()
 	name := toNameCase(input.Name)
 	now := time.Now()
 	user := models.User{

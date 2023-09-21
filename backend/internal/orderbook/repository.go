@@ -44,14 +44,13 @@ func (r *repository) CreateStock(stock models.Stock) error {
 
 func (r *repository) CreateOrder(order *Order) error {
 	orderSide := order.side.String()
-    orderStatus := order.status.String()
-	
-	sql := `
-    INSERT INTO orders (user_id, order_side, order_status, volume, price, created_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-    `
-    _, err := r.db.Exec(sql, order.userID, orderSide, orderStatus, order.volume, order.price, order.createdAt)
+	orderStatus := order.status.String()
 
+	sql := `INSERT INTO orders (user_id, order_side, order_status, volume, price, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)`
+	_, err := r.db.Exec(sql, order.userID, orderSide, orderStatus, order.volume, order.price, order.createdAt)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

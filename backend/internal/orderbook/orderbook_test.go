@@ -1,20 +1,17 @@
 package orderbook
 
-import (
-	// "fmt"
-	// "math/rand"
-	// "reflect"
-	// "sync"
-	// "testing"
-	// "time"
+// "fmt"
+// "math/rand"
+// "reflect"
+// "sync"
+// "testing"
+// "time"
 
-	// "github.com/google/uuid"
-	// "github.com/shopspring/decimal"
-)
+// "github.com/shopspring/decimal"
 
 // func TestPlaceMarketOrderAfterLimit(t *testing.T) {
 // 	ob := NewService("AAPL")
-// 	clientID := uuid.New()
+// 	clientID := ulid.Make()
 // 	for i := 0; i < 2; i++ {
 // 		ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10000), decimal.NewFromInt(10))
 // 	}
@@ -31,7 +28,7 @@ import (
 
 // func TestPlaceMarketOrderAfterLimitConcurrent(t *testing.T) {
 // 	ob := NewService("AAPL")
-// 	clientID := uuid.New()
+// 	clientID := ulid.Make()
 // 	// ch := make(chan int)
 // 	var wg sync.WaitGroup
 // 	_, err := ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10000), decimal.NewFromInt(10))
@@ -73,7 +70,7 @@ import (
 
 // // func TestMarketOrderPartialFill(t *testing.T) {
 // // 	ob := NewService("AAPL")
-// // 	clientID := uuid.New()
+// // 	clientID := ulid.Make()
 // // 	_, err := ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
 // // 	if err != nil {
 // // 		t.Error(err)
@@ -88,7 +85,7 @@ import (
 
 // // func TestMarketOrderVolumeAndDepth(t *testing.T) {
 // // 	ob := NewService("AAPL")
-// // 	clientID := uuid.New()
+// // 	clientID := ulid.Make()
 // // 	_, err := ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(15))
 // // 	if err != nil {
 // // 		t.Error(err)
@@ -133,7 +130,7 @@ import (
 
 // // func TestLimitOrderFilling(t *testing.T) {
 // // 	ob := NewService("AAPL")
-// // 	clientID := uuid.New()
+// // 	clientID := ulid.Make()
 // // 	_, err := ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(15))
 // // 	if err != nil {
 // // 		t.Error(err)
@@ -212,7 +209,7 @@ import (
 // 	wg.Add(1)
 // 	go func() {
 // 		defer wg.Done()
-// 		clientID := uuid.New()
+// 		clientID := ulid.Make()
 // 		for i := 0; i < 4000; i++ {
 // 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 // 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
@@ -224,7 +221,7 @@ import (
 // 	wg.Add(1)
 // 	go func() {
 // 		defer wg.Done()
-// 		clientID := uuid.New()
+// 		clientID := ulid.Make()
 // 		for i := 0; i < 5000; i++ {
 // 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
 // 			ob.PlaceMarketOrder(Buy, clientID, quantity)
@@ -235,7 +232,7 @@ import (
 // 	wg.Add(1)
 // 	go func() {
 // 		defer wg.Done()
-// 		clientID := uuid.New()
+// 		clientID := ulid.Make()
 // 		for i := 0; i < 5000; i++ {
 // 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 // 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
@@ -247,7 +244,7 @@ import (
 // 	wg.Add(1)
 // 	go func() {
 // 		defer wg.Done()
-// 		clientID := uuid.New()
+// 		clientID := ulid.Make()
 // 		for i := 0; i < 5500; i++ {
 // 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
 // 			ob.PlaceMarketOrder(Sell, clientID, quantity)
@@ -257,7 +254,7 @@ import (
 // 	wg.Add(1)
 // 	go func() {
 // 		defer wg.Done()
-// 		clientID := uuid.New()
+// 		clientID := ulid.Make()
 // 		for i := 0; i < 5000; i++ {
 // 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 // 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
@@ -269,7 +266,7 @@ import (
 // 	wg.Add(1)
 // 	go func() {
 // 		defer wg.Done()
-// 		clientID := uuid.New()
+// 		clientID := ulid.Make()
 // 		for i := 0; i < 5000; i++ {
 // 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
 // 			ob.PlaceMarketOrder(Buy, clientID, quantity)
@@ -280,7 +277,7 @@ import (
 // 	wg.Add(1)
 // 	go func() {
 // 		defer wg.Done()
-// 		clientID := uuid.New()
+// 		clientID := ulid.Make()
 // 		for i := 0; i < 5000; i++ {
 // 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 // 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
@@ -292,7 +289,7 @@ import (
 // 	wg.Add(1)
 // 	go func() {
 // 		defer wg.Done()
-// 		clientID := uuid.New()
+// 		clientID := ulid.Make()
 // 		for i := 0; i < 5000; i++ {
 // 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
 // 			ob.PlaceMarketOrder(Sell, clientID, quantity)
@@ -303,7 +300,7 @@ import (
 // 	wg.Add(1)
 // 	go func() {
 // 		defer wg.Done()
-// 		clientID := uuid.New()
+// 		clientID := ulid.Make()
 // 		for i := 0; i < 5000; i++ {
 // 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 // 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
@@ -315,7 +312,7 @@ import (
 // 	wg.Add(1)
 // 	go func() {
 // 		defer wg.Done()
-// 		clientID := uuid.New()
+// 		clientID := ulid.Make()
 // 		for i := 0; i < 5000; i++ {
 // 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
 // 			ob.PlaceMarketOrder(Buy, clientID, quantity)
@@ -326,7 +323,7 @@ import (
 // 	wg.Add(1)
 // 	go func() {
 // 		defer wg.Done()
-// 		clientID := uuid.New()
+// 		clientID := ulid.Make()
 // 		for i := 0; i < 5000; i++ {
 // 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 // 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
@@ -338,7 +335,7 @@ import (
 // 	wg.Add(1)
 // 	go func() {
 // 		defer wg.Done()
-// 		clientID := uuid.New()
+// 		clientID := ulid.Make()
 // 		for i := 0; i < 5000; i++ {
 // 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
 // 			ob.PlaceMarketOrder(Sell, clientID, quantity)
