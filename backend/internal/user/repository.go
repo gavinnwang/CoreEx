@@ -44,7 +44,7 @@ func (r *repository) CreateUser(user models.User) error {
 		return ErrEmailExists // Email already exists
 	}
 
-	_, err = r.db.Exec("INSERT INTO users (id, name, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)", user.ID, user.Name, user.Email, user.Password, user.CreatedAt, user.UpdatedAt)
+	_, err = r.db.Exec("INSERT INTO users (user_id, name, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)", user.ID.String(), user.Name, user.Email, user.Password, user.CreatedAt, user.UpdatedAt)
 	if err != nil {
 		return err
 	}

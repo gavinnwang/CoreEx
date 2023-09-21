@@ -8,6 +8,8 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/oklog/ulid/v2"
 )
 
 type service struct {
@@ -38,7 +40,7 @@ func (s *service) CreateUser(input CreateUserInput) (models.User, error) {
 	name := toNameCase(input.Name)
 	now := time.Now()
 	user := models.User{
-		// ID:        id,
+		ID:        ulid.Make(),
 		Name:      name,
 		Email:     input.Email,
 		CreatedAt: now,

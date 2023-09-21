@@ -247,7 +247,12 @@ func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price dec
 	volumeLeft := volume
 
 	o := NewOrder(side, userID, Limit, price, volume, true)
-	Log(fmt.Sprintf("Created limit order: %v", o))
+	go func() {
+		err = s.obRepo.CreateOrder(o)
+		if err != nil {	
+			log.Fatalf("service: failed to create order: %v", err)
+		}
+	}()
 
 	if o.Side() == Buy { // there are market orders waiting to be match
 

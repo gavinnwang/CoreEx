@@ -43,7 +43,7 @@ func (o *Order) OrderID() ulid.ULID {
 
 // shortOrderID returns first 4 characters of orderID (for debugging purposes)
 func (o *Order) shortOrderID() string {
-	return o.orderID.String()[:4]
+	return o.orderID.String()[:6]
 }
 
 // Status returns status field copy
