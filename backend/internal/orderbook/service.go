@@ -81,7 +81,7 @@ func (s *service) PlaceMarketOrder(side Side, userID ulid.ULID, volume decimal.D
 	}
 
 	o := NewOrder(side, userID, Market, decimal.Zero, volume, true)
-	s.obRepo.CreateOrder(o)
+	s.obRepo.CreateOrder(o, s.symbol)
 	Log(fmt.Sprintf("Created market order: %v", o))
 
 	var (
@@ -248,7 +248,7 @@ func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price dec
 
 	o := NewOrder(side, userID, Limit, price, volume, true)
 	go func() {
-		err = s.obRepo.CreateOrder(o)
+		err = s.obRepo.CreateOrder(o, s.symbol)
 		if err != nil {	
 			log.Fatalf("service: failed to create order: %v", err)
 		}

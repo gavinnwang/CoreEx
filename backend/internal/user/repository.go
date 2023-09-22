@@ -44,7 +44,7 @@ func (r *repository) CreateUser(user models.User) error {
 		return ErrEmailExists // Email already exists
 	}
 
-	_, err = r.db.Exec("INSERT INTO users (user_id, name, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)", user.ID.String(), user.Name, user.Email, user.Password, user.CreatedAt, user.UpdatedAt)
+	_, err = r.db.Exec("INSERT INTO users (user_id, name, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)", user.ID, user.Name, user.Email, user.Password, user.CreatedAt, user.UpdatedAt)
 	if err != nil {
 		return err
 	}
@@ -85,7 +85,7 @@ func (r *repository) UpdateUserName(userID, name string) error {
 
 func (r *repository) GetUser(userID string) (models.User, error) {
 	var user models.User
-	err := r.db.QueryRow("SELECT * FROM users WHERE id = ?", userID).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt)
+	err := r.db.QueryRow("SELECT * FROM users WHERE user_id = ?", userID).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return models.User{}, ErrUserNotFound

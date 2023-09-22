@@ -52,5 +52,5 @@ func (s *service) Login(input LoginInput) (token string, err error) {
 	if ok := security.CheckPasswordHash(input.Password, *retrievedUser.Password); !ok {
 		return "", errBadLogin
 	}
-	return s.jwtService.GenerateToken(retrievedUser.ID.String())
+	return s.jwtService.GenerateToken(retrievedUser.ID)
 }

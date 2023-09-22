@@ -11,8 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS stocks (
-    symbol VARCHAR(10) UNIQUE PRIMARY KEY NOT NULL,
-    INDEX idx_stock_symbol(symbol)
+    symbol VARCHAR(10) UNIQUE PRIMARY KEY NOT NULL
 );
 
 CREATE TABLE if NOT EXISTS stock_price_history (
@@ -22,7 +21,7 @@ CREATE TABLE if NOT EXISTS stock_price_history (
     low DECIMAL(10, 2) NOT NULL,
     close DECIMAL(10, 2) NOT NULL,
     recorded_at BIGINT NOT NULL,
-    FOREIGN KEY (symbol) REFERENCES Stocks(symbol),
+    FOREIGN KEY (symbol) REFERENCES stocks(symbol),
     INDEX idx_stock_time(symbol, recorded_at DESC)
 );
 
@@ -36,6 +35,6 @@ CREATE TABLE if NOT EXISTS orders (
     price DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (symbol) REFERENCES Stocks(symbol)
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (symbol) REFERENCES stocks(symbol)
 );

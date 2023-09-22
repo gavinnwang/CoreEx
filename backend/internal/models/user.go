@@ -2,12 +2,10 @@ package models
 
 import (
 	"time"
-
-	"github.com/oklog/ulid/v2"
 )
 
 type User struct {
-	ID        ulid.ULID `json:"id"`
+	ID        string    `json:"id"`
 	Name      string    `json:"name"`
 	Email     *string   `json:"email"`
 	Password  *string   `json:"password,omitempty"`

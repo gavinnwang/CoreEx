@@ -59,7 +59,7 @@ func (api *API) HandleCreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jwtToken, err := api.jwtService.GenerateToken(user.ID.String())
+	jwtToken, err := api.jwtService.GenerateToken(user.ID)
 	if err != nil {
 		endpoint.WriteWithError(w, http.StatusInternalServerError, ErrMsgInternalServer)
 	}
@@ -103,6 +103,7 @@ func (api *API) HandleGetUserFromJWT(w http.ResponseWriter, r *http.Request) {
 	userID := middleware.UserIDFromContext(ctx)
 	user, err := api.userService.GetUser(userID)
 	if err != nil {
+		log.Printf("handler: failed to get user: %v\n", err)
 		switch {
 		default:
 			endpoint.WriteWithError(w, http.StatusInternalServerError, ErrMsgInternalServer)

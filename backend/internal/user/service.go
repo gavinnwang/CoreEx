@@ -40,7 +40,7 @@ func (s *service) CreateUser(input CreateUserInput) (models.User, error) {
 	name := toNameCase(input.Name)
 	now := time.Now()
 	user := models.User{
-		ID:        ulid.Make(),
+		ID:        ulid.Make().String(),
 		Name:      name,
 		Email:     input.Email,
 		CreatedAt: now,
