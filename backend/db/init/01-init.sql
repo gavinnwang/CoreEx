@@ -31,10 +31,14 @@ CREATE TABLE if NOT EXISTS orders (
     symbol VARCHAR(10) NOT NULL,
     order_side ENUM('Buy', 'Sell') NOT NULL,
     order_status ENUM('Open', 'Filled', 'PartiallyFilled', 'Rejected') NOT NULL,
+    order_type ENUM('Market', 'Limit') NOT NULL,
+    filled_at DECIMAL(10, 2),
     volume DECIMAL(10, 2) NOT NULL,
+    initial_volume DECIMAL(10, 2) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (symbol) REFERENCES stocks(symbol)
 );
+

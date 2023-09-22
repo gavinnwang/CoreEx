@@ -4,6 +4,7 @@ import (
 	// "encoding/json"
 	// "log"
 	"fmt"
+	"log"
 	"sync"
 	"time"
 
@@ -23,8 +24,8 @@ type Order struct {
 	volumeMu  sync.RWMutex
 }
 
-func NewOrder(side Side, userID ulid.ULID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order {
-	return &Order{
+func (s *service) NewOrder(side Side, userID ulid.ULID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order {
+	o := &Order{
 		side:      side,
 		orderID:   ulid.Make(),
 		userID:    userID,
@@ -34,6 +35,13 @@ func NewOrder(side Side, userID ulid.ULID, orderType OrderType, price, volume de
 		volume:    volume,
 		createdAt: time.Now(),
 	}
+	go func() {
+		err := s.obRepo.CreateOrder(o, s.symbol)
+		if err != nil {	
+			log.Fatalf("service: failed to create order: %v", err)
+		}
+	}()
+	return o 
 }
 
 // ID returns orderID field copy
@@ -76,21 +84,32 @@ func (o *Order) UserID() ulid.ULID {
 	return o.userID
 }
 
-func (o *Order) setStatusToPartiallyFilled(remaining decimal.Decimal) {
+func (s *service) setStatusToPartiallyFilled(o *Order, remaining decimal.Decimal, filledAt decimal.Decimal) {
 	o.volumeMu.Lock()
 	o.volume = remaining
 	o.volumeMu.Unlock()
 	o.status = PartiallyFilled
-	// logMsg := fmt.Sprintf("Order partially filled. Remaining volume: %s", remaining)
-	// o.AppendLog(logMsg)
+
+	go func() {
+		err := s.obRepo.UpdateOrder(o, PartiallyFilled, remaining, filledAt)
+		if err != nil {
+			log.Fatalf("service: failed to update order: %v", err)
+		}
+	}()
 }
 
-func (o *Order) setStatusToFilled() {
+func (s *service) setStatusToFilled(o *Order, filledAt decimal.Decimal) {
 	o.volumeMu.Lock()
 	o.volume = decimal.Zero
 	o.volumeMu.Unlock()
 	o.status = Filled
-	// o.AppendLog("Order fully filled.")
+
+	go func() {
+		err := s.obRepo.UpdateOrder(o, Filled, decimal.Zero, filledAt)
+		if err != nil {
+			log.Fatalf("service: failed to update order: %v", err)
+		}
+	}()
 }
 
 func (o *Order) CreatedAt() time.Time {

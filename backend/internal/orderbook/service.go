@@ -20,6 +20,7 @@ type Service interface {
 	BestAsk() decimal.Decimal
 	MarketPrice() decimal.Decimal
 	Symbol() string
+	NewOrder(side Side, userID ulid.ULID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order
 }
 
 type service struct {
@@ -80,9 +81,7 @@ func (s *service) PlaceMarketOrder(side Side, userID ulid.ULID, volume decimal.D
 		return ulid.ULID{}, ErrInvalidSide
 	}
 
-	o := NewOrder(side, userID, Market, decimal.Zero, volume, true)
-	s.obRepo.CreateOrder(o, s.symbol)
-	Log(fmt.Sprintf("Created market order: %v", o))
+	o := s.NewOrder(side, userID, Market, decimal.Zero, volume, true)
 
 	var (
 		os   *OrderSide
@@ -155,18 +154,25 @@ func (s *service) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft decima
 				s.bids.SubVolumeBy(volumeLeft)
 			}
 
-			bestOrder.setStatusToPartiallyFilled(matchedVolumeLeft)
-			o.setStatusToFilled()
+			s.setStatusToPartiallyFilled(bestOrder, matchedVolumeLeft, oq.Price())
+			s.setStatusToFilled(o, oq.Price())
 
 			volumeLeft = decimal.Zero
 
+		} else if volumeLeft.Equal(bestOrder.Volume()) { // both orders will be completely filled
+			volumeLeft = decimal.Zero
+
+			// Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", o.shortOrderID(), o.Volume(), decimal.Zero, bestOrder.shortOrderID(), bestOrder.Volume(), decimal.Zero))
+
+			s.fillAndRemoveLimitOrder(bestOrderNode, oq.Price())
+			s.setStatusToFilled(o, oq.Price())
 		} else { // the best order will be completely filled
 			volumeLeft = volumeLeft.Sub(bestOrder.Volume())
 
 			// Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", o.shortOrderID(), o.Volume(), o.Volume().Sub(bestOrder.Volume()), bestOrder.shortOrderID(), bestOrder.Volume(), decimal.Zero))
 
-			s.fillAndRemoveLimitOrder(bestOrderNode)
-			o.setStatusToPartiallyFilled(volumeLeft)
+			s.fillAndRemoveLimitOrder(bestOrderNode, oq.Price())
+			s.setStatusToPartiallyFilled(o, volumeLeft, oq.Price())
 		}
 	}
 	return
@@ -187,7 +193,7 @@ func (s *service) matchWithMarketOrders(marketOrders *list.List[*Order], order *
 
 			// Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", order.shortOrderID(), order.Volume(), decimal.Zero, marketOrder.shortOrderID(), marketOrder.Volume(), marketOrder.Volume().Sub(orderVolume)))
 
-			marketOrder.setStatusToPartiallyFilled(marketOrderVolume.Sub(orderVolume))
+			s.setStatusToPartiallyFilled(marketOrder, marketOrderVolume.Sub(orderVolume), order.Price())
 
 			if order.Side() == Buy {
 				s.asks.SubVolumeBy(orderVolume)
@@ -195,7 +201,8 @@ func (s *service) matchWithMarketOrders(marketOrders *list.List[*Order], order *
 				s.bids.SubVolumeBy(orderVolume)
 			}
 
-			order.setStatusToFilled()
+			s.setStatusToFilled(order, order.Price())
+
 			break
 
 		} else {
@@ -209,13 +216,13 @@ func (s *service) matchWithMarketOrders(marketOrders *list.List[*Order], order *
 				s.bids.SubVolumeBy(marketOrderVolume)
 			}
 
-			order.setStatusToPartiallyFilled(orderVolume.Sub(marketOrderVolume))
-			marketOrder.setStatusToFilled()
+			s.setStatusToPartiallyFilled(order, orderVolume.Sub(marketOrderVolume), order.Price())
+			s.setStatusToFilled(marketOrder, order.Price())
 		}
 	}
 }
 
-func (s *service) fillAndRemoveLimitOrder(n *list.Node[*Order]) *Order {
+func (s *service) fillAndRemoveLimitOrder(n *list.Node[*Order], filledAt decimal.Decimal) *Order {
 	o := n.Value
 
 	s.ordersMu.Lock()
@@ -227,7 +234,7 @@ func (s *service) fillAndRemoveLimitOrder(n *list.Node[*Order]) *Order {
 	} else {
 		return s.asks.Remove(n)
 	}
-	o.setStatusToFilled()
+	s.setStatusToFilled(o, filledAt)
 	return o
 }
 
@@ -246,13 +253,7 @@ func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price dec
 
 	volumeLeft := volume
 
-	o := NewOrder(side, userID, Limit, price, volume, true)
-	go func() {
-		err = s.obRepo.CreateOrder(o, s.symbol)
-		if err != nil {	
-			log.Fatalf("service: failed to create order: %v", err)
-		}
-	}()
+	o := s.NewOrder(side, userID, Limit, price, volume, true)
 
 	if o.Side() == Buy { // there are market orders waiting to be match
 

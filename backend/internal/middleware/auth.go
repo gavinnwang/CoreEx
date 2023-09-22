@@ -12,7 +12,7 @@ import (
 type userID int
 
 const (
-	keyUserID userID = 0
+	keyUserID userID = -1
 
 	errMsgMissingToken = "Missing bearer token."
 	errMsgInvalidToken = "Token is invalid."

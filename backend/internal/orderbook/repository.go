@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github/wry-0313/exchange/internal/models"
 	"log"
+
+	"github.com/shopspring/decimal"
 )
 
 type repository struct {
@@ -14,6 +16,7 @@ type repository struct {
 type Repository interface {
 	CreateStock(stock models.Stock) error
 	CreateOrder(order *Order, symbol string) error
+	UpdateOrder(order *Order, newStatus OrderStatus, newVolume, filledAt decimal.Decimal) error
 }
 
 func NewRepository(db *sql.DB) Repository {
@@ -43,19 +46,31 @@ func (r *repository) CreateStock(stock models.Stock) error {
 }
 
 func (r *repository) CreateOrder(order *Order, symbol string) error {
-	fmt.Printf("Order: %v\n", order.OrderID())
+
 	orderSide := order.side.String()
 	orderStatus := order.status.String()
 
-	sql := `INSERT INTO orders (user_id, order_id, order_side, order_status, volume, price, created_at, symbol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+	sql := `INSERT INTO orders (user_id, order_id, order_side, order_status, order_type, volume, initial_volume, price, created_at, symbol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
-	log.Printf("User id %s\n", order.userID.String())
-	_, err := r.db.Exec(sql, order.userID.String(), order.orderID.String(), orderSide, orderStatus, order.volume, order.price, order.createdAt, symbol)
+	_, err := r.db.Exec(sql, order.userID.String(), order.orderID.String(), orderSide, orderStatus, order.orderType.String(), order.volume, order.volume, order.price, order.createdAt, symbol)
 	if err != nil {
 		return err
 	}
 
-	log.Printf("Order created successfully: %s\n", order.orderID)
+	log.Printf("Order created successfully: %s\n", order.OrderID())
 
+	return nil
+}
+
+func (r *repository) UpdateOrder (order *Order, newStatus OrderStatus, newVolume, filledAt decimal.Decimal) error {
+	sql := `UPDATE orders SET order_status = ?, volume = ?, filled_at = ? WHERE order_id = ?`
+
+	_, err := r.db.Exec(sql, newStatus.String(), newVolume, filledAt, order.orderID.String()) 
+	if err != nil {
+		return fmt.Errorf("repository: failed to update order: %v", err)
+	}
+
+	log.Printf("Order updated successfully: %s\n", order.OrderID())
+	
 	return nil
 }
