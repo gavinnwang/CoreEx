@@ -1,12 +1,14 @@
 package models
 
+import "github.com/shopspring/decimal"
+
 type Stock struct {
 	ID     int    `json:"id"`
 	Symbol string `json:"symbol"`
 }
 
 type StockPriceHistory struct {
-	StockID    int     `json:"stock_id"`
+	Symbol     string  `json:"symbol"`
 	Open       float64 `json:"open"`
 	High       float64 `json:"high"`
 	Low        float64 `json:"low"`
@@ -14,20 +16,8 @@ type StockPriceHistory struct {
 	RecordedAt int64   `json:"recorded_at"`
 }
 
-type Order struct {
-	StockID     int     `json:"stock_id"`
-	OrderType   string  `json:"order_type"`
-	OrderStatus string  `json:"order_status"`
-	Volume      float64 `json:"volume"`
-	Price       float64 `json:"price"`
-	OrderSide   string  `json:"order_side"`
-}
-
-type Transaction struct {
-	ID              int     `json:"id"`
-	UserID          int     `json:"user_id"`
-	StockID         int     `json:"stock_id"`
-	Volume          float64 `json:"volume"`
-	Price           float64 `json:"price"`
-	TransactionType string  `json:"transaction_type"`
+type Holding struct {
+	UserID       string  `json:"user_id"`
+	Symbol       string  `json:"symbol"`
+	VolumeChange decimal.Decimal `json:"volume_change"`
 }

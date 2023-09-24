@@ -130,7 +130,7 @@ func (s *service) PlaceMarketOrder(side Side, userID ulid.ULID, volume decimal.D
 func (s *service) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft decimal.Decimal) {
 	volumeLeft = o.Volume()
 
-	Log(fmt.Sprintf("Matching %s at price level %s\n", o.shortOrderID(), oq.Price()))
+	logService.logger.Println(fmt.Sprintf("Matching %s at price level %s\n", o.shortOrderID(), oq.Price()))
 
 	s.SetMarketPrice(oq.Price())
 
@@ -139,13 +139,15 @@ func (s *service) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft decima
 		bestOrderNode := oq.Head()
 		bestOrder := oq.Head().Value
 
-		Log(fmt.Sprintf("Matching %s with %s", o.shortOrderID(), bestOrder.shortOrderID()))
+		bestOrderVolume := bestOrder.Volume()
 
-		if volumeLeft.LessThan(bestOrder.Volume()) { // the best order will be partially filled
+		logService.logger.Println(fmt.Sprintf("Matching %s with %s", o.shortOrderID(), bestOrder.shortOrderID()))
+
+		if volumeLeft.LessThan(bestOrderVolume) { // the best order will be partially filled
 
 			// Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", o.shortOrderID(), o.Volume(), o.Volume().Sub(volumeLeft), bestOrder.shortOrderID(), bestOrder.Volume(), bestOrder.Volume().Sub(volumeLeft)))
-
-			matchedVolumeLeft := bestOrder.Volume().Sub(volumeLeft) // update order status. This change should reflect in order queue
+			log.Println("0")
+			// matchedVolumeLeft := bestOrderVolume.Sub(volumeLeft) // update order status. This change should reflect in order queue
 			oq.SetVolume(oq.Volume().Sub(volumeLeft))
 
 			if o.Side() == Buy {
@@ -154,29 +156,24 @@ func (s *service) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft decima
 				s.bids.SubVolumeBy(volumeLeft)
 			}
 
-			s.setStatusToPartiallyFilled(bestOrder, matchedVolumeLeft, oq.Price())
-			s.setStatusToFilled(o, oq.Price())
+			s.fillOrder(bestOrder, volumeLeft, oq.Price())
+			s.fillOrder(o, volumeLeft, oq.Price()) // completely filled
 
 			volumeLeft = decimal.Zero
 
-		} else if volumeLeft.Equal(bestOrder.Volume()) { // both orders will be completely filled
-			volumeLeft = decimal.Zero
-
-			// Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", o.shortOrderID(), o.Volume(), decimal.Zero, bestOrder.shortOrderID(), bestOrder.Volume(), decimal.Zero))
-
-			s.fillAndRemoveLimitOrder(bestOrderNode, oq.Price())
-			s.setStatusToFilled(o, oq.Price())
 		} else { // the best order will be completely filled
-			volumeLeft = volumeLeft.Sub(bestOrder.Volume())
-
+			volumeLeft = volumeLeft.Sub(bestOrderVolume)
+			log.Println("1")
 			// Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", o.shortOrderID(), o.Volume(), o.Volume().Sub(bestOrder.Volume()), bestOrder.shortOrderID(), bestOrder.Volume(), decimal.Zero))
 
-			s.fillAndRemoveLimitOrder(bestOrderNode, oq.Price())
-			s.setStatusToPartiallyFilled(o, volumeLeft, oq.Price())
+			s.fillAndRemoveLimitOrder(bestOrderNode, bestOrderVolume, oq.Price())
+			s.fillOrder(o, bestOrderVolume, oq.Price())
 		}
 	}
 	return
 }
+
+// func (s *service) processTransaction()
 
 func (s *service) matchWithMarketOrders(marketOrders *list.List[*Order], order *Order) {
 
@@ -193,15 +190,14 @@ func (s *service) matchWithMarketOrders(marketOrders *list.List[*Order], order *
 
 			// Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", order.shortOrderID(), order.Volume(), decimal.Zero, marketOrder.shortOrderID(), marketOrder.Volume(), marketOrder.Volume().Sub(orderVolume)))
 
-			s.setStatusToPartiallyFilled(marketOrder, marketOrderVolume.Sub(orderVolume), order.Price())
+			s.fillOrder(marketOrder, orderVolume, order.Price())
+			s.fillOrder(order, orderVolume, order.Price())
 
 			if order.Side() == Buy {
 				s.asks.SubVolumeBy(orderVolume)
 			} else {
 				s.bids.SubVolumeBy(orderVolume)
 			}
-
-			s.setStatusToFilled(order, order.Price())
 
 			break
 
@@ -216,13 +212,13 @@ func (s *service) matchWithMarketOrders(marketOrders *list.List[*Order], order *
 				s.bids.SubVolumeBy(marketOrderVolume)
 			}
 
-			s.setStatusToPartiallyFilled(order, orderVolume.Sub(marketOrderVolume), order.Price())
-			s.setStatusToFilled(marketOrder, order.Price())
+			s.fillOrder(order, marketOrderVolume, order.Price())
+			s.fillOrder(marketOrder, marketOrderVolume, order.Price())
 		}
 	}
 }
 
-func (s *service) fillAndRemoveLimitOrder(n *list.Node[*Order], filledAt decimal.Decimal) *Order {
+func (s *service) fillAndRemoveLimitOrder(n *list.Node[*Order], filledVolume, filledAt decimal.Decimal) *Order {
 	o := n.Value
 
 	s.ordersMu.Lock()
@@ -234,7 +230,7 @@ func (s *service) fillAndRemoveLimitOrder(n *list.Node[*Order], filledAt decimal
 	} else {
 		return s.asks.Remove(n)
 	}
-	s.setStatusToFilled(o, filledAt)
+	s.fillOrder(o, filledVolume, filledAt)
 	return o
 }
 
@@ -298,7 +294,7 @@ func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price dec
 	bestPrice, ok := iter()
 
 	if !ok {
-		Log(fmt.Sprintf("No limit orders in the opposite side, initialize order: %s", o.shortOrderID()))
+		logService.logger.Println(fmt.Sprintf("No limit orders in the opposite side, initialize order: %s", o.shortOrderID()))
 		s.addLimitOrder(o)
 		s.sortedOrdersMu.Unlock()
 		return o.orderID, nil
@@ -385,7 +381,7 @@ func (s *service) MarketPrice() decimal.Decimal {
 
 func (s *service) SetMarketPrice(price decimal.Decimal) {
 	s.marketPriceMu.Lock()
-	Log(fmt.Sprintf("Set market price: %s", price))
+	logService.logger.Println(fmt.Sprintf("Set market price: %s", price))
 	s.marketPrice = price
 	s.marketPriceMu.Unlock()
 

@@ -16,7 +16,9 @@ type repository struct {
 type Repository interface {
 	CreateStock(stock models.Stock) error
 	CreateOrder(order *Order, symbol string) error
-	UpdateOrder(order *Order, newStatus OrderStatus, newVolume, filledAt decimal.Decimal) error
+	UpdateOrder(order *Order, newStatus OrderStatus, newVolume, totalProcessed, filledAt decimal.Decimal) error
+	CreateOrUpdateHolding(holding models.Holding) error
+	UpdateUserBalance(userID string, newBalance decimal.Decimal) error
 }
 
 func NewRepository(db *sql.DB) Repository {
@@ -57,20 +59,49 @@ func (r *repository) CreateOrder(order *Order, symbol string) error {
 		return err
 	}
 
-	log.Printf("Order created successfully: %s\n", order.OrderID())
+	log.Printf("Order created successfully: %s\n", order.shortOrderID())
 
 	return nil
 }
 
-func (r *repository) UpdateOrder (order *Order, newStatus OrderStatus, newVolume, filledAt decimal.Decimal) error {
-	sql := `UPDATE orders SET order_status = ?, volume = ?, filled_at = ? WHERE order_id = ?`
+func (r *repository) UpdateOrder(order *Order, newStatus OrderStatus, newVolume, totalProcessed, filledAt decimal.Decimal) error {
 
-	_, err := r.db.Exec(sql, newStatus.String(), newVolume, filledAt, order.orderID.String()) 
+	sql := `UPDATE orders SET order_status = ?, volume = ?, filled_at = ?, total_processed = total_processed + ? WHERE order_id = ?`
+
+	_, err := r.db.Exec(sql, newStatus.String(), newVolume, filledAt, totalProcessed, order.orderID.String())
 	if err != nil {
 		return fmt.Errorf("repository: failed to update order: %v", err)
 	}
 
-	log.Printf("Order updated successfully: %s\n", order.OrderID())
-	
+	log.Printf("Order updated successfully: %s\n", order.shortOrderID())
+
+	return nil
+}
+
+func (r *repository) CreateOrUpdateHolding(holding models.Holding) error {
+
+	sql := `CALL InsertOrUpdateHoldingThenDeleteZeroVolume(?, ?, ?)`
+
+	_, err := r.db.Exec(sql, holding.UserID, holding.Symbol, holding.VolumeChange)
+	if err != nil {
+		return fmt.Errorf("repository: failed to create or update holding: %v", err)
+	}
+
+	log.Printf("Holding created or updated successfully: %s\n", holding.UserID[22:])
+
+	return nil
+}
+
+func (r *repository) UpdateUserBalance(userID string, balanceChange decimal.Decimal) error {
+
+	sql := `UPDATE users SET cash_balance = cash_balance + ? WHERE user_id = ?`
+
+	_, err := r.db.Exec(sql, balanceChange, userID)
+	if err != nil {
+		return fmt.Errorf("repository: failed to update user balance: %v", err)
+	}
+
+	log.Printf("User balance updated successfully: %s\n", userID[22:])
+
 	return nil
 }

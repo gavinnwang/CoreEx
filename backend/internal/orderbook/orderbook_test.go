@@ -1,5 +1,19 @@
 package orderbook
 
+import (
+	"fmt"
+	"github/wry-0313/exchange/db"
+	"github/wry-0313/exchange/internal/config"
+	"log"
+	"math/rand"
+	"sync"
+	"testing"
+	"time"
+
+	"github.com/oklog/ulid/v2"
+	"github.com/shopspring/decimal"
+)
+
 // "fmt"
 // "math/rand"
 // "reflect"
@@ -188,160 +202,171 @@ package orderbook
 // 	}
 // }
 
-// func TestSimulateStockMarketFluctuations(t *testing.T) {
-// 	fmt.Println("start test")
-// 	ob := NewService("AAPL")
-// 	var wg sync.WaitGroup
+func TestSimulateStockMarketFluctuations(t *testing.T) {
+	fmt.Println("start test")
 
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		for i := 0; i < 50; i++ {
-// 			fmt.Printf("ask volume %s\n", ob.AskVolume())
-// 			fmt.Printf("bid volume %s\n", ob.BidVolume())
-// 			fmt.Printf("bestBid %s\n", ob.BestBid())
-// 			fmt.Printf("bestAsk %s\n", ob.BestAsk())
-// 			fmt.Printf("market price: %s\n", ob.MarketPrice())
-// 			time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
+	cfg, err := config.Load(".env")
+	if err != nil {
+		log.Fatalf("Could not load config: %v", err)
+	}
 
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		clientID := ulid.Make()
-// 		for i := 0; i < 4000; i++ {
-// 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
-// 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
-// 			ob.PlaceLimitOrder(Buy, clientID, quantity, price)
-// 			// time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
+	db, err := db.New(cfg.DB)
+	if err != nil {
+		log.Fatalf("Error connecting to database: %v", err)
+	}
+	obRepo := NewRepository(db.DB)
+	ob := NewService("AAPL", obRepo)
+	var wg sync.WaitGroup
 
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		clientID := ulid.Make()
-// 		for i := 0; i < 5000; i++ {
-// 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
-// 			ob.PlaceMarketOrder(Buy, clientID, quantity)
-// 			// time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 50; i++ {
+			fmt.Printf("ask volume %s\n", ob.AskVolume())
+			fmt.Printf("bid volume %s\n", ob.BidVolume())
+			fmt.Printf("bestBid %s\n", ob.BestBid())
+			fmt.Printf("bestAsk %s\n", ob.BestAsk())
+			fmt.Printf("market price: %s\n", ob.MarketPrice())
+			time.Sleep(time.Millisecond * 10)
+		}
+	}()
 
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		clientID := ulid.Make()
-// 		for i := 0; i < 5000; i++ {
-// 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
-// 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
-// 			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
-// 			// time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 4000; i++ {
+			price := decimal.NewFromInt(rand.Int63n(10) + 10)
+			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+			ob.PlaceLimitOrder(Buy, clientID, quantity, price)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
 
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		clientID := ulid.Make()
-// 		for i := 0; i < 5500; i++ {
-// 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
-// 			ob.PlaceMarketOrder(Sell, clientID, quantity)
-// 			// time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		clientID := ulid.Make()
-// 		for i := 0; i < 5000; i++ {
-// 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
-// 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
-// 			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
-// 			// time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5000; i++ {
+			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
+			ob.PlaceMarketOrder(Buy, clientID, quantity)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
 
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		clientID := ulid.Make()
-// 		for i := 0; i < 5000; i++ {
-// 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
-// 			ob.PlaceMarketOrder(Buy, clientID, quantity)
-// 			// time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5000; i++ {
+			price := decimal.NewFromInt(rand.Int63n(10) + 10)
+			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
 
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		clientID := ulid.Make()
-// 		for i := 0; i < 5000; i++ {
-// 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
-// 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
-// 			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
-// 			// time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5500; i++ {
+			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
+			ob.PlaceMarketOrder(Sell, clientID, quantity)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5000; i++ {
+			price := decimal.NewFromInt(rand.Int63n(10) + 10)
+			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
 
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		clientID := ulid.Make()
-// 		for i := 0; i < 5000; i++ {
-// 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
-// 			ob.PlaceMarketOrder(Sell, clientID, quantity)
-// 			// time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5000; i++ {
+			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
+			ob.PlaceMarketOrder(Buy, clientID, quantity)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
 
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		clientID := ulid.Make()
-// 		for i := 0; i < 5000; i++ {
-// 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
-// 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
-// 			ob.PlaceLimitOrder(Buy, clientID, quantity, price)
-// 			// time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5000; i++ {
+			price := decimal.NewFromInt(rand.Int63n(10) + 10)
+			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
 
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		clientID := ulid.Make()
-// 		for i := 0; i < 5000; i++ {
-// 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
-// 			ob.PlaceMarketOrder(Buy, clientID, quantity)
-// 			// time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5000; i++ {
+			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
+			ob.PlaceMarketOrder(Sell, clientID, quantity)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
 
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		clientID := ulid.Make()
-// 		for i := 0; i < 5000; i++ {
-// 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
-// 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
-// 			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
-// 			// time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5000; i++ {
+			price := decimal.NewFromInt(rand.Int63n(10) + 10)
+			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+			ob.PlaceLimitOrder(Buy, clientID, quantity, price)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
 
-// 	wg.Add(1)
-// 	go func() {
-// 		defer wg.Done()
-// 		clientID := ulid.Make()
-// 		for i := 0; i < 5000; i++ {
-// 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
-// 			ob.PlaceMarketOrder(Sell, clientID, quantity)
-// 			// time.Sleep(time.Millisecond * 10)
-// 		}
-// 	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5000; i++ {
+			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
+			ob.PlaceMarketOrder(Buy, clientID, quantity)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
 
-// 	wg.Wait()
-// }
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5000; i++ {
+			price := decimal.NewFromInt(rand.Int63n(10) + 10)
+			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5000; i++ {
+			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
+			ob.PlaceMarketOrder(Sell, clientID, quantity)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
+
+	wg.Wait()
+}

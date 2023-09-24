@@ -27,10 +27,10 @@ func InitializeLogService(filename string) error {
 	return nil
 }
 
-func Log(message string) {
-	if logService != nil {
-		logService.mu.Lock()
-		defer logService.mu.Unlock()
-		logService.logger.Println(message)
-	}
-}
+// func Log(message string) {
+// 	if logService != nil {
+// 		logService.mu.Lock()
+// 		defer logService.mu.Unlock()
+// 		logService.logger.Println(message)
+// 	}
+// }

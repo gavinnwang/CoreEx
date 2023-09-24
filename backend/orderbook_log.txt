@@ -1,5 +1,1 @@
-ORDERBOOK 2023/09/22 16:46:07 orderbook_log_service.go:34: No limit orders in the opposite side, initialize order: 01HAYW
-ORDERBOOK 2023/09/22 16:46:27 orderbook_log_service.go:34: Matching 01HAYW at price level 53
-
-ORDERBOOK 2023/09/22 16:46:27 orderbook_log_service.go:34: Set market price: 53
-ORDERBOOK 2023/09/22 16:46:27 orderbook_log_service.go:34: Matching 01HAYW with 01HAYW
+ORDERBOOK 2023/09/24 08:31:15 service.go:297: No limit orders in the opposite side, initialize order: C0H6

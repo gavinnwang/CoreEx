@@ -174,13 +174,13 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup, inde
 			log.Printf("Consumer processing: %v\n", order)
 			switch order.OrderType {
 			case "limit":
-				_, err := s.obServices[order.Symbol].PlaceLimitOrder(side, userID, decimal.NewFromFloat(order.Volume), decimal.NewFromFloat(order.Price))
+				_, err := s.obServices[order.Symbol].PlaceLimitOrder(side, userID, decimal.NewFromFloat(order.Volume).Round(2), decimal.NewFromFloat(order.Price).Round(2))
 				if err != nil {
 					log.Println(err)
 					continue
 				}
 			case "market":
-				_, err := s.obServices[order.Symbol].PlaceMarketOrder(side, userID, decimal.NewFromFloat(order.Volume))
+				_, err := s.obServices[order.Symbol].PlaceMarketOrder(side, userID, decimal.NewFromFloat(order.Volume).Round(2))
 				if err != nil {
 					log.Println(err)
 					continue
