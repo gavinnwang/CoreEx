@@ -7,7 +7,6 @@ import (
 	"github/wry-0313/exchange/pkg/validator"
 	"regexp"
 	"strings"
-	"time"
 
 	"github.com/oklog/ulid/v2"
 )
@@ -38,13 +37,10 @@ func (s *service) CreateUser(input CreateUserInput) (models.User, error) {
 	// Prepare user input
 	// id := ulid.Make()
 	name := toNameCase(input.Name)
-	now := time.Now()
 	user := models.User{
 		ID:        ulid.Make().String(),
 		Name:      name,
 		Email:     input.Email,
-		CreatedAt: now,
-		UpdatedAt: now,
 	}
 
 	// Hash the password

@@ -158,6 +158,8 @@ func handleMessage(c *Client, msg []byte) {
 
 	// TODO
 
+	log.Println(c.user)
+
 	switch msgReq.Event {
 	case "":
 		closeConnection(c, websocket.CloseInvalidFramePayloadData, CloseReasonBadEvent)

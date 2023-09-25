@@ -8,16 +8,16 @@ type Stock struct {
 }
 
 type StockPriceHistory struct {
-	Symbol     string  `json:"symbol"`
-	Open       float64 `json:"open"`
-	High       float64 `json:"high"`
-	Low        float64 `json:"low"`
-	Close      float64 `json:"close"`
-	RecordedAt int64   `json:"recorded_at"`
+	Open       decimal.Decimal `json:"open"`
+	Close      decimal.Decimal `json:"close"`
+	High       decimal.Decimal `json:"high"`
+	Low        decimal.Decimal `json:"low"`
+	Volume     decimal.Decimal `json:"volume"`
+	RecordedAt int64           `json:"recorded_at"`
 }
 
 type Holding struct {
-	UserID       string  `json:"user_id"`
-	Symbol       string  `json:"symbol"`
+	UserID       string          `json:"user_id"`
+	Symbol       string          `json:"symbol"`
 	VolumeChange decimal.Decimal `json:"volume_change"`
 }

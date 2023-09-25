@@ -59,6 +59,22 @@ func (api *API) HandlePlaceOrder(w http.ResponseWriter, r *http.Request) {
 	endpoint.WriteWithStatus(w, http.StatusOK, models.SuccessResponse{Message: "Order placed"})
 }
 
+func (api *API) HandleGetPriceData(w http.ResponseWriter, r *http.Request) {
+	symbol := chi.URLParam(r, "symbol") // Extract the dynamic parameter
+
+
+	defer r.Body.Close()
+
+	priceData, err := api.exchangeService.GetSymbolMarketPriceHistory(symbol)
+	if err != nil {
+		log.Printf("handler: failed to get price history: %v\n", err)
+		endpoint.WriteWithError(w, http.StatusInternalServerError, ErrMsgInternalServer)
+		return
+	}	
+
+	endpoint.WriteWithStatus(w, http.StatusOK, priceData)
+}
+
 // func (api *API) HandleStreamMarketPrice(w http.ResponseWriter, r *http.Request) {
 // 	// Unmarshal params
 // 	var params StreamPriceParams
@@ -102,9 +118,10 @@ func (api *API) HandlePlaceOrder(w http.ResponseWriter, r *http.Request) {
 
 // RegisterHandlers is a function that registers all the handlers for the user endpoints
 func (api *API) RegisterHandlers(r chi.Router, authHandler func(http.Handler) http.Handler) {
-
+	r.Route("/price-history", func(r chi.Router) {
+		r.Get("/{symbol}", api.HandleGetPriceData)
+	})
 	r.Route("/orders", func(r chi.Router) {
-		// r.HandleFunc("/price", api.HandleStreamMarketPrice)
 		r.Group(func(r chi.Router) {
 			r.Use(authHandler)
 			r.Post("/", api.HandlePlaceOrder)

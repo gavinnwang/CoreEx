@@ -32,7 +32,6 @@ func (s *service) NewOrder(side Side, userID ulid.ULID, orderType OrderType, pri
 		orderID:   ulid.Make(),
 		userID:    userID,
 		orderType: orderType,
-		// totalProcessed: decimal.Zero,
 		status:    Open,
 		price:     price,
 		volume:    volume,
@@ -87,43 +86,6 @@ func (o *Order) UserID() ulid.ULID {
 	return o.userID
 }
 
-// func (s *service) setStatusToPartiallyFilled(o *Order, remaining decimal.Decimal, filledAt decimal.Decimal) {
-
-// 	o.volumeMu.Lock()
-// 	proccssedVolume := o.volume.Sub(remaining)
-// 	o.volume = remaining
-// 	o.volumeMu.Unlock()
-// 	o.status = PartiallyFilled
-
-// 	go func() {
-// 		processedValue := proccssedVolume.Mul(filledAt)
-// 		err := s.obRepo.UpdateOrder(o, Filled, decimal.Zero, processedValue, filledAt)
-// 		if err != nil {
-// 			log.Fatalf("service: failed to update order: %v", err)
-// 		}
-// 		var holding models.Holding
-// 		if o.Side() == Buy { // order wants to buy stock so we need to add new holding to user and subtract user balance
-// 			holding = models.Holding{
-// 				UserID:       o.UserID().String(),
-// 				Symbol:       s.symbol,
-// 				VolumeChange: proccssedVolume,
-// 			}
-// 			processedValue = processedValue.Neg()
-// 		} else {
-// 			holding = models.Holding{
-// 				UserID:       o.UserID().String(),
-// 				Symbol:       s.symbol,
-// 				VolumeChange: proccssedVolume.Neg(),
-// 			}
-// 		}
-// 		err = s.obRepo.CreateOrUpdateHolding(holding)
-// 		if err != nil {
-// 			log.Fatalf("service: failed to create or update holding: %v", err)
-// 		}
-// 		err = s.obRepo.UpdateUserBalance(o.UserID().String(), processedValue)
-// 	}()
-// }
-
 func (s *service) fillOrder(o *Order, filledVolume, filledAt decimal.Decimal) {
 	log.Printf("service: order %s filled with volume %s at price %s\n", o.shortOrderID(), filledVolume, filledAt)
 	o.volumeMu.Lock()
@@ -167,41 +129,6 @@ func (s *service) fillOrder(o *Order, filledVolume, filledAt decimal.Decimal) {
 	}()	
 }
 
-// func (s *service) setStatusToFilled(o *Order, filledAt decimal.Decimal) {
-// 	o.volumeMu.Lock()
-// 	proccssedVolume := o.volume
-// 	o.volume = decimal.Zero
-// 	o.volumeMu.Unlock()
-// 	o.status = Filled
-
-// 	go func() {
-// 		processedValue := proccssedVolume.Mul(filledAt).Round(2)
-// 		err := s.obRepo.UpdateOrder(o, Filled, decimal.Zero, processedValue, filledAt)
-// 		if err != nil {
-// 			log.Fatalf("service: failed to update order: %v", err)
-// 		}
-// 		var holding models.Holding
-// 		if o.Side() == Buy { // order wants to buy stock so we need to add new holding to user and subtract user balance
-// 			holding = models.Holding{
-// 				UserID:       o.UserID().String(),
-// 				Symbol:       s.symbol,
-// 				VolumeChange: proccssedVolume,
-// 			}
-// 			processedValue = processedValue.Neg()
-// 		} else {
-// 			holding = models.Holding{
-// 				UserID:       o.UserID().String(),
-// 				Symbol:       s.symbol,
-// 				VolumeChange: proccssedVolume.Neg(),
-// 			}
-// 		}
-// 		err = s.obRepo.CreateOrUpdateHolding(holding)
-// 		if err != nil {
-// 			log.Fatalf("service: failed to create or update holding: %v", err)
-// 		}
-// 		err = s.obRepo.UpdateUserBalance(o.UserID().String(), processedValue)
-// 	}()
-// }
 
 func (o *Order) CreatedAt() time.Time {
 	return o.createdAt

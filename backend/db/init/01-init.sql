@@ -5,23 +5,24 @@ CREATE TABLE IF NOT EXISTS users (
     user_id VARCHAR(26) PRIMARY KEY,
     name VARCHAR(50),
     email VARCHAR(255) UNIQUE,
-    cash_balance DECIMAL(10, 2) NOT NULL DEFAULT 100000,
     password VARCHAR(255),
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    cash_balance DECIMAL(10, 2) NOT NULL DEFAULT 100000,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS stocks (
     symbol VARCHAR(10) UNIQUE PRIMARY KEY NOT NULL
 );
 
-CREATE TABLE if NOT EXISTS stock_price_history (
+CREATE TABLE if NOT EXISTS stock_history (
     symbol VARCHAR(10) NOT NULL,
     open DECIMAL(10, 2) NOT NULL,
     high DECIMAL(10, 2) NOT NULL,
     low DECIMAL(10, 2) NOT NULL,
     close DECIMAL(10, 2) NOT NULL,
-    recorded_at BIGINT NOT NULL,
+    volume DECIMAL(10, 2) NOT NULL,
+    recorded_at INT NOT NULL,
     FOREIGN KEY (symbol) REFERENCES stocks(symbol),
     INDEX idx_stock_time(symbol, recorded_at DESC)
 );
@@ -80,3 +81,4 @@ BEGIN
     END IF;
 END //
 DELIMITER ;
+

@@ -19,6 +19,8 @@ type Repository interface {
 	UpdateOrder(order *Order, newStatus OrderStatus, newVolume, totalProcessed, filledAt decimal.Decimal) error
 	CreateOrUpdateHolding(holding models.Holding) error
 	UpdateUserBalance(userID string, newBalance decimal.Decimal) error
+	CreateMarketPriceHistory(symbol string, priceHistory models.StockPriceHistory) error
+	GetEntireMarketPriceHistory(symbol string) ([]models.StockPriceHistory, error)
 }
 
 func NewRepository(db *sql.DB) Repository {
@@ -104,4 +106,44 @@ func (r *repository) UpdateUserBalance(userID string, balanceChange decimal.Deci
 	log.Printf("User balance updated successfully: %s\n", userID[22:])
 
 	return nil
+}
+
+func (r *repository) CreateMarketPriceHistory(symbol string, priceHistory models.StockPriceHistory) error {
+
+	sql := `INSERT INTO stock_history (symbol, open, high, low, close, volume, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?)`
+
+	_, err := r.db.Exec(sql, symbol, priceHistory.Open, priceHistory.High, priceHistory.Low, priceHistory.Close, priceHistory.Volume, priceHistory.RecordedAt)
+
+	if err != nil {
+		return fmt.Errorf("repository: failed to create market price history: %v", err)
+	}
+
+	return nil
+}
+
+func (r *repository) GetEntireMarketPriceHistory(symbol string) ([]models.StockPriceHistory, error) {
+
+	sql := `SELECT open, high, low, close, volume, recorded_at FROM stock_history WHERE symbol = ? ORDER BY recorded_at ASC`
+	
+	rows, err := r.db.Query(sql, symbol)
+	if err != nil {
+		return nil, fmt.Errorf("repository: failed to get market price history: %v", err)
+	}
+	defer rows.Close()
+
+	var priceData []models.StockPriceHistory
+	for rows.Next() {
+		var history models.StockPriceHistory
+		if err := rows.Scan(&history.Open, &history.High, &history.Low, &history.Close, &history.Volume, &history.RecordedAt); err != nil {
+			return nil, fmt.Errorf("repository: failed to scan row: %v", err)
+		}
+		priceData = append(priceData, history)
+	}
+
+	// Check for errors from iterating over rows
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("repository: error iterating rows: %v", err)
+	}
+
+	return priceData, nil
 }

@@ -4,13 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github/wry-0313/exchange/internal/models"
 	"github/wry-0313/exchange/internal/orderbook"
 	"github/wry-0313/exchange/internal/user"
 	"github/wry-0313/exchange/pkg/validator"
 	"log"
 	"sync"
-
-	// "time"
 
 	"github.com/IBM/sarama"
 	"github.com/oklog/ulid/v2"
@@ -30,8 +29,9 @@ type Service interface {
 	PlaceOrder(input PlaceOrderInput) error
 	GetMarketPrice(symbol string) (float64, error)
 	GetSymbolInfo(symbol string) (SymbolInfoResponse, error)
-	StartConsumers(brokerList []string)
+	Run(brokerList []string)
 	ShutdownConsumers()
+	GetSymbolMarketPriceHistory(symbol string) ([]models.StockPriceHistory, error)
 }
 
 type service struct {
@@ -40,7 +40,6 @@ type service struct {
 	producer   sarama.SyncProducer
 	Shutdown   chan struct{}
 	userRepo   user.Repository
-
 }
 
 func NewService(userRepo user.Repository, obServices map[string]orderbook.Service, validator validator.Validate, brokerList []string) Service {
@@ -48,8 +47,6 @@ func NewService(userRepo user.Repository, obServices map[string]orderbook.Servic
 	if err != nil {
 		log.Fatalf("Could not create producer: %v", err)
 	}
-
-
 	return &service{
 		validator:  validator,
 		obServices: obServices,
@@ -57,6 +54,34 @@ func NewService(userRepo user.Repository, obServices map[string]orderbook.Servic
 		Shutdown:   make(chan struct{}),
 		userRepo:   userRepo,
 	}
+}
+
+func (s *service) Run(brokerList []string) {
+	marketSimulationUlid := ulid.Make()
+	email := "Market@gmail.com"
+	err := s.userRepo.CreateUser(models.User{
+		ID: marketSimulationUlid.String(),
+		Name: "Market Simulation",
+		Email: &email,
+	})
+	if err != nil {
+		log.Fatalf("Service: failed to create market simulation user: %v", err)
+	}
+
+	go s.startConsumers(brokerList)
+	for _, ob := range s.obServices {
+		log.Printf("Starting market price history persistance for %v\n", ob.Symbol())
+		ob.RunMarketPriceHistoryPersistance()
+		// ob.SimulateMarketFluctuations(marketSimulationUlid)
+	}
+}
+
+func (s *service) GetSymbolMarketPriceHistory(symbol string) ([]models.StockPriceHistory, error) {
+	ob, ok := s.obServices[symbol]
+	if !ok {
+		return nil, ErrInvalidSymbol
+	}
+	return ob.GetMarketPriceHistory()
 }
 
 func (s *service) PlaceOrder(input PlaceOrderInput) error {
@@ -113,7 +138,7 @@ func (s *service) GetSymbolInfo(symbol string) (SymbolInfoResponse, error) {
 
 }
 
-func (s *service) StartConsumers(brokerList []string) {
+func (s *service) startConsumers(brokerList []string) {
 	config := sarama.NewConfig()
 	config.Consumer.Return.Errors = true
 	consumer, err := sarama.NewConsumer(brokerList, config)

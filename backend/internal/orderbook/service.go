@@ -5,7 +5,10 @@ import (
 	"github/wry-0313/exchange/internal/models"
 	list "github/wry-0313/exchange/pkg/dsa/linkedlist"
 	"log"
+	"math/rand"
+	"sort"
 	"sync"
+	"time"
 
 	"github.com/oklog/ulid/v2"
 	"github.com/shopspring/decimal"
@@ -21,6 +24,10 @@ type Service interface {
 	MarketPrice() decimal.Decimal
 	Symbol() string
 	NewOrder(side Side, userID ulid.ULID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order
+	PersistMarketPrice(priceData models.StockPriceHistory) error
+	GetMarketPriceHistory() ([]models.StockPriceHistory, error)
+	RunMarketPriceHistoryPersistance()
+	SimulateMarketFluctuations(marketSimulationUlid ulid.ULID)
 }
 
 type service struct {
@@ -43,6 +50,8 @@ type service struct {
 	sortedOrdersMu sync.RWMutex
 
 	obRepo Repository
+
+	prices []decimal.Decimal
 }
 
 func NewService(symbol string, obRepo Repository) Service {
@@ -69,7 +78,69 @@ func NewService(symbol string, obRepo Repository) Service {
 		marketSellOrders: list.New[*Order](),
 		marketPrice:      decimal.Zero,
 		obRepo:           obRepo,
+		prices:           []decimal.Decimal{},
 	}
+}
+
+func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
+	go func() {
+		ticker := time.NewTicker(500 * time.Millisecond)
+		defer ticker.Stop()
+
+		for range ticker.C {
+			side := Buy
+			if rand.Intn(2) == 0 {
+				side = Sell
+			}
+
+			volume := decimal.NewFromFloat(rand.Float64() * 10).Round(2)
+			price := decimal.NewFromFloat(rand.Float64() * 5000).Round(2)
+			log.Printf("Simulating market fluctuations: %v %v %v\n", side, volume, price)
+			if rand.Intn(2) == 0 {
+				_, _ = s.PlaceLimitOrder(side, marketSimulationUlid, volume, price)
+			} else {
+				_, _ = s.PlaceLimitOrder(side, marketSimulationUlid, volume, price)
+			}
+		}
+	}()
+}
+
+func (s *service) RunMarketPriceHistoryPersistance() {
+	go func() {
+		ticker := time.NewTicker(1 * time.Second)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-ticker.C:
+				log.Printf("price vector %v\n", s.prices)
+				if len(s.prices) >= 5 {
+					open := s.prices[0]
+					close := s.prices[len(s.prices)-1]
+					sort.Slice(s.prices, func(i, j int) bool {
+						return s.prices[i].LessThan(s.prices[j])
+					})
+					priceData := models.StockPriceHistory{
+						Open:       open,
+						Close:      close,
+						High:       s.prices[len(s.prices)-1],
+						Low:        s.prices[0],
+						Volume:     s.AskVolume().Add(s.BidVolume()),
+						RecordedAt: time.Now().Unix(),
+					}
+					err := s.PersistMarketPrice(priceData)
+					if err != nil {
+						log.Printf("Could not persist market price: %v", err)
+					}
+					s.prices = []decimal.Decimal{}
+				}
+				s.prices = append(s.prices, s.MarketPrice())
+			}
+		}
+	}()
+}
+
+func (s *service) GetMarketPriceHistory() ([]models.StockPriceHistory, error) {
+	return s.obRepo.GetEntireMarketPriceHistory(s.symbol)
 }
 
 func (s *service) PlaceMarketOrder(side Side, userID ulid.ULID, volume decimal.Decimal) (orderID ulid.ULID, err error) {
@@ -146,7 +217,6 @@ func (s *service) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft decima
 		if volumeLeft.LessThan(bestOrderVolume) { // the best order will be partially filled
 
 			// Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", o.shortOrderID(), o.Volume(), o.Volume().Sub(volumeLeft), bestOrder.shortOrderID(), bestOrder.Volume(), bestOrder.Volume().Sub(volumeLeft)))
-			log.Println("0")
 			// matchedVolumeLeft := bestOrderVolume.Sub(volumeLeft) // update order status. This change should reflect in order queue
 			oq.SetVolume(oq.Volume().Sub(volumeLeft))
 
@@ -163,7 +233,6 @@ func (s *service) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft decima
 
 		} else { // the best order will be completely filled
 			volumeLeft = volumeLeft.Sub(bestOrderVolume)
-			log.Println("1")
 			// Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", o.shortOrderID(), o.Volume(), o.Volume().Sub(bestOrder.Volume()), bestOrder.shortOrderID(), bestOrder.Volume(), decimal.Zero))
 
 			s.fillAndRemoveLimitOrder(bestOrderNode, bestOrderVolume, oq.Price())
@@ -313,6 +382,16 @@ func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price dec
 	s.sortedOrdersMu.Unlock()
 
 	return o.orderID, nil
+}
+
+func (s *service) PersistMarketPrice(priceData models.StockPriceHistory) error {
+	log.Printf("Persisting market price: %v", priceData)
+	// persist market price to db
+	err := s.obRepo.CreateMarketPriceHistory(s.symbol, priceData)
+	if err != nil {
+		return fmt.Errorf("Service: failed to persist market price history: %w", err)
+	}
+	return nil
 }
 
 func (s *service) addMarketOrder(o *Order) {

@@ -46,11 +46,7 @@ func main() {
 		Handler: r,
 	}
 
-	go func() {
-		// log.Println("Starting Kafka consumers in 10 seconds...")
-		// time.Sleep(10 * time.Second)
-		exchangeService.StartConsumers(cfg.KafkaBrokers)
-	}()
+	exchangeService.Run(cfg.KafkaBrokers)
 
 	// Graceful shutdown
 	stop := make(chan os.Signal, 1)
