@@ -84,7 +84,7 @@ func NewService(symbol string, obRepo Repository) Service {
 
 func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 	go func() {
-		ticker := time.NewTicker(4 * time.Second)
+		ticker := time.NewTicker(10 * time.Millisecond)
 		defer ticker.Stop()
 
 		for range ticker.C {

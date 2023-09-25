@@ -58,14 +58,25 @@ func NewService(userRepo user.Repository, obServices map[string]orderbook.Servic
 
 func (s *service) Run(brokerList []string) {
 	marketSimulationUlid := ulid.Make()
-	email := "Market@gmail.com"
+	email := "market@gmail.com"
 	err := s.userRepo.CreateUser(models.User{
 		ID: marketSimulationUlid.String(),
 		Name: "Market Simulation",
 		Email: &email,
 	})
+
 	if err != nil {
-		log.Fatalf("Service: failed to create market simulation user: %v", err)
+		// log.Fatalf("Service: failed to create market simulation user: %v", err)
+		// retrieve the ulid if already exist
+		ulidString, err := s.userRepo.GetUserByEmail(email)
+		if err != nil {
+			log.Fatalf("Service: failed to retrieve market simulation user: %v", err)
+		}
+		marketSimulationUlid, err = ulid.Parse(ulidString.ID)
+		if err != nil {
+			log.Fatalf("Service: failed to parse market simulation user ulid: %v", err)
+		}
+
 	}
 
 	go s.startConsumers(brokerList)
