@@ -9,6 +9,7 @@ import { token } from "../store";
 import toast from "solid-toast";
 import { APIError } from "../api";
 
+
 export default function PlaceOrderForm({ className }: { className?: string }) {
   const [order, setOrder] = createSignal<PlaceOrderParams>({
     price: 0,
@@ -17,6 +18,8 @@ export default function PlaceOrderForm({ className }: { className?: string }) {
     order_side: "sell",
     symbol: "",
   });
+
+
 
   const handleSubmit = (event: Event) => {
     event.preventDefault();

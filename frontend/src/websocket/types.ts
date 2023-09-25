@@ -19,6 +19,22 @@ type MarketPrice = {
   price: number;
 };
 
+type PriceData = {
+  recorded_at: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}[];
+
+type GraphPriceDataPoint = {
+  x: Date;
+  y: [number, number, number, number];
+}
+
+type GraphPriceData = GraphPriceDataPoint[];
+
 type SymbolInfo = {
   symbol: string;
   price: number;
@@ -26,12 +42,12 @@ type SymbolInfo = {
   bid_volume: number;
   best_bid: number;
   best_ask: number;
-}
+};
 
 type WSResponseGetMarketPrice = WSResponseBase & {
   result?: MarketPrice;
 };
 
 type WSResponseGetSymbolInfo = WSResponseBase & {
-  result?: SymbolInfo
-}
+  result?: SymbolInfo;
+};

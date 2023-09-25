@@ -1,13 +1,47 @@
-import { createSignal, type Component, createEffect } from "solid-js";
+import {
+  createSignal,
+  type Component,
+  createEffect,
+  createResource,
+} from "solid-js";
 import { BASE_URL, NAVBAR_HEIGHT_PX } from "../constants";
 import PlaceOrderForm from "../components/PlaceOrderForm";
 import CandleGraph from "../components/CandleGraph";
 import SymbolInfoTable from "../components/SymbolInfoTable";
 import toast from "solid-toast";
+import { getPriceData } from "../api/marketData";
+
+async function getPriceHistoryData(symbol: string): Promise<PriceData> {
+  try {
+    const data = await getPriceData(symbol);
+    console.log("data", data)
+    return data
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
 
 const Price: Component = () => {
   const [symbolInfo, setSymbolInfo] = createSignal<SymbolInfo | null>(null);
   const [fetchErrorMsg, setFetchErrorMsg] = createSignal<string | null>(null);
+
+  const symbol = "AAPL";
+
+  const [priceData] = createResource(symbol, getPriceHistoryData);
+
+
+  const convertDataToGraphFormat = (data: PriceData): { data: GraphPriceDataPoint[] }[] => {
+    const d =  [{
+      data: data.map((item) => ({
+        x: new Date(item.recorded_at),
+        y: [item.open, item.high, item.low, item.close] as [number, number, number, number],
+      }))
+    }];
+    console.log(d)
+    return d
+  };
+  
 
   createEffect(() => {
     const url = `ws://${BASE_URL}/ws`;
@@ -18,7 +52,7 @@ const Price: Component = () => {
       const payload: ParamsStreamPrice = {
         event: "exchange.stream_info",
         params: {
-          symbol: "AAPL",
+          symbol: symbol,
         },
       };
       ws.send(JSON.stringify(payload));
@@ -32,7 +66,6 @@ const Price: Component = () => {
     ws.addEventListener("message", (event) => {
       const res = event.data;
       const resData: WSResponseGetSymbolInfo = JSON.parse(res);
-      // console.log(resData)
       if (resData.success && resData.result) {
         setSymbolInfo(resData.result);
       } else {
@@ -60,7 +93,15 @@ const Price: Component = () => {
             symbolInfo={symbolInfo}
             fetchErrorMsg={fetchErrorMsg}
           />
-          <CandleGraph />
+          {priceData.loading ? (
+            <div>Loading...</div>
+          ) : priceData.error ? (
+            <div>Error: {priceData.error.message}</div>
+          ) : priceData() && (
+            <CandleGraph
+              data={convertDataToGraphFormat(priceData() as PriceData)}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -1,21 +1,24 @@
 import { SolidApexCharts } from "solid-apexcharts";
 import { createSignal } from "solid-js";
-import { list } from "./options";
-
-export default function CandleGraph() {
+export default function CandleGraph({
+  data,
+}: {
+  data: ApexAxisChartSeries;
+}) {
   const [options] = createSignal({
     chart: {
       id: "solidchart-example",
     },
   });
-  const [series] = createSignal(list);
 
-  return (
-    <SolidApexCharts
-      width="800"
-      type="line"
-      options={options()}
-      series={series()}
-    />
-  );
+    console.log(data);
+    return (
+      <SolidApexCharts
+        width="800"
+        type="candlestick"
+        options={options()}
+        series={data}
+      />
+    );
+
 }
