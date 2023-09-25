@@ -90,11 +90,12 @@ func setupHandlerAndService(
 	userService := user.NewService(userRepo, v)
 
 	obServices := make(map[string]orderbook.Service)
-	obServices["AAPL"] = orderbook.NewService("AAPL", obRepo)
+
+	rdb := ws.NewRedis(cfg.Rdb)
+	obServices["AAPL"] = orderbook.NewService("AAPL", obRepo, rdb)
 
 	exchangeService := exchange.NewService(userRepo, obServices, v, cfg.KafkaBrokers)
 
-	rdb := ws.NewRedis(cfg.Rdb)
 
 	// Set up API
 	userAPI := user.NewAPI(userService, jwtService, v)

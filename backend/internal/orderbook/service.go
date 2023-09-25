@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/go-redis/redis"
 	"github.com/oklog/ulid/v2"
 	"github.com/shopspring/decimal"
 )
@@ -51,10 +52,12 @@ type service struct {
 
 	obRepo Repository
 
+	rdb *redis.Client
+
 	prices []decimal.Decimal
 }
 
-func NewService(symbol string, obRepo Repository) Service {
+func NewService(symbol string, obRepo Repository, rdb *redis.Client) Service {
 	err := InitializeLogService("orderbook_log.txt")
 	if err != nil {
 		log.Fatalf("Could not initialize log service: %v", err)
@@ -78,13 +81,14 @@ func NewService(symbol string, obRepo Repository) Service {
 		marketSellOrders: list.New[*Order](),
 		marketPrice:      decimal.Zero,
 		obRepo:           obRepo,
+		rdb:              rdb,
 		prices:           []decimal.Decimal{},
 	}
 }
 
 func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 	go func() {
-		ticker := time.NewTicker(5*time.Second)
+		ticker := time.NewTicker(5 * time.Second)
 		defer ticker.Stop()
 
 		for range ticker.C {

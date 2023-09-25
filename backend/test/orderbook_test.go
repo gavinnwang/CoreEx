@@ -1,14 +1,17 @@
-package orderbook
+package test
 
 import (
 	"fmt"
 	"github/wry-0313/exchange/db"
 	"github/wry-0313/exchange/internal/config"
+	"github/wry-0313/exchange/internal/orderbook"
 	"log"
 	"math/rand"
 	"sync"
 	"testing"
 	"time"
+
+	ws "github/wry-0313/exchange/internal/websocket"
 
 	"github.com/oklog/ulid/v2"
 	"github.com/shopspring/decimal"
@@ -27,16 +30,16 @@ import (
 // 	ob := NewService("AAPL")
 // 	clientID := ulid.Make()
 // 	for i := 0; i < 2; i++ {
-// 		ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10000), decimal.NewFromInt(10))
+// 		ob.PlaceLimitOrder(orderbook.Buy, clientID, decimal.NewFromInt(10000), decimal.NewFromInt(10))
 // 	}
 // 	max := ob.BestBid()
 // 	fmt.Printf("max: %v\n", max)
-// 	ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(50))
-// 	ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(50))
-// 	ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(50))
-// 	ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(50))
-// 	ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(50))
-// 	ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(9751))
+// 	ob.PlaceMarketOrder(orderbook.Sell, clientID, decimal.NewFromInt(50))
+// 	ob.PlaceMarketOrder(orderbook.Sell, clientID, decimal.NewFromInt(50))
+// 	ob.PlaceMarketOrder(orderbook.Sell, clientID, decimal.NewFromInt(50))
+// 	ob.PlaceMarketOrder(orderbook.Sell, clientID, decimal.NewFromInt(50))
+// 	ob.PlaceMarketOrder(orderbook.Sell, clientID, decimal.NewFromInt(50))
+// 	ob.PlaceMarketOrder(orderbook.Sell, clientID, decimal.NewFromInt(9751))
 // 	fmt.Printf("max: %v\n", max)
 // }
 
@@ -45,7 +48,7 @@ import (
 // 	clientID := ulid.Make()
 // 	// ch := make(chan int)
 // 	var wg sync.WaitGroup
-// 	_, err := ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10000), decimal.NewFromInt(10))
+// 	_, err := ob.PlaceLimitOrder(orderbook.Buy, clientID, decimal.NewFromInt(10000), decimal.NewFromInt(10))
 // 	if err != nil {
 // 		t.Error(err)
 // 	}
@@ -57,7 +60,7 @@ import (
 // 		fmt.Println("start1")
 // 		defer wg.Done()
 // 		for i := 0; i < 10; i++ {
-// 			ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
+// 			ob.PlaceLimitOrder(orderbook.Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
 // 		}
 // 	}()
 // 	wg.Add(1)
@@ -65,7 +68,7 @@ import (
 // 		fmt.Println("start1.5")
 // 		defer wg.Done()
 // 		for i := 0; i < 5; i++ {
-// 			ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
+// 			ob.PlaceLimitOrder(orderbook.Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
 // 		}
 // 	}()
 // 	wg.Add(1)
@@ -73,7 +76,7 @@ import (
 // 		fmt.Println("start2")
 // 		defer wg.Done()
 // 		for i := 0; i < 51; i++ {
-// 			ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(1))
+// 			ob.PlaceMarketOrder(orderbook.Sell, clientID, decimal.NewFromInt(1))
 // 		}
 // 	}()
 // 	wg.Wait()
@@ -85,11 +88,11 @@ import (
 // // func TestMarketOrderPartialFill(t *testing.T) {
 // // 	ob := NewService("AAPL")
 // // 	clientID := ulid.Make()
-// // 	_, err := ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
+// // 	_, err := ob.PlaceLimitOrder(orderbook.Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
 // // 	if err != nil {
 // // 		t.Error(err)
 // // 	}
-// // 	ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(15))
+// // 	ob.PlaceMarketOrder(orderbook.Sell, clientID, decimal.NewFromInt(15))
 // // 	// Log(fmt.Sprintf("order side volume %v\n", ob.asks.volume))
 // // 	// Log(fmt.Sprintf("order queue volume %v\n", oq.volume))
 // // 	assert(t, ob.AskVolume(), "5")
@@ -100,11 +103,11 @@ import (
 // // func TestMarketOrderVolumeAndDepth(t *testing.T) {
 // // 	ob := NewService("AAPL")
 // // 	clientID := ulid.Make()
-// // 	_, err := ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(15))
+// // 	_, err := ob.PlaceMarketOrder(orderbook.Sell, clientID, decimal.NewFromInt(15))
 // // 	if err != nil {
 // // 		t.Error(err)
 // // 	}
-// // 	_, err = ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(5))
+// // 	_, err = ob.PlaceMarketOrder(orderbook.Sell, clientID, decimal.NewFromInt(5))
 // // 	if err != nil {
 // // 		t.Error(err)
 // // 	}
@@ -114,7 +117,7 @@ import (
 // // 	assert(t, ob.asks.volume.String(), "20")
 // // 	assert(t, ob.bids.volume.String(), "0")
 // // 	assert(t, ob.asks.depth, 0)
-// // 	_, err = ob.PlaceLimitOrder(Sell, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
+// // 	_, err = ob.PlaceLimitOrder(orderbook.Sell, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
 // // 	if err != nil {
 // // 		t.Error(err)
 // // 	}
@@ -122,7 +125,7 @@ import (
 // // 	assert(t, ob.bids.volume.String(), "0")
 // // 	assert(t, ob.asks.volume.String(), "30")
 // // 	assert(t, ob.asks.depth, 1)
-// // 	_, err = ob.PlaceLimitOrder(Sell, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
+// // 	_, err = ob.PlaceLimitOrder(orderbook.Sell, clientID, decimal.NewFromInt(10), decimal.NewFromInt(10))
 // // 	if err != nil {
 // // 		t.Error(err)
 // // 	}
@@ -130,7 +133,7 @@ import (
 // // 	assert(t, ob.bids.volume.String(), "0")
 // // 	assert(t, ob.asks.volume.String(), "40")
 // // 	assert(t, ob.asks.depth, 1)
-// // 	_, err = ob.PlaceLimitOrder(Sell, clientID, decimal.NewFromInt(15), decimal.NewFromInt(9))
+// // 	_, err = ob.PlaceLimitOrder(orderbook.Sell, clientID, decimal.NewFromInt(15), decimal.NewFromInt(9))
 // // 	if err != nil {
 // // 		t.Error(err)
 // // 	}
@@ -145,14 +148,14 @@ import (
 // // func TestLimitOrderFilling(t *testing.T) {
 // // 	ob := NewService("AAPL")
 // // 	clientID := ulid.Make()
-// // 	_, err := ob.PlaceMarketOrder(Sell, clientID, decimal.NewFromInt(15))
+// // 	_, err := ob.PlaceMarketOrder(orderbook.Sell, clientID, decimal.NewFromInt(15))
 // // 	if err != nil {
 // // 		t.Error(err)
 // // 	}
 // // 	assert(t, ob.asks.volume.String(), "15")
 // // 	assert(t, ob.bids.volume.String(), "0")
 // // 	assert(t, ob.asks.depth, 0)
-// // 	_, err = ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(5), decimal.NewFromInt(10))
+// // 	_, err = ob.PlaceLimitOrder(orderbook.Buy, clientID, decimal.NewFromInt(5), decimal.NewFromInt(10))
 // // 	if err != nil {
 // // 		t.Error(err)
 // // 	}
@@ -160,7 +163,7 @@ import (
 // // 	assert(t, ob.bids.volume.String(), "0")
 // // 	assert(t, ob.asks.depth, 0)
 
-// // 	_, err = ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(5), decimal.NewFromInt(20))
+// // 	_, err = ob.PlaceLimitOrder(orderbook.Buy, clientID, decimal.NewFromInt(5), decimal.NewFromInt(20))
 // // 	if err != nil {
 // // 		t.Error(err)
 // // 	}
@@ -168,7 +171,7 @@ import (
 // // 	assert(t, ob.bids.volume.String(), "0")
 // // 	assert(t, ob.asks.depth, 0)
 
-// // 	_, err = ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(6), decimal.NewFromInt(30))
+// // 	_, err = ob.PlaceLimitOrder(orderbook.Buy, clientID, decimal.NewFromInt(6), decimal.NewFromInt(30))
 // // 	if err != nil {
 // // 		t.Error(err)
 // // 	}
@@ -177,7 +180,7 @@ import (
 // // 	assert(t, ob.asks.depth, 0)
 // // 	assert(t, ob.bids.depth, 1)
 
-// // 	_, err = ob.PlaceLimitOrder(Sell, clientID, decimal.NewFromInt(2), decimal.NewFromInt(50))
+// // 	_, err = ob.PlaceLimitOrder(orderbook.Sell, clientID, decimal.NewFromInt(2), decimal.NewFromInt(50))
 // // 	if err != nil {
 // // 		t.Error(err)
 // // 	}
@@ -186,7 +189,7 @@ import (
 // // 	assert(t, ob.asks.depth, 1)
 // // 	assert(t, ob.bids.depth, 1)
 
-// // 	_, err = ob.PlaceLimitOrder(Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(51))
+// // 	_, err = ob.PlaceLimitOrder(orderbook.Buy, clientID, decimal.NewFromInt(10), decimal.NewFromInt(51))
 // // 	if err != nil {
 // // 		t.Error(err)
 // // 	}
@@ -205,17 +208,19 @@ import (
 func TestSimulateStockMarketFluctuations(t *testing.T) {
 	fmt.Println("start test")
 
-	cfg, err := config.Load(".env")
+	cfg, err := config.Load("../.env")
 	if err != nil {
 		log.Fatalf("Could not load config: %v", err)
 	}
+
+	rdb := ws.NewRedis(cfg.Rdb)
 
 	db, err := db.New(cfg.DB)
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
-	obRepo := NewRepository(db.DB)
-	ob := NewService("AAPL", obRepo)
+	obRepo := orderbook.NewRepository(db.DB)
+	ob := orderbook.NewService("AAPL", obRepo, rdb)
 	var wg sync.WaitGroup
 
 	wg.Add(1)
@@ -238,7 +243,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 		for i := 0; i < 4000; i++ {
 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
-			ob.PlaceLimitOrder(Buy, clientID, quantity, price)
+			ob.PlaceLimitOrder(orderbook.Buy, clientID, quantity, price)
 			// time.Sleep(time.Millisecond * 10)
 		}
 	}()
@@ -249,7 +254,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 		clientID := ulid.Make()
 		for i := 0; i < 5000; i++ {
 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
-			ob.PlaceMarketOrder(Buy, clientID, quantity)
+			ob.PlaceMarketOrder(orderbook.Buy, clientID, quantity)
 			// time.Sleep(time.Millisecond * 10)
 		}
 	}()
@@ -261,7 +266,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 		for i := 0; i < 5000; i++ {
 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
-			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
+			ob.PlaceLimitOrder(orderbook.Sell, clientID, quantity, price)
 			// time.Sleep(time.Millisecond * 10)
 		}
 	}()
@@ -272,7 +277,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 		clientID := ulid.Make()
 		for i := 0; i < 5500; i++ {
 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
-			ob.PlaceMarketOrder(Sell, clientID, quantity)
+			ob.PlaceMarketOrder(orderbook.Sell, clientID, quantity)
 			// time.Sleep(time.Millisecond * 10)
 		}
 	}()
@@ -283,7 +288,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 		for i := 0; i < 5000; i++ {
 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
-			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
+			ob.PlaceLimitOrder(orderbook.Sell, clientID, quantity, price)
 			// time.Sleep(time.Millisecond * 10)
 		}
 	}()
@@ -294,30 +299,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 		clientID := ulid.Make()
 		for i := 0; i < 5000; i++ {
 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
-			ob.PlaceMarketOrder(Buy, clientID, quantity)
-			// time.Sleep(time.Millisecond * 10)
-		}
-	}()
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		clientID := ulid.Make()
-		for i := 0; i < 5000; i++ {
-			price := decimal.NewFromInt(rand.Int63n(10) + 10)
-			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
-			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
-			// time.Sleep(time.Millisecond * 10)
-		}
-	}()
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		clientID := ulid.Make()
-		for i := 0; i < 5000; i++ {
-			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
-			ob.PlaceMarketOrder(Sell, clientID, quantity)
+			ob.PlaceMarketOrder(orderbook.Buy, clientID, quantity)
 			// time.Sleep(time.Millisecond * 10)
 		}
 	}()
@@ -329,7 +311,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 		for i := 0; i < 5000; i++ {
 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
-			ob.PlaceLimitOrder(Buy, clientID, quantity, price)
+			ob.PlaceLimitOrder(orderbook.Sell, clientID, quantity, price)
 			// time.Sleep(time.Millisecond * 10)
 		}
 	}()
@@ -340,7 +322,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 		clientID := ulid.Make()
 		for i := 0; i < 5000; i++ {
 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
-			ob.PlaceMarketOrder(Buy, clientID, quantity)
+			ob.PlaceMarketOrder(orderbook.Sell, clientID, quantity)
 			// time.Sleep(time.Millisecond * 10)
 		}
 	}()
@@ -352,7 +334,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 		for i := 0; i < 5000; i++ {
 			price := decimal.NewFromInt(rand.Int63n(10) + 10)
 			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
-			ob.PlaceLimitOrder(Sell, clientID, quantity, price)
+			ob.PlaceLimitOrder(orderbook.Buy, clientID, quantity, price)
 			// time.Sleep(time.Millisecond * 10)
 		}
 	}()
@@ -363,7 +345,30 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 		clientID := ulid.Make()
 		for i := 0; i < 5000; i++ {
 			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
-			ob.PlaceMarketOrder(Sell, clientID, quantity)
+			ob.PlaceMarketOrder(orderbook.Buy, clientID, quantity)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5000; i++ {
+			price := decimal.NewFromInt(rand.Int63n(10) + 10)
+			quantity := decimal.NewFromInt(rand.Int63n(10) + 1)
+			ob.PlaceLimitOrder(orderbook.Sell, clientID, quantity, price)
+			// time.Sleep(time.Millisecond * 10)
+		}
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		clientID := ulid.Make()
+		for i := 0; i < 5000; i++ {
+			quantity := decimal.NewFromInt(rand.Int63n(3) + 1)
+			ob.PlaceMarketOrder(orderbook.Sell, clientID, quantity)
 			// time.Sleep(time.Millisecond * 10)
 		}
 	}()

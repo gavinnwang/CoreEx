@@ -2,6 +2,7 @@ package ws
 
 import (
 	"encoding/json"
+	"fmt"
 	"github/wry-0313/exchange/internal/models"
 	"log"
 	"time"
@@ -141,6 +142,30 @@ func (c *Client) writePump() {
 	}
 }
 
+
+// subscribe subscribes a client to a Redis symbol channel
+func (c *Client) subscribe(symbol string) {
+	rdb := c.ws.rdb
+	pubsub := rdb.Subscribe(symbol)
+	defer pubsub.Close()
+
+	cancel := make(chan bool)
+	c.subscriptions[symbol] = cancel
+
+	ch := pubsub.Channel()
+	fmt.Printf("Channel created for board %v\n", symbol)
+	for {
+		select {
+		case msg := <-ch:
+			// Forward messages received from pubsub channel to client
+			c.send <- []byte(msg.Payload)
+		case <-cancel:
+			fmt.Printf("Cancelling subscription %v\n", symbol)
+			return
+		}
+	}
+}
+
 func (c *Client) closeSubscriptions() {
 	for _, cancel := range c.subscriptions {
 		cancel <- true
@@ -155,10 +180,6 @@ func handleMessage(c *Client, msg []byte) {
 		closeConnection(c, websocket.CloseInvalidFramePayloadData, CloseReasonBadEvent)
 		return
 	}
-
-	// TODO
-
-	log.Println(c.user)
 
 	switch msgReq.Event {
 	case "":
