@@ -142,7 +142,7 @@ func getDatabaseConfig() (DatabaseConfig, error) {
 	// This allows running tests from outside the docker network assuming your local
 	// development environment has ports exposed
 	if os.Getenv(keyInternalNetwork) != "true" {
-		databaseConfig.Host = "localhost"
+		databaseConfig.Host = "127.0.0.1"
 	}
 
 	// validate all db params are available

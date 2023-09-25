@@ -36,7 +36,7 @@ type Client struct {
 	user *models.User
 
 	// A map of symbols that the client is subscribed to.
-	symbols map[string]Symbol
+	// symbols map[string]Symbol
 
 	// A map of subscriptions that the client has. Each value is a cancel channel to close the subscription.
 	subscriptions map[string]chan bool

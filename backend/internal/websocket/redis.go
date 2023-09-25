@@ -14,5 +14,6 @@ func NewRedis(cfg config.RedisConfig) *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
 		Addr: fmt.Sprintf("%v:%v", cfg.Host, cfg.Port),
 	})
+
 	return rdb
 }

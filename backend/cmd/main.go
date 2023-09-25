@@ -94,13 +94,13 @@ func setupHandlerAndService(
 
 	exchangeService := exchange.NewService(userRepo, obServices, v, cfg.KafkaBrokers)
 
-	// rdb := ws.NewRedis(cfg.Rdb)
+	rdb := ws.NewRedis(cfg.Rdb)
 
 	// Set up API
 	userAPI := user.NewAPI(userService, jwtService, v)
 	authAPI := auth.NewAPI(authService, v)
 	exchangeAPI := exchange.NewAPI(exchangeService)
-	websocket := ws.NewWebSocket(exchangeService)
+	websocket := ws.NewWebSocket(exchangeService, rdb)
 
 	// Set up auth handler
 	authHandler := middleware.Auth(jwtService)

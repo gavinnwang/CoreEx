@@ -32,7 +32,9 @@ services:
       kafka:
         condition: service_started
       db: 
-        condition: service_healthy
+        condition: service_healthy 
+      redis-ws:
+        condition: service_started
   db:
     image: mysql:latest
     restart: always
@@ -46,6 +48,11 @@ services:
       - MYSQL_DATABASE=exchange
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 20s
-      timeout: 20s
+      interval: 3s
+      timeout: 10s
       retries: 10
+  redis-ws:
+    container_name: redis-ws
+    image: redis:latest
+    ports:
+      - 6379:6379

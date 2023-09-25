@@ -32,7 +32,7 @@ func (ws *WebSocket) HandleConnection(w http.ResponseWriter, r *http.Request) {
 	}
 
 	client := Client{
-		symbols:       make(map[string]Symbol),
+		// symbols:       make(map[string]Symbol),
 		subscriptions: make(map[string]chan bool),
 		conn:          conn,
 		send:          make(chan []byte, 256),
