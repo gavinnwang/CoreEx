@@ -82,6 +82,8 @@ func (r *repository) UpdateOrder(order *Order, newStatus OrderStatus, newVolume,
 
 func (r *repository) CreateOrUpdateHolding(holding models.Holding) error {
 
+	log.Printf("holding: %+v\n", holding)
+
 	sql := `CALL InsertOrUpdateHoldingThenDeleteZeroVolume(?, ?, ?)`
 
 	_, err := r.db.Exec(sql, holding.UserID, holding.Symbol, holding.VolumeChange)

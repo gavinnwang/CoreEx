@@ -84,7 +84,7 @@ func NewService(symbol string, obRepo Repository) Service {
 
 func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 	go func() {
-		ticker := time.NewTicker(500 * time.Millisecond)
+		ticker := time.NewTicker(4 * time.Second)
 		defer ticker.Stop()
 
 		for range ticker.C {
@@ -112,7 +112,7 @@ func (s *service) RunMarketPriceHistoryPersistance() {
 		for {
 			select {
 			case <-ticker.C:
-				log.Printf("price vector %v\n", s.prices)
+				// log.Printf("price vector %v\n", s.prices)
 				if len(s.prices) >= 5 {
 					open := s.prices[0]
 					close := s.prices[len(s.prices)-1]
@@ -225,7 +225,6 @@ func (s *service) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft decima
 			} else {
 				s.bids.SubVolumeBy(volumeLeft)
 			}
-
 			s.fillOrder(bestOrder, volumeLeft, oq.Price())
 			s.fillOrder(o, volumeLeft, oq.Price()) // completely filled
 
@@ -234,7 +233,6 @@ func (s *service) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft decima
 		} else { // the best order will be completely filled
 			volumeLeft = volumeLeft.Sub(bestOrderVolume)
 			// Log(fmt.Sprintf("%s: %s -> %s | %s: %s -> %s\n", o.shortOrderID(), o.Volume(), o.Volume().Sub(bestOrder.Volume()), bestOrder.shortOrderID(), bestOrder.Volume(), decimal.Zero))
-
 			s.fillAndRemoveLimitOrder(bestOrderNode, bestOrderVolume, oq.Price())
 			s.fillOrder(o, bestOrderVolume, oq.Price())
 		}
@@ -297,7 +295,7 @@ func (s *service) fillAndRemoveLimitOrder(n *list.Node[*Order], filledVolume, fi
 	if o.Side() == Buy {
 		s.bids.Remove(n)
 	} else {
-		return s.asks.Remove(n)
+		s.asks.Remove(n)
 	}
 	s.fillOrder(o, filledVolume, filledAt)
 	return o

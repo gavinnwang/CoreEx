@@ -72,7 +72,7 @@ func (s *service) Run(brokerList []string) {
 	for _, ob := range s.obServices {
 		log.Printf("Starting market price history persistance for %v\n", ob.Symbol())
 		ob.RunMarketPriceHistoryPersistance()
-		// ob.SimulateMarketFluctuations(marketSimulationUlid)
+		ob.SimulateMarketFluctuations(marketSimulationUlid)
 	}
 }
 
