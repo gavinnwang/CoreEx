@@ -19,21 +19,26 @@ type MarketPrice = {
   price: number;
 };
 
-type PriceData = {
+
+type CandleDataPoint = {
   recorded_at: number;
   open: number;
   high: number;
   low: number;
   close: number;
   volume: number;
-}[];
+}
 
 type GraphPriceDataPoint = {
   x: Date;
   y: [number, number, number, number];
-}
+};
 
 type GraphPriceData = GraphPriceDataPoint[];
+
+type ApexGraphData = {
+  data: GraphPriceDataPoint[];
+}[];
 
 type SymbolInfo = {
   symbol: string;
@@ -42,6 +47,11 @@ type SymbolInfo = {
   bid_volume: number;
   best_bid: number;
   best_ask: number;
+  candle_data: CandleDataUpdate;
+};
+
+type CandleDataUpdate = CandleDataPoint & {
+  new_candle: boolean;
 };
 
 type WSResponseGetMarketPrice = WSResponseBase & {
