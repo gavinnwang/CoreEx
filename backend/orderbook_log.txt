@@ -1,94 +1,1751 @@
-ORDERBOOK 2023/09/26 04:35:02 service.go:435: No limit orders in the opposite side, initialize order: SJ7H
-ORDERBOOK 2023/09/26 04:35:07 service.go:275: Matching 5XSP at price level 4823.5
+ORDERBOOK 2023/09/26 15:21:56 service.go:433: No limit orders in the opposite side, initialize order: ZR3Y
+ORDERBOOK 2023/09/26 15:21:57 service.go:433: No limit orders in the opposite side, initialize order: WTXE
+ORDERBOOK 2023/09/26 15:21:58 service.go:433: No limit orders in the opposite side, initialize order: 7BAP
+ORDERBOOK 2023/09/26 15:21:59 service.go:273: Matching HRRH at price level 0.18
 
-ORDERBOOK 2023/09/26 04:35:07 service.go:531: Set market price: 4823.5
-ORDERBOOK 2023/09/26 04:35:07 service.go:286: Matching 5XSP with SJ7H
-ORDERBOOK 2023/09/26 04:35:12 service.go:435: No limit orders in the opposite side, initialize order: S23C
-ORDERBOOK 2023/09/26 04:35:17 service.go:435: No limit orders in the opposite side, initialize order: H6NY
-ORDERBOOK 2023/09/26 04:35:22 service.go:275: Matching 5RQN at price level 50.87
+ORDERBOOK 2023/09/26 15:21:59 service.go:529: Set market price: 0.18
+ORDERBOOK 2023/09/26 15:21:59 service.go:284: Matching HRRH with ZR3Y
+ORDERBOOK 2023/09/26 15:21:59 service.go:433: No limit orders in the opposite side, initialize order: C5QH
+ORDERBOOK 2023/09/26 15:22:00 service.go:273: Matching ZFQM at price level 0.18
 
-ORDERBOOK 2023/09/26 04:35:22 service.go:531: Set market price: 50.87
-ORDERBOOK 2023/09/26 04:35:22 service.go:286: Matching 5RQN with H6NY
-ORDERBOOK 2023/09/26 04:35:27 service.go:435: No limit orders in the opposite side, initialize order: RTEJ
-ORDERBOOK 2023/09/26 04:35:32 service.go:435: No limit orders in the opposite side, initialize order: 3V6G
-ORDERBOOK 2023/09/26 04:35:37 service.go:275: Matching J0TS at price level 50.87
+ORDERBOOK 2023/09/26 15:22:00 service.go:529: Set market price: 0.18
+ORDERBOOK 2023/09/26 15:22:00 service.go:284: Matching ZFQM with ZR3Y
+ORDERBOOK 2023/09/26 15:22:00 service.go:273: Matching ZFQM at price level 0.87
 
-ORDERBOOK 2023/09/26 04:35:37 service.go:531: Set market price: 50.87
-ORDERBOOK 2023/09/26 04:35:37 service.go:286: Matching J0TS with H6NY
-ORDERBOOK 2023/09/26 04:35:37 service.go:275: Matching J0TS at price level 1266.06
+ORDERBOOK 2023/09/26 15:22:00 service.go:529: Set market price: 0.87
+ORDERBOOK 2023/09/26 15:22:00 service.go:284: Matching ZFQM with C5QH
+ORDERBOOK 2023/09/26 15:22:02 service.go:433: No limit orders in the opposite side, initialize order: PDVQ
+ORDERBOOK 2023/09/26 15:22:03 service.go:433: No limit orders in the opposite side, initialize order: 8MX5
+ORDERBOOK 2023/09/26 15:22:04 service.go:433: No limit orders in the opposite side, initialize order: GG6F
+ORDERBOOK 2023/09/26 15:22:05 service.go:273: Matching W7AM at price level 0.87
 
-ORDERBOOK 2023/09/26 04:35:37 service.go:531: Set market price: 1266.06
-ORDERBOOK 2023/09/26 04:35:37 service.go:286: Matching J0TS with 5XSP
-ORDERBOOK 2023/09/26 04:35:37 service.go:275: Matching J0TS at price level 2037.28
+ORDERBOOK 2023/09/26 15:22:05 service.go:529: Set market price: 0.87
+ORDERBOOK 2023/09/26 15:22:05 service.go:284: Matching W7AM with C5QH
+ORDERBOOK 2023/09/26 15:22:05 service.go:273: Matching W7AM at price level 3.19
 
-ORDERBOOK 2023/09/26 04:35:37 service.go:531: Set market price: 2037.28
-ORDERBOOK 2023/09/26 04:35:37 service.go:286: Matching J0TS with RTEJ
-ORDERBOOK 2023/09/26 04:35:42 service.go:275: Matching JWXB at price level 2037.28
+ORDERBOOK 2023/09/26 15:22:05 service.go:529: Set market price: 3.19
+ORDERBOOK 2023/09/26 15:22:05 service.go:284: Matching W7AM with GG6F
+ORDERBOOK 2023/09/26 15:22:06 service.go:273: Matching QS0T at price level 3.19
 
-ORDERBOOK 2023/09/26 04:35:42 service.go:531: Set market price: 2037.28
-ORDERBOOK 2023/09/26 04:35:42 service.go:286: Matching JWXB with RTEJ
-ORDERBOOK 2023/09/26 04:35:47 service.go:435: No limit orders in the opposite side, initialize order: JRKV
-ORDERBOOK 2023/09/26 04:36:07 service.go:275: Matching GQE8 at price level 2037.28
+ORDERBOOK 2023/09/26 15:22:06 service.go:529: Set market price: 3.19
+ORDERBOOK 2023/09/26 15:22:06 service.go:284: Matching QS0T with GG6F
+ORDERBOOK 2023/09/26 15:22:06 service.go:273: Matching QS0T at price level 3.27
 
-ORDERBOOK 2023/09/26 04:36:07 service.go:531: Set market price: 2037.28
-ORDERBOOK 2023/09/26 04:36:07 service.go:286: Matching GQE8 with RTEJ
-ORDERBOOK 2023/09/26 04:36:07 service.go:275: Matching GQE8 at price level 2553.62
+ORDERBOOK 2023/09/26 15:22:06 service.go:529: Set market price: 3.27
+ORDERBOOK 2023/09/26 15:22:06 service.go:284: Matching QS0T with 7BAP
+ORDERBOOK 2023/09/26 15:22:07 service.go:273: Matching YWGT at price level 2.19
 
-ORDERBOOK 2023/09/26 04:36:07 service.go:531: Set market price: 2553.62
-ORDERBOOK 2023/09/26 04:36:07 service.go:286: Matching GQE8 with S23C
-ORDERBOOK 2023/09/26 04:36:12 service.go:275: Matching QT9G at price level 2553.62
+ORDERBOOK 2023/09/26 15:22:07 service.go:529: Set market price: 2.19
+ORDERBOOK 2023/09/26 15:22:07 service.go:284: Matching YWGT with 0T9W
+ORDERBOOK 2023/09/26 15:22:08 service.go:273: Matching TVJX at price level 3.27
 
-ORDERBOOK 2023/09/26 04:36:12 service.go:531: Set market price: 2553.62
-ORDERBOOK 2023/09/26 04:36:12 service.go:286: Matching QT9G with S23C
-ORDERBOOK 2023/09/26 04:36:12 service.go:275: Matching QT9G at price level 2588.82
+ORDERBOOK 2023/09/26 15:22:08 service.go:529: Set market price: 3.27
+ORDERBOOK 2023/09/26 15:22:08 service.go:284: Matching TVJX with 7BAP
+ORDERBOOK 2023/09/26 15:22:08 service.go:273: Matching TVJX at price level 3.47
 
-ORDERBOOK 2023/09/26 04:36:12 service.go:531: Set market price: 2588.82
-ORDERBOOK 2023/09/26 04:36:12 service.go:286: Matching QT9G with 3V6G
-ORDERBOOK 2023/09/26 04:36:27 service.go:275: Matching ZTQD at price level 2578.29
+ORDERBOOK 2023/09/26 15:22:08 service.go:529: Set market price: 3.47
+ORDERBOOK 2023/09/26 15:22:08 service.go:284: Matching TVJX with PDVQ
+ORDERBOOK 2023/09/26 15:22:10 service.go:273: Matching PH4R at price level 2.19
 
-ORDERBOOK 2023/09/26 04:36:27 service.go:531: Set market price: 2578.29
-ORDERBOOK 2023/09/26 04:36:27 service.go:286: Matching ZTQD with V0DN
-ORDERBOOK 2023/09/26 04:36:27 service.go:275: Matching ZTQD at price level 2588.82
+ORDERBOOK 2023/09/26 15:22:10 service.go:529: Set market price: 2.19
+ORDERBOOK 2023/09/26 15:22:10 service.go:284: Matching PH4R with 0T9W
+ORDERBOOK 2023/09/26 15:22:10 service.go:273: Matching PH4R at price level 1.99
 
-ORDERBOOK 2023/09/26 04:36:27 service.go:531: Set market price: 2588.82
-ORDERBOOK 2023/09/26 04:36:27 service.go:286: Matching ZTQD with 3V6G
-ORDERBOOK 2023/09/26 04:36:27 service.go:275: Matching ZTQD at price level 3061.77
+ORDERBOOK 2023/09/26 15:22:10 service.go:529: Set market price: 1.99
+ORDERBOOK 2023/09/26 15:22:10 service.go:284: Matching PH4R with SKBP
+ORDERBOOK 2023/09/26 15:22:11 service.go:273: Matching SGZN at price level 1.99
 
-ORDERBOOK 2023/09/26 04:36:27 service.go:531: Set market price: 3061.77
-ORDERBOOK 2023/09/26 04:36:27 service.go:286: Matching ZTQD with JRKV
-ORDERBOOK 2023/09/26 04:36:47 service.go:275: Matching 2Q54 at price level 1741.19
+ORDERBOOK 2023/09/26 15:22:11 service.go:529: Set market price: 1.99
+ORDERBOOK 2023/09/26 15:22:11 service.go:284: Matching SGZN with SKBP
+ORDERBOOK 2023/09/26 15:22:11 service.go:273: Matching SGZN at price level 1.38
 
-ORDERBOOK 2023/09/26 04:36:47 service.go:531: Set market price: 1741.19
-ORDERBOOK 2023/09/26 04:36:47 service.go:286: Matching 2Q54 with H32E
-ORDERBOOK 2023/09/26 04:36:47 service.go:275: Matching 2Q54 at price level 2155.01
+ORDERBOOK 2023/09/26 15:22:11 service.go:529: Set market price: 1.38
+ORDERBOOK 2023/09/26 15:22:11 service.go:284: Matching SGZN with 5Z8G
+ORDERBOOK 2023/09/26 15:22:12 service.go:273: Matching AZHB at price level 3.03
 
-ORDERBOOK 2023/09/26 04:36:47 service.go:531: Set market price: 2155.01
-ORDERBOOK 2023/09/26 04:36:47 service.go:286: Matching 2Q54 with D268
-ORDERBOOK 2023/09/26 04:36:52 service.go:275: Matching 6MQG at price level 2155.01
+ORDERBOOK 2023/09/26 15:22:12 service.go:529: Set market price: 3.03
+ORDERBOOK 2023/09/26 15:22:12 service.go:284: Matching AZHB with M5VS
+ORDERBOOK 2023/09/26 15:22:16 service.go:273: Matching FDX3 at price level 3.03
 
-ORDERBOOK 2023/09/26 04:36:52 service.go:531: Set market price: 2155.01
-ORDERBOOK 2023/09/26 04:36:52 service.go:286: Matching 6MQG with D268
-ORDERBOOK 2023/09/26 04:36:52 service.go:275: Matching 6MQG at price level 3061.77
+ORDERBOOK 2023/09/26 15:22:16 service.go:529: Set market price: 3.03
+ORDERBOOK 2023/09/26 15:22:16 service.go:284: Matching FDX3 with M5VS
+ORDERBOOK 2023/09/26 15:22:16 service.go:273: Matching FDX3 at price level 3.22
 
-ORDERBOOK 2023/09/26 04:36:52 service.go:531: Set market price: 3061.77
-ORDERBOOK 2023/09/26 04:36:52 service.go:286: Matching 6MQG with JRKV
-ORDERBOOK 2023/09/26 04:37:02 service.go:275: Matching P77R at price level 2176.43
+ORDERBOOK 2023/09/26 15:22:16 service.go:529: Set market price: 3.22
+ORDERBOOK 2023/09/26 15:22:16 service.go:284: Matching FDX3 with 71JX
+ORDERBOOK 2023/09/26 15:22:16 service.go:273: Matching FDX3 at price level 3.47
 
-ORDERBOOK 2023/09/26 04:37:02 service.go:531: Set market price: 2176.43
-ORDERBOOK 2023/09/26 04:37:02 service.go:286: Matching P77R with YNJV
-ORDERBOOK 2023/09/26 04:37:12 service.go:275: Matching WK00 at price level 604.65
+ORDERBOOK 2023/09/26 15:22:16 service.go:529: Set market price: 3.47
+ORDERBOOK 2023/09/26 15:22:16 service.go:284: Matching FDX3 with PDVQ
+ORDERBOOK 2023/09/26 15:22:16 service.go:273: Matching KW46 at price level 3.47
 
-ORDERBOOK 2023/09/26 04:37:12 service.go:531: Set market price: 604.65
-ORDERBOOK 2023/09/26 04:37:12 service.go:286: Matching WK00 with JRRR
-ORDERBOOK 2023/09/26 04:37:22 service.go:275: Matching CE2J at price level 1506.26
+ORDERBOOK 2023/09/26 15:22:16 service.go:529: Set market price: 3.47
+ORDERBOOK 2023/09/26 15:22:16 service.go:284: Matching KW46 with PDVQ
+ORDERBOOK 2023/09/26 15:22:16 service.go:273: Matching KW46 at price level 3.67
 
-ORDERBOOK 2023/09/26 04:37:22 service.go:531: Set market price: 1506.26
-ORDERBOOK 2023/09/26 04:37:22 service.go:286: Matching CE2J with MWFC
-ORDERBOOK 2023/09/26 04:37:22 service.go:275: Matching CE2J at price level 2176.43
+ORDERBOOK 2023/09/26 15:22:16 service.go:529: Set market price: 3.67
+ORDERBOOK 2023/09/26 15:22:16 service.go:284: Matching KW46 with WTXE
+ORDERBOOK 2023/09/26 15:22:17 service.go:273: Matching H0G0 at price level 2.66
 
-ORDERBOOK 2023/09/26 04:37:22 service.go:531: Set market price: 2176.43
-ORDERBOOK 2023/09/26 04:37:22 service.go:286: Matching CE2J with YNJV
-ORDERBOOK 2023/09/26 04:37:37 service.go:275: Matching 7PZT at price level 2176.43
+ORDERBOOK 2023/09/26 15:22:17 service.go:529: Set market price: 2.66
+ORDERBOOK 2023/09/26 15:22:17 service.go:284: Matching H0G0 with A1DC
+ORDERBOOK 2023/09/26 15:22:18 service.go:273: Matching NYJN at price level 3.42
 
-ORDERBOOK 2023/09/26 04:37:37 service.go:531: Set market price: 2176.43
-ORDERBOOK 2023/09/26 04:37:37 service.go:286: Matching 7PZT with YNJV
+ORDERBOOK 2023/09/26 15:22:18 service.go:529: Set market price: 3.42
+ORDERBOOK 2023/09/26 15:22:18 service.go:284: Matching NYJN with M1H5
+ORDERBOOK 2023/09/26 15:22:18 service.go:273: Matching NS6E at price level 3.42
+
+ORDERBOOK 2023/09/26 15:22:18 service.go:529: Set market price: 3.42
+ORDERBOOK 2023/09/26 15:22:18 service.go:284: Matching NS6E with M1H5
+ORDERBOOK 2023/09/26 15:22:18 service.go:273: Matching NS6E at price level 3.67
+
+ORDERBOOK 2023/09/26 15:22:18 service.go:529: Set market price: 3.67
+ORDERBOOK 2023/09/26 15:22:18 service.go:284: Matching NS6E with WTXE
+ORDERBOOK 2023/09/26 15:22:21 service.go:273: Matching Y6J1 at price level 3.67
+
+ORDERBOOK 2023/09/26 15:22:21 service.go:529: Set market price: 3.67
+ORDERBOOK 2023/09/26 15:22:21 service.go:284: Matching Y6J1 with WTXE
+ORDERBOOK 2023/09/26 15:22:21 service.go:273: Matching Y6J1 at price level 4.45
+
+ORDERBOOK 2023/09/26 15:22:21 service.go:529: Set market price: 4.45
+ORDERBOOK 2023/09/26 15:22:21 service.go:284: Matching Y6J1 with 8MX5
+ORDERBOOK 2023/09/26 15:22:21 service.go:273: Matching Y6J1 at price level 6.37
+
+ORDERBOOK 2023/09/26 15:22:21 service.go:529: Set market price: 6.37
+ORDERBOOK 2023/09/26 15:22:21 service.go:284: Matching Y6J1 with B32B
+ORDERBOOK 2023/09/26 15:22:22 service.go:273: Matching QFVN at price level 6.29
+
+ORDERBOOK 2023/09/26 15:22:22 service.go:529: Set market price: 6.29
+ORDERBOOK 2023/09/26 15:22:22 service.go:284: Matching QFVN with 70GK
+ORDERBOOK 2023/09/26 15:22:22 service.go:273: Matching 3JSP at price level 6.29
+
+ORDERBOOK 2023/09/26 15:22:22 service.go:529: Set market price: 6.29
+ORDERBOOK 2023/09/26 15:22:22 service.go:284: Matching 3JSP with 70GK
+ORDERBOOK 2023/09/26 15:22:22 service.go:273: Matching 3JSP at price level 2.66
+
+ORDERBOOK 2023/09/26 15:22:22 service.go:529: Set market price: 2.66
+ORDERBOOK 2023/09/26 15:22:22 service.go:284: Matching 3JSP with A1DC
+ORDERBOOK 2023/09/26 15:22:22 service.go:273: Matching 3JSP at price level 1.58
+
+ORDERBOOK 2023/09/26 15:22:22 service.go:529: Set market price: 1.58
+ORDERBOOK 2023/09/26 15:22:22 service.go:284: Matching 3JSP with 5YFJ
+ORDERBOOK 2023/09/26 15:22:26 service.go:273: Matching YGHD at price level 4.45
+
+ORDERBOOK 2023/09/26 15:22:26 service.go:529: Set market price: 4.45
+ORDERBOOK 2023/09/26 15:22:26 service.go:284: Matching YGHD with 51JT
+ORDERBOOK 2023/09/26 15:22:26 service.go:273: Matching PC4E at price level 4.45
+
+ORDERBOOK 2023/09/26 15:22:26 service.go:529: Set market price: 4.45
+ORDERBOOK 2023/09/26 15:22:26 service.go:284: Matching PC4E with 51JT
+ORDERBOOK 2023/09/26 15:22:26 service.go:273: Matching PC4E at price level 5.39
+
+ORDERBOOK 2023/09/26 15:22:26 service.go:529: Set market price: 5.39
+ORDERBOOK 2023/09/26 15:22:26 service.go:284: Matching PC4E with 8F3J
+ORDERBOOK 2023/09/26 15:22:29 service.go:273: Matching PH5A at price level 1.87
+
+ORDERBOOK 2023/09/26 15:22:29 service.go:529: Set market price: 1.87
+ORDERBOOK 2023/09/26 15:22:29 service.go:284: Matching PH5A with 62MS
+ORDERBOOK 2023/09/26 15:22:29 service.go:273: Matching PH5A at price level 1.58
+
+ORDERBOOK 2023/09/26 15:22:29 service.go:529: Set market price: 1.58
+ORDERBOOK 2023/09/26 15:22:29 service.go:284: Matching PH5A with 5YFJ
+ORDERBOOK 2023/09/26 15:22:30 service.go:273: Matching S2DT at price level 4.19
+
+ORDERBOOK 2023/09/26 15:22:30 service.go:529: Set market price: 4.19
+ORDERBOOK 2023/09/26 15:22:30 service.go:284: Matching S2DT with Z9W1
+ORDERBOOK 2023/09/26 15:22:31 service.go:273: Matching 5DBH at price level 4.19
+
+ORDERBOOK 2023/09/26 15:22:31 service.go:529: Set market price: 4.19
+ORDERBOOK 2023/09/26 15:22:31 service.go:284: Matching 5DBH with Z9W1
+ORDERBOOK 2023/09/26 15:22:31 service.go:273: Matching 5DBH at price level 4.55
+
+ORDERBOOK 2023/09/26 15:22:31 service.go:529: Set market price: 4.55
+ORDERBOOK 2023/09/26 15:22:31 service.go:284: Matching 5DBH with GW0W
+ORDERBOOK 2023/09/26 15:22:32 service.go:273: Matching QHAK at price level 4.55
+
+ORDERBOOK 2023/09/26 15:22:32 service.go:529: Set market price: 4.55
+ORDERBOOK 2023/09/26 15:22:32 service.go:284: Matching QHAK with GW0W
+ORDERBOOK 2023/09/26 15:22:32 service.go:273: Matching QHAK at price level 5.39
+
+ORDERBOOK 2023/09/26 15:22:32 service.go:529: Set market price: 5.39
+ORDERBOOK 2023/09/26 15:22:32 service.go:284: Matching QHAK with 8F3J
+ORDERBOOK 2023/09/26 15:22:32 service.go:273: Matching QHAK at price level 5.93
+
+ORDERBOOK 2023/09/26 15:22:32 service.go:529: Set market price: 5.93
+ORDERBOOK 2023/09/26 15:22:32 service.go:284: Matching QHAK with WAMT
+ORDERBOOK 2023/09/26 15:22:33 service.go:273: Matching 0VRZ at price level 5.93
+
+ORDERBOOK 2023/09/26 15:22:33 service.go:529: Set market price: 5.93
+ORDERBOOK 2023/09/26 15:22:33 service.go:284: Matching 0VRZ with WAMT
+ORDERBOOK 2023/09/26 15:22:33 service.go:273: Matching 0VRZ at price level 6.08
+
+ORDERBOOK 2023/09/26 15:22:33 service.go:529: Set market price: 6.08
+ORDERBOOK 2023/09/26 15:22:33 service.go:284: Matching 0VRZ with JZW1
+ORDERBOOK 2023/09/26 15:22:35 service.go:273: Matching JSA5 at price level 4.58
+
+ORDERBOOK 2023/09/26 15:22:35 service.go:529: Set market price: 4.58
+ORDERBOOK 2023/09/26 15:22:35 service.go:284: Matching JSA5 with 6J0G
+ORDERBOOK 2023/09/26 15:22:36 service.go:273: Matching XAYF at price level 4.58
+
+ORDERBOOK 2023/09/26 15:22:36 service.go:529: Set market price: 4.58
+ORDERBOOK 2023/09/26 15:22:36 service.go:284: Matching XAYF with 6J0G
+ORDERBOOK 2023/09/26 15:22:36 service.go:273: Matching XAYF at price level 5.74
+
+ORDERBOOK 2023/09/26 15:22:36 service.go:529: Set market price: 5.74
+ORDERBOOK 2023/09/26 15:22:36 service.go:284: Matching XAYF with RH8E
+ORDERBOOK 2023/09/26 15:22:36 service.go:273: Matching PAFN at price level 5.74
+
+ORDERBOOK 2023/09/26 15:22:36 service.go:529: Set market price: 5.74
+ORDERBOOK 2023/09/26 15:22:36 service.go:284: Matching PAFN with RH8E
+ORDERBOOK 2023/09/26 15:22:36 service.go:273: Matching PAFN at price level 6.08
+
+ORDERBOOK 2023/09/26 15:22:36 service.go:529: Set market price: 6.08
+ORDERBOOK 2023/09/26 15:22:36 service.go:284: Matching PAFN with JZW1
+ORDERBOOK 2023/09/26 15:22:37 service.go:273: Matching 1D27 at price level 6.08
+
+ORDERBOOK 2023/09/26 15:22:37 service.go:529: Set market price: 6.08
+ORDERBOOK 2023/09/26 15:22:37 service.go:284: Matching 1D27 with JZW1
+ORDERBOOK 2023/09/26 15:22:37 service.go:273: Matching 1D27 at price level 6.25
+
+ORDERBOOK 2023/09/26 15:22:37 service.go:529: Set market price: 6.25
+ORDERBOOK 2023/09/26 15:22:37 service.go:284: Matching 1D27 with XCF8
+ORDERBOOK 2023/09/26 15:22:37 service.go:273: Matching 1D27 at price level 6.37
+
+ORDERBOOK 2023/09/26 15:22:37 service.go:529: Set market price: 6.37
+ORDERBOOK 2023/09/26 15:22:37 service.go:284: Matching 1D27 with B32B
+ORDERBOOK 2023/09/26 15:22:37 service.go:273: Matching 1T5D at price level 6.37
+
+ORDERBOOK 2023/09/26 15:22:37 service.go:529: Set market price: 6.37
+ORDERBOOK 2023/09/26 15:22:37 service.go:284: Matching 1T5D with B32B
+ORDERBOOK 2023/09/26 15:22:37 service.go:273: Matching 1T5D at price level 6.83
+
+ORDERBOOK 2023/09/26 15:22:37 service.go:529: Set market price: 6.83
+ORDERBOOK 2023/09/26 15:22:37 service.go:284: Matching 1T5D with BVVN
+ORDERBOOK 2023/09/26 15:22:38 service.go:273: Matching FQM0 at price level 6.83
+
+ORDERBOOK 2023/09/26 15:22:38 service.go:529: Set market price: 6.83
+ORDERBOOK 2023/09/26 15:22:38 service.go:284: Matching FQM0 with BVVN
+ORDERBOOK 2023/09/26 15:22:38 service.go:273: Matching FQM0 at price level 7.16
+
+ORDERBOOK 2023/09/26 15:22:38 service.go:529: Set market price: 7.16
+ORDERBOOK 2023/09/26 15:22:38 service.go:284: Matching FQM0 with MBMB
+ORDERBOOK 2023/09/26 15:22:38 service.go:273: Matching XTTK at price level 4.11
+
+ORDERBOOK 2023/09/26 15:22:38 service.go:529: Set market price: 4.11
+ORDERBOOK 2023/09/26 15:22:38 service.go:284: Matching XTTK with 34SK
+ORDERBOOK 2023/09/26 15:22:39 service.go:273: Matching N9KR at price level 4.4
+
+ORDERBOOK 2023/09/26 15:22:39 service.go:529: Set market price: 4.4
+ORDERBOOK 2023/09/26 15:22:39 service.go:284: Matching N9KR with QNSD
+ORDERBOOK 2023/09/26 15:22:40 service.go:273: Matching FATR at price level 4.11
+
+ORDERBOOK 2023/09/26 15:22:40 service.go:529: Set market price: 4.11
+ORDERBOOK 2023/09/26 15:22:40 service.go:284: Matching FATR with 34SK
+ORDERBOOK 2023/09/26 15:22:40 service.go:273: Matching FATR at price level 3.02
+
+ORDERBOOK 2023/09/26 15:22:40 service.go:529: Set market price: 3.02
+ORDERBOOK 2023/09/26 15:22:40 service.go:284: Matching FATR with N37R
+ORDERBOOK 2023/09/26 15:22:41 service.go:273: Matching JF95 at price level 4.4
+
+ORDERBOOK 2023/09/26 15:22:41 service.go:529: Set market price: 4.4
+ORDERBOOK 2023/09/26 15:22:41 service.go:284: Matching JF95 with QNSD
+ORDERBOOK 2023/09/26 15:22:41 service.go:273: Matching JF95 at price level 4.43
+
+ORDERBOOK 2023/09/26 15:22:41 service.go:529: Set market price: 4.43
+ORDERBOOK 2023/09/26 15:22:41 service.go:284: Matching JF95 with AEAE
+ORDERBOOK 2023/09/26 15:22:42 service.go:273: Matching F4D9 at price level 3.31
+
+ORDERBOOK 2023/09/26 15:22:42 service.go:529: Set market price: 3.31
+ORDERBOOK 2023/09/26 15:22:42 service.go:284: Matching F4D9 with WGAH
+ORDERBOOK 2023/09/26 15:22:43 service.go:273: Matching NX0Z at price level 3.31
+
+ORDERBOOK 2023/09/26 15:22:43 service.go:529: Set market price: 3.31
+ORDERBOOK 2023/09/26 15:22:43 service.go:284: Matching NX0Z with WGAH
+ORDERBOOK 2023/09/26 15:22:43 service.go:273: Matching NX0Z at price level 4.43
+
+ORDERBOOK 2023/09/26 15:22:43 service.go:529: Set market price: 4.43
+ORDERBOOK 2023/09/26 15:22:43 service.go:284: Matching NX0Z with AEAE
+ORDERBOOK 2023/09/26 15:22:43 service.go:273: Matching NX0Z at price level 7.16
+
+ORDERBOOK 2023/09/26 15:22:43 service.go:529: Set market price: 7.16
+ORDERBOOK 2023/09/26 15:22:43 service.go:284: Matching NX0Z with MBMB
+ORDERBOOK 2023/09/26 15:22:45 service.go:273: Matching Z35G at price level 8.01
+
+ORDERBOOK 2023/09/26 15:22:45 service.go:529: Set market price: 8.01
+ORDERBOOK 2023/09/26 15:22:45 service.go:284: Matching Z35G with QDPS
+ORDERBOOK 2023/09/26 15:22:45 service.go:273: Matching QFDJ at price level 7.51
+
+ORDERBOOK 2023/09/26 15:22:45 service.go:529: Set market price: 7.51
+ORDERBOOK 2023/09/26 15:22:45 service.go:284: Matching QFDJ with NX0Z
+ORDERBOOK 2023/09/26 15:22:45 service.go:273: Matching QFDJ at price level 5.96
+
+ORDERBOOK 2023/09/26 15:22:45 service.go:529: Set market price: 5.96
+ORDERBOOK 2023/09/26 15:22:45 service.go:284: Matching QFDJ with 841R
+ORDERBOOK 2023/09/26 15:22:47 service.go:273: Matching 219Y at price level 5.96
+
+ORDERBOOK 2023/09/26 15:22:47 service.go:529: Set market price: 5.96
+ORDERBOOK 2023/09/26 15:22:47 service.go:284: Matching 219Y with 841R
+ORDERBOOK 2023/09/26 15:22:48 service.go:273: Matching HXNN at price level 5.96
+
+ORDERBOOK 2023/09/26 15:22:48 service.go:529: Set market price: 5.96
+ORDERBOOK 2023/09/26 15:22:48 service.go:284: Matching HXNN with 841R
+ORDERBOOK 2023/09/26 15:22:48 service.go:273: Matching HXNN at price level 5.51
+
+ORDERBOOK 2023/09/26 15:22:48 service.go:529: Set market price: 5.51
+ORDERBOOK 2023/09/26 15:22:48 service.go:284: Matching HXNN with WKRS
+ORDERBOOK 2023/09/26 15:22:48 service.go:273: Matching HXNN at price level 5.31
+
+ORDERBOOK 2023/09/26 15:22:48 service.go:529: Set market price: 5.31
+ORDERBOOK 2023/09/26 15:22:48 service.go:284: Matching HXNN with DK44
+ORDERBOOK 2023/09/26 15:22:49 service.go:273: Matching 0BA4 at price level 7.6
+
+ORDERBOOK 2023/09/26 15:22:49 service.go:529: Set market price: 7.6
+ORDERBOOK 2023/09/26 15:22:49 service.go:284: Matching 0BA4 with 8J1V
+ORDERBOOK 2023/09/26 15:22:50 service.go:273: Matching B76T at price level 7.87
+
+ORDERBOOK 2023/09/26 15:22:50 service.go:529: Set market price: 7.87
+ORDERBOOK 2023/09/26 15:22:50 service.go:284: Matching B76T with RAPM
+ORDERBOOK 2023/09/26 15:22:50 service.go:273: Matching B76T at price level 8.01
+
+ORDERBOOK 2023/09/26 15:22:50 service.go:529: Set market price: 8.01
+ORDERBOOK 2023/09/26 15:22:50 service.go:284: Matching B76T with QDPS
+ORDERBOOK 2023/09/26 15:22:52 service.go:273: Matching R398 at price level 7.6
+
+ORDERBOOK 2023/09/26 15:22:52 service.go:529: Set market price: 7.6
+ORDERBOOK 2023/09/26 15:22:52 service.go:284: Matching R398 with 8J1V
+ORDERBOOK 2023/09/26 15:22:52 service.go:273: Matching R398 at price level 6.69
+
+ORDERBOOK 2023/09/26 15:22:52 service.go:529: Set market price: 6.69
+ORDERBOOK 2023/09/26 15:22:52 service.go:284: Matching R398 with YB12
+ORDERBOOK 2023/09/26 15:22:53 service.go:273: Matching 2ZEM at price level 6.69
+
+ORDERBOOK 2023/09/26 15:22:53 service.go:529: Set market price: 6.69
+ORDERBOOK 2023/09/26 15:22:53 service.go:284: Matching 2ZEM with YB12
+ORDERBOOK 2023/09/26 15:22:53 service.go:273: Matching 2ZEM at price level 5.31
+
+ORDERBOOK 2023/09/26 15:22:53 service.go:529: Set market price: 5.31
+ORDERBOOK 2023/09/26 15:22:53 service.go:284: Matching 2ZEM with DK44
+ORDERBOOK 2023/09/26 15:22:53 service.go:273: Matching 2ZEM at price level 3.34
+
+ORDERBOOK 2023/09/26 15:22:53 service.go:529: Set market price: 3.34
+ORDERBOOK 2023/09/26 15:22:53 service.go:284: Matching 2ZEM with MEEW
+ORDERBOOK 2023/09/26 15:22:53 service.go:273: Matching SY4E at price level 3.34
+
+ORDERBOOK 2023/09/26 15:22:53 service.go:529: Set market price: 3.34
+ORDERBOOK 2023/09/26 15:22:53 service.go:284: Matching SY4E with MEEW
+ORDERBOOK 2023/09/26 15:22:53 service.go:273: Matching SY4E at price level 3.02
+
+ORDERBOOK 2023/09/26 15:22:53 service.go:529: Set market price: 3.02
+ORDERBOOK 2023/09/26 15:22:53 service.go:284: Matching SY4E with N37R
+ORDERBOOK 2023/09/26 15:22:54 service.go:273: Matching CNZ5 at price level 8.01
+
+ORDERBOOK 2023/09/26 15:22:54 service.go:529: Set market price: 8.01
+ORDERBOOK 2023/09/26 15:22:54 service.go:284: Matching CNZ5 with QDPS
+ORDERBOOK 2023/09/26 15:22:54 service.go:273: Matching CNZ5 at price level 9.74
+
+ORDERBOOK 2023/09/26 15:22:54 service.go:529: Set market price: 9.74
+ORDERBOOK 2023/09/26 15:22:54 service.go:284: Matching CNZ5 with 87S2
+ORDERBOOK 2023/09/26 15:22:55 service.go:273: Matching S7B2 at price level 3.85
+
+ORDERBOOK 2023/09/26 15:22:55 service.go:529: Set market price: 3.85
+ORDERBOOK 2023/09/26 15:22:55 service.go:284: Matching S7B2 with XV93
+ORDERBOOK 2023/09/26 15:22:56 service.go:273: Matching 16K8 at price level 3.85
+
+ORDERBOOK 2023/09/26 15:22:56 service.go:529: Set market price: 3.85
+ORDERBOOK 2023/09/26 15:22:56 service.go:284: Matching 16K8 with XV93
+ORDERBOOK 2023/09/26 15:22:56 service.go:273: Matching 16K8 at price level 5.11
+
+ORDERBOOK 2023/09/26 15:22:56 service.go:529: Set market price: 5.11
+ORDERBOOK 2023/09/26 15:22:56 service.go:284: Matching 16K8 with G6GD
+ORDERBOOK 2023/09/26 15:22:58 service.go:273: Matching C7T8 at price level 3.02
+
+ORDERBOOK 2023/09/26 15:22:58 service.go:529: Set market price: 3.02
+ORDERBOOK 2023/09/26 15:22:58 service.go:284: Matching C7T8 with N37R
+ORDERBOOK 2023/09/26 15:22:58 service.go:273: Matching C7T8 at price level 2.8
+
+ORDERBOOK 2023/09/26 15:22:58 service.go:529: Set market price: 2.8
+ORDERBOOK 2023/09/26 15:22:58 service.go:284: Matching C7T8 with E6X3
+ORDERBOOK 2023/09/26 15:22:59 service.go:273: Matching 5RF6 at price level 4.68
+
+ORDERBOOK 2023/09/26 15:22:59 service.go:529: Set market price: 4.68
+ORDERBOOK 2023/09/26 15:22:59 service.go:284: Matching 5RF6 with SJC1
+ORDERBOOK 2023/09/26 15:23:01 service.go:273: Matching GPNH at price level 4.68
+
+ORDERBOOK 2023/09/26 15:23:01 service.go:529: Set market price: 4.68
+ORDERBOOK 2023/09/26 15:23:01 service.go:284: Matching GPNH with SJC1
+ORDERBOOK 2023/09/26 15:23:01 service.go:273: Matching GPNH at price level 4.81
+
+ORDERBOOK 2023/09/26 15:23:01 service.go:529: Set market price: 4.81
+ORDERBOOK 2023/09/26 15:23:01 service.go:284: Matching GPNH with QCSZ
+ORDERBOOK 2023/09/26 15:23:02 service.go:273: Matching QQ34 at price level 3.63
+
+ORDERBOOK 2023/09/26 15:23:02 service.go:529: Set market price: 3.63
+ORDERBOOK 2023/09/26 15:23:02 service.go:284: Matching QQ34 with ZFPD
+ORDERBOOK 2023/09/26 15:23:02 service.go:273: Matching QQ34 at price level 2.8
+
+ORDERBOOK 2023/09/26 15:23:02 service.go:529: Set market price: 2.8
+ORDERBOOK 2023/09/26 15:23:02 service.go:284: Matching QQ34 with E6X3
+ORDERBOOK 2023/09/26 15:23:02 service.go:273: Matching TGCE at price level 2.8
+
+ORDERBOOK 2023/09/26 15:23:02 service.go:529: Set market price: 2.8
+ORDERBOOK 2023/09/26 15:23:02 service.go:284: Matching TGCE with E6X3
+ORDERBOOK 2023/09/26 15:23:02 service.go:273: Matching TGCE at price level 2.77
+
+ORDERBOOK 2023/09/26 15:23:02 service.go:529: Set market price: 2.77
+ORDERBOOK 2023/09/26 15:23:02 service.go:284: Matching TGCE with C34T
+ORDERBOOK 2023/09/26 15:23:02 service.go:273: Matching TGCE at price level 1.58
+
+ORDERBOOK 2023/09/26 15:23:02 service.go:529: Set market price: 1.58
+ORDERBOOK 2023/09/26 15:23:02 service.go:284: Matching TGCE with 5YFJ
+ORDERBOOK 2023/09/26 15:23:02 service.go:273: Matching TGCE at price level 1.44
+
+ORDERBOOK 2023/09/26 15:23:02 service.go:529: Set market price: 1.44
+ORDERBOOK 2023/09/26 15:23:02 service.go:284: Matching TGCE with HM80
+ORDERBOOK 2023/09/26 15:23:04 service.go:273: Matching 8HAN at price level 4.81
+
+ORDERBOOK 2023/09/26 15:23:04 service.go:529: Set market price: 4.81
+ORDERBOOK 2023/09/26 15:23:04 service.go:284: Matching 8HAN with QCSZ
+ORDERBOOK 2023/09/26 15:23:04 service.go:273: Matching 8HAN at price level 5.11
+
+ORDERBOOK 2023/09/26 15:23:04 service.go:529: Set market price: 5.11
+ORDERBOOK 2023/09/26 15:23:04 service.go:284: Matching 8HAN with G6GD
+ORDERBOOK 2023/09/26 15:23:06 service.go:273: Matching PPV7 at price level 5.01
+
+ORDERBOOK 2023/09/26 15:23:06 service.go:529: Set market price: 5.01
+ORDERBOOK 2023/09/26 15:23:06 service.go:284: Matching PPV7 with 5FHK
+ORDERBOOK 2023/09/26 15:23:06 service.go:273: Matching PPV7 at price level 5.11
+
+ORDERBOOK 2023/09/26 15:23:06 service.go:529: Set market price: 5.11
+ORDERBOOK 2023/09/26 15:23:06 service.go:284: Matching PPV7 with G6GD
+ORDERBOOK 2023/09/26 15:23:07 service.go:273: Matching M63M at price level 4.74
+
+ORDERBOOK 2023/09/26 15:23:07 service.go:529: Set market price: 4.74
+ORDERBOOK 2023/09/26 15:23:07 service.go:284: Matching M63M with QE52
+ORDERBOOK 2023/09/26 15:23:07 service.go:273: Matching M63M at price level 1.44
+
+ORDERBOOK 2023/09/26 15:23:07 service.go:529: Set market price: 1.44
+ORDERBOOK 2023/09/26 15:23:07 service.go:284: Matching M63M with HM80
+ORDERBOOK 2023/09/26 15:23:11 service.go:273: Matching 1TP4 at price level 3.12
+
+ORDERBOOK 2023/09/26 15:23:11 service.go:529: Set market price: 3.12
+ORDERBOOK 2023/09/26 15:23:11 service.go:284: Matching 1TP4 with 2002
+ORDERBOOK 2023/09/26 15:23:11 service.go:273: Matching W8CR at price level 4.19
+
+ORDERBOOK 2023/09/26 15:23:11 service.go:529: Set market price: 4.19
+ORDERBOOK 2023/09/26 15:23:11 service.go:284: Matching W8CR with 34JE
+ORDERBOOK 2023/09/26 15:23:12 service.go:273: Matching SCWF at price level 3.12
+
+ORDERBOOK 2023/09/26 15:23:12 service.go:529: Set market price: 3.12
+ORDERBOOK 2023/09/26 15:23:12 service.go:284: Matching SCWF with 2002
+ORDERBOOK 2023/09/26 15:23:12 service.go:273: Matching SCWF at price level 2.27
+
+ORDERBOOK 2023/09/26 15:23:12 service.go:529: Set market price: 2.27
+ORDERBOOK 2023/09/26 15:23:12 service.go:284: Matching SCWF with GR17
+ORDERBOOK 2023/09/26 15:23:13 service.go:273: Matching M2HJ at price level 4.19
+
+ORDERBOOK 2023/09/26 15:23:13 service.go:529: Set market price: 4.19
+ORDERBOOK 2023/09/26 15:23:13 service.go:284: Matching M2HJ with 34JE
+ORDERBOOK 2023/09/26 15:23:13 service.go:273: Matching M2HJ at price level 5.11
+
+ORDERBOOK 2023/09/26 15:23:13 service.go:529: Set market price: 5.11
+ORDERBOOK 2023/09/26 15:23:13 service.go:284: Matching M2HJ with G6GD
+ORDERBOOK 2023/09/26 15:23:13 service.go:273: Matching M2HJ at price level 5.16
+
+ORDERBOOK 2023/09/26 15:23:13 service.go:529: Set market price: 5.16
+ORDERBOOK 2023/09/26 15:23:13 service.go:284: Matching M2HJ with F935
+ORDERBOOK 2023/09/26 15:23:14 service.go:273: Matching 0QD4 at price level 2.27
+
+ORDERBOOK 2023/09/26 15:23:14 service.go:529: Set market price: 2.27
+ORDERBOOK 2023/09/26 15:23:14 service.go:284: Matching 0QD4 with GR17
+ORDERBOOK 2023/09/26 15:23:14 service.go:273: Matching 0QD4 at price level 2.17
+
+ORDERBOOK 2023/09/26 15:23:14 service.go:529: Set market price: 2.17
+ORDERBOOK 2023/09/26 15:23:14 service.go:284: Matching 0QD4 with 82PV
+ORDERBOOK 2023/09/26 15:23:15 service.go:273: Matching PQA5 at price level 2.17
+
+ORDERBOOK 2023/09/26 15:23:15 service.go:529: Set market price: 2.17
+ORDERBOOK 2023/09/26 15:23:15 service.go:284: Matching PQA5 with 82PV
+ORDERBOOK 2023/09/26 15:23:15 service.go:284: Matching PQA5 with XHW7
+ORDERBOOK 2023/09/26 15:23:16 service.go:273: Matching JNJS at price level 4.65
+
+ORDERBOOK 2023/09/26 15:23:16 service.go:529: Set market price: 4.65
+ORDERBOOK 2023/09/26 15:23:16 service.go:284: Matching JNJS with JCW0
+ORDERBOOK 2023/09/26 15:23:17 service.go:273: Matching BGD2 at price level 4.81
+
+ORDERBOOK 2023/09/26 15:23:17 service.go:529: Set market price: 4.81
+ORDERBOOK 2023/09/26 15:23:17 service.go:284: Matching BGD2 with N2ZR
+ORDERBOOK 2023/09/26 15:23:17 service.go:273: Matching BGD2 at price level 5.16
+
+ORDERBOOK 2023/09/26 15:23:17 service.go:529: Set market price: 5.16
+ORDERBOOK 2023/09/26 15:23:17 service.go:284: Matching BGD2 with F935
+ORDERBOOK 2023/09/26 15:23:17 service.go:273: Matching BN62 at price level 5.16
+
+ORDERBOOK 2023/09/26 15:23:17 service.go:529: Set market price: 5.16
+ORDERBOOK 2023/09/26 15:23:17 service.go:284: Matching BN62 with F935
+ORDERBOOK 2023/09/26 15:23:17 service.go:273: Matching BN62 at price level 5.36
+
+ORDERBOOK 2023/09/26 15:23:17 service.go:529: Set market price: 5.36
+ORDERBOOK 2023/09/26 15:23:17 service.go:284: Matching BN62 with 7HD1
+ORDERBOOK 2023/09/26 15:23:19 service.go:273: Matching NDAD at price level 5.36
+
+ORDERBOOK 2023/09/26 15:23:19 service.go:529: Set market price: 5.36
+ORDERBOOK 2023/09/26 15:23:19 service.go:284: Matching NDAD with 7HD1
+ORDERBOOK 2023/09/26 15:23:19 service.go:273: Matching NDAD at price level 5.87
+
+ORDERBOOK 2023/09/26 15:23:19 service.go:529: Set market price: 5.87
+ORDERBOOK 2023/09/26 15:23:19 service.go:284: Matching NDAD with GWDQ
+ORDERBOOK 2023/09/26 15:23:20 service.go:273: Matching 0QY4 at price level 5.87
+
+ORDERBOOK 2023/09/26 15:23:20 service.go:529: Set market price: 5.87
+ORDERBOOK 2023/09/26 15:23:20 service.go:284: Matching 0QY4 with GWDQ
+ORDERBOOK 2023/09/26 15:23:20 service.go:273: Matching 0QY4 at price level 6.06
+
+ORDERBOOK 2023/09/26 15:23:20 service.go:529: Set market price: 6.06
+ORDERBOOK 2023/09/26 15:23:20 service.go:284: Matching 0QY4 with 3SM8
+ORDERBOOK 2023/09/26 15:23:21 service.go:273: Matching ZGXH at price level 6.06
+
+ORDERBOOK 2023/09/26 15:23:21 service.go:529: Set market price: 6.06
+ORDERBOOK 2023/09/26 15:23:21 service.go:284: Matching ZGXH with 3SM8
+ORDERBOOK 2023/09/26 15:23:21 service.go:273: Matching ZGXH at price level 6.26
+
+ORDERBOOK 2023/09/26 15:23:21 service.go:529: Set market price: 6.26
+ORDERBOOK 2023/09/26 15:23:21 service.go:284: Matching ZGXH with XTXC
+ORDERBOOK 2023/09/26 15:23:22 service.go:273: Matching QJDZ at price level 6.26
+
+ORDERBOOK 2023/09/26 15:23:22 service.go:529: Set market price: 6.26
+ORDERBOOK 2023/09/26 15:23:22 service.go:284: Matching QJDZ with XTXC
+ORDERBOOK 2023/09/26 15:23:22 service.go:273: Matching QJDZ at price level 6.59
+
+ORDERBOOK 2023/09/26 15:23:22 service.go:529: Set market price: 6.59
+ORDERBOOK 2023/09/26 15:23:22 service.go:284: Matching QJDZ with 7BEB
+ORDERBOOK 2023/09/26 15:23:23 service.go:273: Matching RYQW at price level 4.65
+
+ORDERBOOK 2023/09/26 15:23:23 service.go:529: Set market price: 4.65
+ORDERBOOK 2023/09/26 15:23:23 service.go:284: Matching RYQW with JCW0
+ORDERBOOK 2023/09/26 15:23:23 service.go:273: Matching RYQW at price level 3.61
+
+ORDERBOOK 2023/09/26 15:23:23 service.go:529: Set market price: 3.61
+ORDERBOOK 2023/09/26 15:23:23 service.go:284: Matching RYQW with F51S
+ORDERBOOK 2023/09/26 15:23:23 service.go:273: Matching ZAH8 at price level 6.59
+
+ORDERBOOK 2023/09/26 15:23:23 service.go:529: Set market price: 6.59
+ORDERBOOK 2023/09/26 15:23:23 service.go:284: Matching ZAH8 with 7BEB
+ORDERBOOK 2023/09/26 15:23:23 service.go:273: Matching ZAH8 at price level 6.6
+
+ORDERBOOK 2023/09/26 15:23:23 service.go:529: Set market price: 6.6
+ORDERBOOK 2023/09/26 15:23:23 service.go:284: Matching ZAH8 with E09A
+ORDERBOOK 2023/09/26 15:23:24 service.go:273: Matching RCZ6 at price level 6.6
+
+ORDERBOOK 2023/09/26 15:23:24 service.go:529: Set market price: 6.6
+ORDERBOOK 2023/09/26 15:23:24 service.go:284: Matching RCZ6 with E09A
+ORDERBOOK 2023/09/26 15:23:24 service.go:273: Matching RCZ6 at price level 6.87
+
+ORDERBOOK 2023/09/26 15:23:24 service.go:529: Set market price: 6.87
+ORDERBOOK 2023/09/26 15:23:24 service.go:284: Matching RCZ6 with R3KS
+ORDERBOOK 2023/09/26 15:23:25 service.go:273: Matching T61C at price level 6.87
+
+ORDERBOOK 2023/09/26 15:23:25 service.go:529: Set market price: 6.87
+ORDERBOOK 2023/09/26 15:23:25 service.go:284: Matching T61C with R3KS
+ORDERBOOK 2023/09/26 15:23:25 service.go:273: Matching T61C at price level 7.78
+
+ORDERBOOK 2023/09/26 15:23:25 service.go:529: Set market price: 7.78
+ORDERBOOK 2023/09/26 15:23:25 service.go:284: Matching T61C with 1N2M
+ORDERBOOK 2023/09/26 15:23:25 service.go:273: Matching 345D at price level 5.65
+
+ORDERBOOK 2023/09/26 15:23:25 service.go:529: Set market price: 5.65
+ORDERBOOK 2023/09/26 15:23:25 service.go:284: Matching 345D with N4BA
+ORDERBOOK 2023/09/26 15:23:25 service.go:273: Matching 345D at price level 3.61
+
+ORDERBOOK 2023/09/26 15:23:25 service.go:529: Set market price: 3.61
+ORDERBOOK 2023/09/26 15:23:25 service.go:284: Matching 345D with F51S
+ORDERBOOK 2023/09/26 15:23:27 service.go:273: Matching V6Q7 at price level 5.61
+
+ORDERBOOK 2023/09/26 15:23:27 service.go:529: Set market price: 5.61
+ORDERBOOK 2023/09/26 15:23:27 service.go:284: Matching V6Q7 with CFSP
+ORDERBOOK 2023/09/26 15:23:27 service.go:273: Matching V6Q7 at price level 7.78
+
+ORDERBOOK 2023/09/26 15:23:27 service.go:529: Set market price: 7.78
+ORDERBOOK 2023/09/26 15:23:27 service.go:284: Matching V6Q7 with 1N2M
+ORDERBOOK 2023/09/26 15:23:27 service.go:273: Matching V6Q7 at price level 7.83
+
+ORDERBOOK 2023/09/26 15:23:27 service.go:529: Set market price: 7.83
+ORDERBOOK 2023/09/26 15:23:27 service.go:284: Matching V6Q7 with JPZE
+ORDERBOOK 2023/09/26 15:23:27 service.go:273: Matching 1X6Q at price level 7.83
+
+ORDERBOOK 2023/09/26 15:23:27 service.go:529: Set market price: 7.83
+ORDERBOOK 2023/09/26 15:23:27 service.go:284: Matching 1X6Q with JPZE
+ORDERBOOK 2023/09/26 15:23:29 service.go:273: Matching W1HJ at price level 7.83
+
+ORDERBOOK 2023/09/26 15:23:29 service.go:529: Set market price: 7.83
+ORDERBOOK 2023/09/26 15:23:29 service.go:284: Matching W1HJ with JPZE
+ORDERBOOK 2023/09/26 15:23:29 service.go:273: Matching W1HJ at price level 7.92
+
+ORDERBOOK 2023/09/26 15:23:29 service.go:529: Set market price: 7.92
+ORDERBOOK 2023/09/26 15:23:29 service.go:284: Matching W1HJ with CFAH
+ORDERBOOK 2023/09/26 15:23:31 service.go:273: Matching W5JC at price level 7.92
+
+ORDERBOOK 2023/09/26 15:23:31 service.go:529: Set market price: 7.92
+ORDERBOOK 2023/09/26 15:23:31 service.go:284: Matching W5JC with CFAH
+ORDERBOOK 2023/09/26 15:23:31 service.go:273: Matching W5JC at price level 7.94
+
+ORDERBOOK 2023/09/26 15:23:31 service.go:529: Set market price: 7.94
+ORDERBOOK 2023/09/26 15:23:31 service.go:284: Matching W5JC with 05QQ
+ORDERBOOK 2023/09/26 15:23:32 service.go:273: Matching DS6G at price level 7.73
+
+ORDERBOOK 2023/09/26 15:23:32 service.go:529: Set market price: 7.73
+ORDERBOOK 2023/09/26 15:23:32 service.go:284: Matching DS6G with 0YTQ
+ORDERBOOK 2023/09/26 15:23:32 service.go:273: Matching T0VF at price level 7.73
+
+ORDERBOOK 2023/09/26 15:23:32 service.go:529: Set market price: 7.73
+ORDERBOOK 2023/09/26 15:23:32 service.go:284: Matching T0VF with 0YTQ
+ORDERBOOK 2023/09/26 15:23:32 service.go:273: Matching T0VF at price level 5.45
+
+ORDERBOOK 2023/09/26 15:23:32 service.go:529: Set market price: 5.45
+ORDERBOOK 2023/09/26 15:23:32 service.go:284: Matching T0VF with M1ET
+ORDERBOOK 2023/09/26 15:23:33 service.go:273: Matching YXDT at price level 5.45
+
+ORDERBOOK 2023/09/26 15:23:33 service.go:529: Set market price: 5.45
+ORDERBOOK 2023/09/26 15:23:33 service.go:284: Matching YXDT with M1ET
+ORDERBOOK 2023/09/26 15:23:33 service.go:273: Matching YXDT at price level 3.61
+
+ORDERBOOK 2023/09/26 15:23:33 service.go:529: Set market price: 3.61
+ORDERBOOK 2023/09/26 15:23:33 service.go:284: Matching YXDT with F51S
+ORDERBOOK 2023/09/26 15:23:33 service.go:284: Matching YXDT with W2KC
+ORDERBOOK 2023/09/26 15:23:33 service.go:273: Matching V7FK at price level 7.94
+
+ORDERBOOK 2023/09/26 15:23:33 service.go:529: Set market price: 7.94
+ORDERBOOK 2023/09/26 15:23:33 service.go:284: Matching V7FK with 05QQ
+ORDERBOOK 2023/09/26 15:23:33 service.go:273: Matching V7FK at price level 7.99
+
+ORDERBOOK 2023/09/26 15:23:33 service.go:529: Set market price: 7.99
+ORDERBOOK 2023/09/26 15:23:33 service.go:284: Matching V7FK with VBMY
+ORDERBOOK 2023/09/26 15:23:34 service.go:273: Matching TX96 at price level 7.99
+
+ORDERBOOK 2023/09/26 15:23:34 service.go:529: Set market price: 7.99
+ORDERBOOK 2023/09/26 15:23:34 service.go:284: Matching TX96 with VBMY
+ORDERBOOK 2023/09/26 15:23:34 service.go:273: Matching TX96 at price level 8.73
+
+ORDERBOOK 2023/09/26 15:23:34 service.go:529: Set market price: 8.73
+ORDERBOOK 2023/09/26 15:23:34 service.go:284: Matching TX96 with 722D
+ORDERBOOK 2023/09/26 15:23:35 service.go:273: Matching J9FJ at price level 5.88
+
+ORDERBOOK 2023/09/26 15:23:35 service.go:529: Set market price: 5.88
+ORDERBOOK 2023/09/26 15:23:35 service.go:284: Matching J9FJ with MTGC
+ORDERBOOK 2023/09/26 15:23:35 service.go:273: Matching J9FJ at price level 3.61
+
+ORDERBOOK 2023/09/26 15:23:35 service.go:529: Set market price: 3.61
+ORDERBOOK 2023/09/26 15:23:35 service.go:284: Matching J9FJ with W2KC
+ORDERBOOK 2023/09/26 15:23:41 service.go:273: Matching RFMX at price level 5.56
+
+ORDERBOOK 2023/09/26 15:23:41 service.go:529: Set market price: 5.56
+ORDERBOOK 2023/09/26 15:23:41 service.go:284: Matching RFMX with PXMF
+ORDERBOOK 2023/09/26 15:23:41 service.go:273: Matching RFMX at price level 5.46
+
+ORDERBOOK 2023/09/26 15:23:41 service.go:529: Set market price: 5.46
+ORDERBOOK 2023/09/26 15:23:41 service.go:284: Matching RFMX with 04N0
+ORDERBOOK 2023/09/26 15:23:41 service.go:273: Matching WC89 at price level 5.76
+
+ORDERBOOK 2023/09/26 15:23:41 service.go:529: Set market price: 5.76
+ORDERBOOK 2023/09/26 15:23:41 service.go:284: Matching WC89 with E72G
+ORDERBOOK 2023/09/26 15:23:41 service.go:273: Matching WC89 at price level 6.28
+
+ORDERBOOK 2023/09/26 15:23:41 service.go:529: Set market price: 6.28
+ORDERBOOK 2023/09/26 15:23:41 service.go:284: Matching WC89 with H06J
+ORDERBOOK 2023/09/26 15:23:42 service.go:273: Matching STCT at price level 6.28
+
+ORDERBOOK 2023/09/26 15:23:42 service.go:529: Set market price: 6.28
+ORDERBOOK 2023/09/26 15:23:42 service.go:284: Matching STCT with H06J
+ORDERBOOK 2023/09/26 15:23:42 service.go:273: Matching STCT at price level 6.58
+
+ORDERBOOK 2023/09/26 15:23:42 service.go:529: Set market price: 6.58
+ORDERBOOK 2023/09/26 15:23:42 service.go:284: Matching STCT with VPSQ
+ORDERBOOK 2023/09/26 15:23:43 service.go:273: Matching KC3S at price level 5.46
+
+ORDERBOOK 2023/09/26 15:23:43 service.go:529: Set market price: 5.46
+ORDERBOOK 2023/09/26 15:23:43 service.go:284: Matching KC3S with 04N0
+ORDERBOOK 2023/09/26 15:23:45 service.go:273: Matching MK4R at price level 5.75
+
+ORDERBOOK 2023/09/26 15:23:45 service.go:529: Set market price: 5.75
+ORDERBOOK 2023/09/26 15:23:45 service.go:284: Matching MK4R with 9Y7F
+ORDERBOOK 2023/09/26 15:23:46 service.go:273: Matching 2DQM at price level 5.46
+
+ORDERBOOK 2023/09/26 15:23:46 service.go:529: Set market price: 5.46
+ORDERBOOK 2023/09/26 15:23:46 service.go:284: Matching 2DQM with 04N0
+ORDERBOOK 2023/09/26 15:23:46 service.go:273: Matching 2DQM at price level 4.4
+
+ORDERBOOK 2023/09/26 15:23:46 service.go:529: Set market price: 4.4
+ORDERBOOK 2023/09/26 15:23:46 service.go:284: Matching 2DQM with SA5J
+ORDERBOOK 2023/09/26 15:23:46 service.go:273: Matching 2DQM at price level 4.03
+
+ORDERBOOK 2023/09/26 15:23:46 service.go:529: Set market price: 4.03
+ORDERBOOK 2023/09/26 15:23:46 service.go:284: Matching 2DQM with 1FDP
+ORDERBOOK 2023/09/26 15:23:47 service.go:273: Matching 39HD at price level 4.03
+
+ORDERBOOK 2023/09/26 15:23:47 service.go:529: Set market price: 4.03
+ORDERBOOK 2023/09/26 15:23:47 service.go:284: Matching 39HD with 1FDP
+ORDERBOOK 2023/09/26 15:23:47 service.go:273: Matching 39HD at price level 3.61
+
+ORDERBOOK 2023/09/26 15:23:47 service.go:529: Set market price: 3.61
+ORDERBOOK 2023/09/26 15:23:47 service.go:284: Matching 39HD with W2KC
+ORDERBOOK 2023/09/26 15:23:47 service.go:273: Matching 39HD at price level 3.49
+
+ORDERBOOK 2023/09/26 15:23:47 service.go:529: Set market price: 3.49
+ORDERBOOK 2023/09/26 15:23:47 service.go:284: Matching 39HD with Q9JX
+ORDERBOOK 2023/09/26 15:23:47 service.go:273: Matching 6F57 at price level 3.49
+
+ORDERBOOK 2023/09/26 15:23:47 service.go:529: Set market price: 3.49
+ORDERBOOK 2023/09/26 15:23:47 service.go:284: Matching 6F57 with Q9JX
+ORDERBOOK 2023/09/26 15:23:47 service.go:273: Matching 6F57 at price level 3.32
+
+ORDERBOOK 2023/09/26 15:23:47 service.go:529: Set market price: 3.32
+ORDERBOOK 2023/09/26 15:23:47 service.go:284: Matching 6F57 with 4JGR
+ORDERBOOK 2023/09/26 15:23:48 service.go:273: Matching FZKX at price level 5.75
+
+ORDERBOOK 2023/09/26 15:23:48 service.go:529: Set market price: 5.75
+ORDERBOOK 2023/09/26 15:23:48 service.go:284: Matching FZKX with 9Y7F
+ORDERBOOK 2023/09/26 15:23:48 service.go:273: Matching FZKX at price level 6.58
+
+ORDERBOOK 2023/09/26 15:23:48 service.go:529: Set market price: 6.58
+ORDERBOOK 2023/09/26 15:23:48 service.go:284: Matching FZKX with VPSQ
+ORDERBOOK 2023/09/26 15:23:48 service.go:273: Matching FZKX at price level 8.35
+
+ORDERBOOK 2023/09/26 15:23:48 service.go:529: Set market price: 8.35
+ORDERBOOK 2023/09/26 15:23:48 service.go:284: Matching FZKX with KZW9
+ORDERBOOK 2023/09/26 15:23:48 service.go:273: Matching SG19 at price level 8.35
+
+ORDERBOOK 2023/09/26 15:23:48 service.go:529: Set market price: 8.35
+ORDERBOOK 2023/09/26 15:23:48 service.go:284: Matching SG19 with KZW9
+ORDERBOOK 2023/09/26 15:23:48 service.go:273: Matching SG19 at price level 8.73
+
+ORDERBOOK 2023/09/26 15:23:48 service.go:529: Set market price: 8.73
+ORDERBOOK 2023/09/26 15:23:48 service.go:284: Matching SG19 with 722D
+ORDERBOOK 2023/09/26 15:23:48 service.go:273: Matching SG19 at price level 9.15
+
+ORDERBOOK 2023/09/26 15:23:48 service.go:529: Set market price: 9.15
+ORDERBOOK 2023/09/26 15:23:48 service.go:284: Matching SG19 with AVGN
+ORDERBOOK 2023/09/26 15:23:50 service.go:273: Matching NQ1E at price level 9.15
+
+ORDERBOOK 2023/09/26 15:23:50 service.go:529: Set market price: 9.15
+ORDERBOOK 2023/09/26 15:23:50 service.go:284: Matching NQ1E with AVGN
+ORDERBOOK 2023/09/26 15:23:50 service.go:273: Matching NQ1E at price level 9.44
+
+ORDERBOOK 2023/09/26 15:23:50 service.go:529: Set market price: 9.44
+ORDERBOOK 2023/09/26 15:23:50 service.go:284: Matching NQ1E with 6275
+ORDERBOOK 2023/09/26 15:23:50 service.go:273: Matching CSBM at price level 8.2
+
+ORDERBOOK 2023/09/26 15:23:50 service.go:529: Set market price: 8.2
+ORDERBOOK 2023/09/26 15:23:50 service.go:284: Matching CSBM with BJXT
+ORDERBOOK 2023/09/26 15:23:52 service.go:273: Matching 35Z4 at price level 9.44
+
+ORDERBOOK 2023/09/26 15:23:52 service.go:529: Set market price: 9.44
+ORDERBOOK 2023/09/26 15:23:52 service.go:284: Matching 35Z4 with 6275
+ORDERBOOK 2023/09/26 15:23:52 service.go:273: Matching 35Z4 at price level 9.74
+
+ORDERBOOK 2023/09/26 15:23:52 service.go:529: Set market price: 9.74
+ORDERBOOK 2023/09/26 15:23:52 service.go:284: Matching 35Z4 with 87S2
+ORDERBOOK 2023/09/26 15:23:52 service.go:273: Matching 35Z4 at price level 9.95
+
+ORDERBOOK 2023/09/26 15:23:52 service.go:529: Set market price: 9.95
+ORDERBOOK 2023/09/26 15:23:52 service.go:284: Matching 35Z4 with DP66
+ORDERBOOK 2023/09/26 15:23:53 service.go:273: Matching GWTY at price level 9.12
+
+ORDERBOOK 2023/09/26 15:23:53 service.go:529: Set market price: 9.12
+ORDERBOOK 2023/09/26 15:23:53 service.go:284: Matching GWTY with KEH1
+ORDERBOOK 2023/09/26 15:23:53 service.go:273: Matching GWTY at price level 8.2
+
+ORDERBOOK 2023/09/26 15:23:53 service.go:529: Set market price: 8.2
+ORDERBOOK 2023/09/26 15:23:53 service.go:284: Matching GWTY with BJXT
+ORDERBOOK 2023/09/26 15:23:54 service.go:273: Matching WPKM at price level 8.2
+
+ORDERBOOK 2023/09/26 15:23:54 service.go:529: Set market price: 8.2
+ORDERBOOK 2023/09/26 15:23:54 service.go:284: Matching WPKM with BJXT
+ORDERBOOK 2023/09/26 15:23:54 service.go:273: Matching WPKM at price level 6.52
+
+ORDERBOOK 2023/09/26 15:23:54 service.go:529: Set market price: 6.52
+ORDERBOOK 2023/09/26 15:23:54 service.go:284: Matching WPKM with 4EF7
+ORDERBOOK 2023/09/26 15:23:55 service.go:273: Matching X0NE at price level 9.47
+
+ORDERBOOK 2023/09/26 15:23:55 service.go:529: Set market price: 9.47
+ORDERBOOK 2023/09/26 15:23:55 service.go:284: Matching X0NE with RVXC
+ORDERBOOK 2023/09/26 15:23:55 service.go:273: Matching X0NE at price level 9.95
+
+ORDERBOOK 2023/09/26 15:23:55 service.go:529: Set market price: 9.95
+ORDERBOOK 2023/09/26 15:23:55 service.go:284: Matching X0NE with DP66
+ORDERBOOK 2023/09/26 15:23:55 service.go:273: Matching KF4B at price level 7.55
+
+ORDERBOOK 2023/09/26 15:23:55 service.go:529: Set market price: 7.55
+ORDERBOOK 2023/09/26 15:23:55 service.go:284: Matching KF4B with 0MQ4
+ORDERBOOK 2023/09/26 15:23:56 service.go:273: Matching ZZ5Q at price level 9.95
+
+ORDERBOOK 2023/09/26 15:23:56 service.go:529: Set market price: 9.95
+ORDERBOOK 2023/09/26 15:23:56 service.go:284: Matching ZZ5Q with DP66
+ORDERBOOK 2023/09/26 15:23:56 service.go:273: Matching ZZ5Q at price level 10.1
+
+ORDERBOOK 2023/09/26 15:23:56 service.go:529: Set market price: 10.1
+ORDERBOOK 2023/09/26 15:23:56 service.go:284: Matching ZZ5Q with R9DY
+ORDERBOOK 2023/09/26 15:23:58 service.go:273: Matching HEG3 at price level 9.06
+
+ORDERBOOK 2023/09/26 15:23:58 service.go:529: Set market price: 9.06
+ORDERBOOK 2023/09/26 15:23:58 service.go:284: Matching HEG3 with YAGE
+ORDERBOOK 2023/09/26 15:23:58 service.go:273: Matching HEG3 at price level 9.13
+
+ORDERBOOK 2023/09/26 15:23:58 service.go:529: Set market price: 9.13
+ORDERBOOK 2023/09/26 15:23:58 service.go:284: Matching HEG3 with 917P
+ORDERBOOK 2023/09/26 15:23:59 service.go:273: Matching 4WH5 at price level 9.13
+
+ORDERBOOK 2023/09/26 15:23:59 service.go:529: Set market price: 9.13
+ORDERBOOK 2023/09/26 15:23:59 service.go:284: Matching 4WH5 with 917P
+ORDERBOOK 2023/09/26 15:23:59 service.go:273: Matching 4WH5 at price level 10.1
+
+ORDERBOOK 2023/09/26 15:23:59 service.go:529: Set market price: 10.1
+ORDERBOOK 2023/09/26 15:23:59 service.go:284: Matching 4WH5 with R9DY
+ORDERBOOK 2023/09/26 15:23:59 service.go:273: Matching 4WH5 at price level 10.16
+
+ORDERBOOK 2023/09/26 15:23:59 service.go:529: Set market price: 10.16
+ORDERBOOK 2023/09/26 15:23:59 service.go:284: Matching 4WH5 with F34K
+ORDERBOOK 2023/09/26 15:24:00 service.go:273: Matching F5D1 at price level 9.02
+
+ORDERBOOK 2023/09/26 15:24:00 service.go:529: Set market price: 9.02
+ORDERBOOK 2023/09/26 15:24:00 service.go:284: Matching F5D1 with 5M7R
+ORDERBOOK 2023/09/26 15:24:01 service.go:273: Matching QDRD at price level 9.02
+
+ORDERBOOK 2023/09/26 15:24:01 service.go:529: Set market price: 9.02
+ORDERBOOK 2023/09/26 15:24:01 service.go:284: Matching QDRD with 5M7R
+ORDERBOOK 2023/09/26 15:24:01 service.go:273: Matching QDRD at price level 7.55
+
+ORDERBOOK 2023/09/26 15:24:01 service.go:529: Set market price: 7.55
+ORDERBOOK 2023/09/26 15:24:01 service.go:284: Matching QDRD with 0MQ4
+ORDERBOOK 2023/09/26 15:24:01 service.go:273: Matching QDRD at price level 7.17
+
+ORDERBOOK 2023/09/26 15:24:01 service.go:529: Set market price: 7.17
+ORDERBOOK 2023/09/26 15:24:01 service.go:284: Matching QDRD with XXQH
+ORDERBOOK 2023/09/26 15:24:02 service.go:273: Matching S9ZS at price level 10.16
+
+ORDERBOOK 2023/09/26 15:24:02 service.go:529: Set market price: 10.16
+ORDERBOOK 2023/09/26 15:24:02 service.go:284: Matching S9ZS with F34K
+ORDERBOOK 2023/09/26 15:24:02 service.go:273: Matching S9ZS at price level 10.25
+
+ORDERBOOK 2023/09/26 15:24:02 service.go:529: Set market price: 10.25
+ORDERBOOK 2023/09/26 15:24:02 service.go:284: Matching S9ZS with JA0M
+ORDERBOOK 2023/09/26 15:24:02 service.go:273: Matching F0FH at price level 10.25
+
+ORDERBOOK 2023/09/26 15:24:02 service.go:529: Set market price: 10.25
+ORDERBOOK 2023/09/26 15:24:02 service.go:284: Matching F0FH with JA0M
+ORDERBOOK 2023/09/26 15:24:02 service.go:273: Matching F0FH at price level 10.28
+
+ORDERBOOK 2023/09/26 15:24:02 service.go:529: Set market price: 10.28
+ORDERBOOK 2023/09/26 15:24:02 service.go:284: Matching F0FH with 9CWR
+ORDERBOOK 2023/09/26 15:24:07 service.go:273: Matching DZCZ at price level 9.38
+
+ORDERBOOK 2023/09/26 15:24:07 service.go:529: Set market price: 9.38
+ORDERBOOK 2023/09/26 15:24:07 service.go:284: Matching DZCZ with FHVS
+ORDERBOOK 2023/09/26 15:24:08 service.go:273: Matching 3EBN at price level 9.38
+
+ORDERBOOK 2023/09/26 15:24:08 service.go:529: Set market price: 9.38
+ORDERBOOK 2023/09/26 15:24:08 service.go:284: Matching 3EBN with FHVS
+ORDERBOOK 2023/09/26 15:24:08 service.go:273: Matching 3EBN at price level 9.34
+
+ORDERBOOK 2023/09/26 15:24:08 service.go:529: Set market price: 9.34
+ORDERBOOK 2023/09/26 15:24:08 service.go:284: Matching 3EBN with 9687
+ORDERBOOK 2023/09/26 15:24:09 service.go:273: Matching XHWE at price level 9.34
+
+ORDERBOOK 2023/09/26 15:24:09 service.go:529: Set market price: 9.34
+ORDERBOOK 2023/09/26 15:24:09 service.go:284: Matching XHWE with 9687
+ORDERBOOK 2023/09/26 15:24:09 service.go:273: Matching XHWE at price level 7.17
+
+ORDERBOOK 2023/09/26 15:24:09 service.go:529: Set market price: 7.17
+ORDERBOOK 2023/09/26 15:24:09 service.go:284: Matching XHWE with XXQH
+ORDERBOOK 2023/09/26 15:24:09 service.go:273: Matching DTFP at price level 7.17
+
+ORDERBOOK 2023/09/26 15:24:09 service.go:529: Set market price: 7.17
+ORDERBOOK 2023/09/26 15:24:09 service.go:284: Matching DTFP with XXQH
+ORDERBOOK 2023/09/26 15:24:09 service.go:273: Matching DTFP at price level 6.58
+
+ORDERBOOK 2023/09/26 15:24:09 service.go:529: Set market price: 6.58
+ORDERBOOK 2023/09/26 15:24:09 service.go:284: Matching DTFP with W74M
+ORDERBOOK 2023/09/26 15:24:12 service.go:273: Matching AH68 at price level 6.92
+
+ORDERBOOK 2023/09/26 15:24:12 service.go:529: Set market price: 6.92
+ORDERBOOK 2023/09/26 15:24:12 service.go:284: Matching AH68 with MECQ
+ORDERBOOK 2023/09/26 15:24:12 service.go:273: Matching YE6K at price level 6.58
+
+ORDERBOOK 2023/09/26 15:24:12 service.go:529: Set market price: 6.58
+ORDERBOOK 2023/09/26 15:24:12 service.go:284: Matching YE6K with W74M
+ORDERBOOK 2023/09/26 15:24:12 service.go:273: Matching YE6K at price level 6.52
+
+ORDERBOOK 2023/09/26 15:24:12 service.go:529: Set market price: 6.52
+ORDERBOOK 2023/09/26 15:24:12 service.go:284: Matching YE6K with 4EF7
+ORDERBOOK 2023/09/26 15:24:12 service.go:273: Matching YE6K at price level 5.83
+
+ORDERBOOK 2023/09/26 15:24:12 service.go:529: Set market price: 5.83
+ORDERBOOK 2023/09/26 15:24:12 service.go:284: Matching YE6K with 4FR3
+ORDERBOOK 2023/09/26 15:24:14 service.go:273: Matching NXC5 at price level 5.83
+
+ORDERBOOK 2023/09/26 15:24:14 service.go:529: Set market price: 5.83
+ORDERBOOK 2023/09/26 15:24:14 service.go:284: Matching NXC5 with 4FR3
+ORDERBOOK 2023/09/26 15:24:14 service.go:273: Matching NXC5 at price level 5.23
+
+ORDERBOOK 2023/09/26 15:24:14 service.go:529: Set market price: 5.23
+ORDERBOOK 2023/09/26 15:24:14 service.go:284: Matching NXC5 with XVDS
+ORDERBOOK 2023/09/26 15:24:15 service.go:273: Matching CJBP at price level 5.36
+
+ORDERBOOK 2023/09/26 15:24:15 service.go:529: Set market price: 5.36
+ORDERBOOK 2023/09/26 15:24:15 service.go:284: Matching CJBP with 2QMG
+ORDERBOOK 2023/09/26 15:24:15 service.go:273: Matching SDF8 at price level 5.36
+
+ORDERBOOK 2023/09/26 15:24:15 service.go:529: Set market price: 5.36
+ORDERBOOK 2023/09/26 15:24:15 service.go:284: Matching SDF8 with 2QMG
+ORDERBOOK 2023/09/26 15:24:15 service.go:273: Matching SDF8 at price level 5.23
+
+ORDERBOOK 2023/09/26 15:24:15 service.go:529: Set market price: 5.23
+ORDERBOOK 2023/09/26 15:24:15 service.go:284: Matching SDF8 with XVDS
+ORDERBOOK 2023/09/26 15:24:15 service.go:273: Matching SDF8 at price level 5
+
+ORDERBOOK 2023/09/26 15:24:15 service.go:529: Set market price: 5
+ORDERBOOK 2023/09/26 15:24:15 service.go:284: Matching SDF8 with Q3A1
+ORDERBOOK 2023/09/26 15:24:16 service.go:273: Matching 247G at price level 5
+
+ORDERBOOK 2023/09/26 15:24:16 service.go:529: Set market price: 5
+ORDERBOOK 2023/09/26 15:24:16 service.go:284: Matching 247G with Q3A1
+ORDERBOOK 2023/09/26 15:24:16 service.go:273: Matching 247G at price level 4.85
+
+ORDERBOOK 2023/09/26 15:24:16 service.go:529: Set market price: 4.85
+ORDERBOOK 2023/09/26 15:24:16 service.go:284: Matching 247G with JN33
+ORDERBOOK 2023/09/26 15:24:17 service.go:273: Matching 63TX at price level 6.34
+
+ORDERBOOK 2023/09/26 15:24:17 service.go:529: Set market price: 6.34
+ORDERBOOK 2023/09/26 15:24:17 service.go:284: Matching 63TX with 614J
+ORDERBOOK 2023/09/26 15:24:17 service.go:273: Matching 63TX at price level 6.92
+
+ORDERBOOK 2023/09/26 15:24:17 service.go:529: Set market price: 6.92
+ORDERBOOK 2023/09/26 15:24:17 service.go:284: Matching 63TX with MECQ
+ORDERBOOK 2023/09/26 15:24:18 service.go:273: Matching 13JP at price level 4.85
+
+ORDERBOOK 2023/09/26 15:24:18 service.go:529: Set market price: 4.85
+ORDERBOOK 2023/09/26 15:24:18 service.go:284: Matching 13JP with JN33
+ORDERBOOK 2023/09/26 15:24:18 service.go:273: Matching 13JP at price level 3.91
+
+ORDERBOOK 2023/09/26 15:24:18 service.go:529: Set market price: 3.91
+ORDERBOOK 2023/09/26 15:24:18 service.go:284: Matching 13JP with QY53
+ORDERBOOK 2023/09/26 15:24:20 service.go:273: Matching RNSA at price level 3.91
+
+ORDERBOOK 2023/09/26 15:24:20 service.go:529: Set market price: 3.91
+ORDERBOOK 2023/09/26 15:24:20 service.go:284: Matching RNSA with QY53
+ORDERBOOK 2023/09/26 15:24:20 service.go:273: Matching RNSA at price level 3.4
+
+ORDERBOOK 2023/09/26 15:24:20 service.go:529: Set market price: 3.4
+ORDERBOOK 2023/09/26 15:24:20 service.go:284: Matching RNSA with DGJQ
+ORDERBOOK 2023/09/26 15:24:20 service.go:273: Matching WAJC at price level 3.4
+
+ORDERBOOK 2023/09/26 15:24:20 service.go:529: Set market price: 3.4
+ORDERBOOK 2023/09/26 15:24:20 service.go:284: Matching WAJC with DGJQ
+ORDERBOOK 2023/09/26 15:24:20 service.go:273: Matching WAJC at price level 3.32
+
+ORDERBOOK 2023/09/26 15:24:20 service.go:529: Set market price: 3.32
+ORDERBOOK 2023/09/26 15:24:20 service.go:284: Matching WAJC with 4JGR
+ORDERBOOK 2023/09/26 15:24:21 service.go:273: Matching XZ8G at price level 3.32
+
+ORDERBOOK 2023/09/26 15:24:21 service.go:529: Set market price: 3.32
+ORDERBOOK 2023/09/26 15:24:21 service.go:284: Matching XZ8G with 4JGR
+ORDERBOOK 2023/09/26 15:24:21 service.go:273: Matching XZ8G at price level 2.81
+
+ORDERBOOK 2023/09/26 15:24:21 service.go:529: Set market price: 2.81
+ORDERBOOK 2023/09/26 15:24:21 service.go:284: Matching XZ8G with 2CWB
+ORDERBOOK 2023/09/26 15:24:21 service.go:273: Matching J7YS at price level 2.81
+
+ORDERBOOK 2023/09/26 15:24:21 service.go:529: Set market price: 2.81
+ORDERBOOK 2023/09/26 15:24:21 service.go:284: Matching J7YS with 2CWB
+ORDERBOOK 2023/09/26 15:24:21 service.go:273: Matching J7YS at price level 2.69
+
+ORDERBOOK 2023/09/26 15:24:21 service.go:529: Set market price: 2.69
+ORDERBOOK 2023/09/26 15:24:21 service.go:284: Matching J7YS with 11AE
+ORDERBOOK 2023/09/26 15:24:21 service.go:273: Matching J7YS at price level 2.65
+
+ORDERBOOK 2023/09/26 15:24:21 service.go:529: Set market price: 2.65
+ORDERBOOK 2023/09/26 15:24:21 service.go:284: Matching J7YS with WT2K
+ORDERBOOK 2023/09/26 15:24:22 service.go:273: Matching QNZQ at price level 5.54
+
+ORDERBOOK 2023/09/26 15:24:22 service.go:529: Set market price: 5.54
+ORDERBOOK 2023/09/26 15:24:22 service.go:284: Matching QNZQ with ZCA7
+ORDERBOOK 2023/09/26 15:24:22 service.go:273: Matching WBDD at price level 5.54
+
+ORDERBOOK 2023/09/26 15:24:22 service.go:529: Set market price: 5.54
+ORDERBOOK 2023/09/26 15:24:22 service.go:284: Matching WBDD with ZCA7
+ORDERBOOK 2023/09/26 15:24:22 service.go:273: Matching DC8G at price level 5.54
+
+ORDERBOOK 2023/09/26 15:24:22 service.go:529: Set market price: 5.54
+ORDERBOOK 2023/09/26 15:24:22 service.go:284: Matching DC8G with ZCA7
+ORDERBOOK 2023/09/26 15:24:22 service.go:273: Matching XT46 at price level 5.54
+
+ORDERBOOK 2023/09/26 15:24:22 service.go:529: Set market price: 5.54
+ORDERBOOK 2023/09/26 15:24:22 service.go:284: Matching XT46 with ZCA7
+ORDERBOOK 2023/09/26 15:24:23 service.go:273: Matching ZG4X at price level 5.54
+
+ORDERBOOK 2023/09/26 15:24:23 service.go:529: Set market price: 5.54
+ORDERBOOK 2023/09/26 15:24:23 service.go:284: Matching ZG4X with ZCA7
+ORDERBOOK 2023/09/26 15:24:23 service.go:273: Matching 0DZA at price level 3.44
+
+ORDERBOOK 2023/09/26 15:24:23 service.go:529: Set market price: 3.44
+ORDERBOOK 2023/09/26 15:24:23 service.go:284: Matching 0DZA with Q4SG
+ORDERBOOK 2023/09/26 15:24:23 service.go:273: Matching MZHP at price level 3.44
+
+ORDERBOOK 2023/09/26 15:24:23 service.go:529: Set market price: 3.44
+ORDERBOOK 2023/09/26 15:24:23 service.go:284: Matching MZHP with Q4SG
+ORDERBOOK 2023/09/26 15:24:23 service.go:273: Matching HEQM at price level 2.65
+
+ORDERBOOK 2023/09/26 15:24:23 service.go:529: Set market price: 2.65
+ORDERBOOK 2023/09/26 15:24:23 service.go:284: Matching HEQM with WT2K
+ORDERBOOK 2023/09/26 15:24:23 service.go:273: Matching SZK3 at price level 3.44
+
+ORDERBOOK 2023/09/26 15:24:23 service.go:529: Set market price: 3.44
+ORDERBOOK 2023/09/26 15:24:23 service.go:284: Matching SZK3 with Q4SG
+ORDERBOOK 2023/09/26 15:24:24 service.go:273: Matching BVS9 at price level 3.44
+
+ORDERBOOK 2023/09/26 15:24:24 service.go:529: Set market price: 3.44
+ORDERBOOK 2023/09/26 15:24:24 service.go:284: Matching BVS9 with Q4SG
+ORDERBOOK 2023/09/26 15:24:24 service.go:273: Matching 0GXN at price level 3.44
+
+ORDERBOOK 2023/09/26 15:24:24 service.go:529: Set market price: 3.44
+ORDERBOOK 2023/09/26 15:24:24 service.go:284: Matching 0GXN with Q4SG
+ORDERBOOK 2023/09/26 15:24:24 service.go:273: Matching YMJE at price level 3.44
+
+ORDERBOOK 2023/09/26 15:24:24 service.go:529: Set market price: 3.44
+ORDERBOOK 2023/09/26 15:24:24 service.go:284: Matching YMJE with Q4SG
+ORDERBOOK 2023/09/26 15:24:24 service.go:273: Matching 93MH at price level 3.44
+
+ORDERBOOK 2023/09/26 15:24:24 service.go:529: Set market price: 3.44
+ORDERBOOK 2023/09/26 15:24:24 service.go:284: Matching 93MH with Q4SG
+ORDERBOOK 2023/09/26 15:24:24 service.go:273: Matching 93MH at price level 5.54
+
+ORDERBOOK 2023/09/26 15:24:24 service.go:529: Set market price: 5.54
+ORDERBOOK 2023/09/26 15:24:24 service.go:284: Matching 93MH with ZCA7
+ORDERBOOK 2023/09/26 15:24:24 service.go:273: Matching 93MH at price level 6.92
+
+ORDERBOOK 2023/09/26 15:24:24 service.go:529: Set market price: 6.92
+ORDERBOOK 2023/09/26 15:24:24 service.go:284: Matching 93MH with MECQ
+ORDERBOOK 2023/09/26 15:24:24 service.go:273: Matching 93MH at price level 7.27
+
+ORDERBOOK 2023/09/26 15:24:24 service.go:529: Set market price: 7.27
+ORDERBOOK 2023/09/26 15:24:24 service.go:284: Matching 93MH with BQF3
+ORDERBOOK 2023/09/26 15:24:24 service.go:273: Matching 6CJ8 at price level 7.27
+
+ORDERBOOK 2023/09/26 15:24:24 service.go:529: Set market price: 7.27
+ORDERBOOK 2023/09/26 15:24:24 service.go:284: Matching 6CJ8 with BQF3
+ORDERBOOK 2023/09/26 15:24:25 service.go:273: Matching QPV8 at price level 7.27
+
+ORDERBOOK 2023/09/26 15:24:25 service.go:529: Set market price: 7.27
+ORDERBOOK 2023/09/26 15:24:25 service.go:284: Matching QPV8 with BQF3
+ORDERBOOK 2023/09/26 15:24:25 service.go:273: Matching YHJW at price level 2.65
+
+ORDERBOOK 2023/09/26 15:24:25 service.go:529: Set market price: 2.65
+ORDERBOOK 2023/09/26 15:24:25 service.go:284: Matching YHJW with WT2K
+ORDERBOOK 2023/09/26 15:24:25 service.go:273: Matching YHJW at price level 2.58
+
+ORDERBOOK 2023/09/26 15:24:25 service.go:529: Set market price: 2.58
+ORDERBOOK 2023/09/26 15:24:25 service.go:284: Matching YHJW with 4TXW
+ORDERBOOK 2023/09/26 15:24:25 service.go:273: Matching YHJW at price level 2.18
+
+ORDERBOOK 2023/09/26 15:24:25 service.go:529: Set market price: 2.18
+ORDERBOOK 2023/09/26 15:24:25 service.go:284: Matching YHJW with WNH3
+ORDERBOOK 2023/09/26 15:24:25 service.go:273: Matching 0C8Q at price level 7.27
+
+ORDERBOOK 2023/09/26 15:24:25 service.go:529: Set market price: 7.27
+ORDERBOOK 2023/09/26 15:24:25 service.go:284: Matching 0C8Q with BQF3
+ORDERBOOK 2023/09/26 15:24:25 service.go:273: Matching 0C8Q at price level 9.21
+
+ORDERBOOK 2023/09/26 15:24:25 service.go:529: Set market price: 9.21
+ORDERBOOK 2023/09/26 15:24:25 service.go:284: Matching 0C8Q with F47P
+ORDERBOOK 2023/09/26 15:24:25 service.go:273: Matching TK4G at price level 9.21
+
+ORDERBOOK 2023/09/26 15:24:25 service.go:529: Set market price: 9.21
+ORDERBOOK 2023/09/26 15:24:25 service.go:284: Matching TK4G with F47P
+ORDERBOOK 2023/09/26 15:24:25 service.go:273: Matching 2DS4 at price level 9.21
+
+ORDERBOOK 2023/09/26 15:24:25 service.go:529: Set market price: 9.21
+ORDERBOOK 2023/09/26 15:24:25 service.go:284: Matching 2DS4 with F47P
+ORDERBOOK 2023/09/26 15:24:25 service.go:273: Matching 2DS4 at price level 9.65
+
+ORDERBOOK 2023/09/26 15:24:25 service.go:529: Set market price: 9.65
+ORDERBOOK 2023/09/26 15:24:25 service.go:284: Matching 2DS4 with WY7T
+ORDERBOOK 2023/09/26 15:24:25 service.go:273: Matching GKCC at price level 9.65
+
+ORDERBOOK 2023/09/26 15:24:25 service.go:529: Set market price: 9.65
+ORDERBOOK 2023/09/26 15:24:25 service.go:284: Matching GKCC with WY7T
+ORDERBOOK 2023/09/26 15:24:26 service.go:273: Matching TXA6 at price level 9.65
+
+ORDERBOOK 2023/09/26 15:24:26 service.go:529: Set market price: 9.65
+ORDERBOOK 2023/09/26 15:24:26 service.go:284: Matching TXA6 with WY7T
+ORDERBOOK 2023/09/26 15:24:26 service.go:273: Matching SDWM at price level 9.65
+
+ORDERBOOK 2023/09/26 15:24:26 service.go:529: Set market price: 9.65
+ORDERBOOK 2023/09/26 15:24:26 service.go:284: Matching SDWM with WY7T
+ORDERBOOK 2023/09/26 15:24:26 service.go:273: Matching 4DAT at price level 9.65
+
+ORDERBOOK 2023/09/26 15:24:26 service.go:529: Set market price: 9.65
+ORDERBOOK 2023/09/26 15:24:26 service.go:284: Matching 4DAT with WY7T
+ORDERBOOK 2023/09/26 15:24:26 service.go:273: Matching EKWF at price level 9.65
+
+ORDERBOOK 2023/09/26 15:24:26 service.go:529: Set market price: 9.65
+ORDERBOOK 2023/09/26 15:24:26 service.go:284: Matching EKWF with WY7T
+ORDERBOOK 2023/09/26 15:24:26 service.go:273: Matching CC9G at price level 9.65
+
+ORDERBOOK 2023/09/26 15:24:26 service.go:529: Set market price: 9.65
+ORDERBOOK 2023/09/26 15:24:26 service.go:284: Matching CC9G with WY7T
+ORDERBOOK 2023/09/26 15:24:27 service.go:273: Matching CMY6 at price level 9.65
+
+ORDERBOOK 2023/09/26 15:24:27 service.go:529: Set market price: 9.65
+ORDERBOOK 2023/09/26 15:24:27 service.go:284: Matching CMY6 with WY7T
+ORDERBOOK 2023/09/26 15:24:27 service.go:273: Matching CMY6 at price level 9.9
+
+ORDERBOOK 2023/09/26 15:24:27 service.go:529: Set market price: 9.9
+ORDERBOOK 2023/09/26 15:24:27 service.go:284: Matching CMY6 with WEBM
+ORDERBOOK 2023/09/26 15:24:27 service.go:273: Matching 5ZCC at price level 9.9
+
+ORDERBOOK 2023/09/26 15:24:27 service.go:529: Set market price: 9.9
+ORDERBOOK 2023/09/26 15:24:27 service.go:284: Matching 5ZCC with WEBM
+ORDERBOOK 2023/09/26 15:24:27 service.go:273: Matching JXN3 at price level 9.9
+
+ORDERBOOK 2023/09/26 15:24:27 service.go:529: Set market price: 9.9
+ORDERBOOK 2023/09/26 15:24:27 service.go:284: Matching JXN3 with WEBM
+ORDERBOOK 2023/09/26 15:24:27 service.go:273: Matching 1NVM at price level 9.9
+
+ORDERBOOK 2023/09/26 15:24:27 service.go:529: Set market price: 9.9
+ORDERBOOK 2023/09/26 15:24:27 service.go:284: Matching 1NVM with WEBM
+ORDERBOOK 2023/09/26 15:24:27 service.go:273: Matching 1NVM at price level 9.94
+
+ORDERBOOK 2023/09/26 15:24:27 service.go:529: Set market price: 9.94
+ORDERBOOK 2023/09/26 15:24:27 service.go:284: Matching 1NVM with YXPA
+ORDERBOOK 2023/09/26 15:24:27 service.go:273: Matching 286Y at price level 9.94
+
+ORDERBOOK 2023/09/26 15:24:27 service.go:529: Set market price: 9.94
+ORDERBOOK 2023/09/26 15:24:27 service.go:284: Matching 286Y with YXPA
+ORDERBOOK 2023/09/26 15:24:27 service.go:273: Matching 286Y at price level 10.02
+
+ORDERBOOK 2023/09/26 15:24:27 service.go:529: Set market price: 10.02
+ORDERBOOK 2023/09/26 15:24:27 service.go:284: Matching 286Y with RZP1
+ORDERBOOK 2023/09/26 15:24:27 service.go:273: Matching C90V at price level 10.02
+
+ORDERBOOK 2023/09/26 15:24:27 service.go:529: Set market price: 10.02
+ORDERBOOK 2023/09/26 15:24:27 service.go:284: Matching C90V with RZP1
+ORDERBOOK 2023/09/26 15:24:28 service.go:273: Matching Q6X7 at price level 10.02
+
+ORDERBOOK 2023/09/26 15:24:28 service.go:529: Set market price: 10.02
+ORDERBOOK 2023/09/26 15:24:28 service.go:284: Matching Q6X7 with RZP1
+ORDERBOOK 2023/09/26 15:24:28 service.go:273: Matching 6XJ6 at price level 10.02
+
+ORDERBOOK 2023/09/26 15:24:28 service.go:529: Set market price: 10.02
+ORDERBOOK 2023/09/26 15:24:28 service.go:284: Matching 6XJ6 with RZP1
+ORDERBOOK 2023/09/26 15:24:28 service.go:273: Matching PG4P at price level 10.02
+
+ORDERBOOK 2023/09/26 15:24:28 service.go:529: Set market price: 10.02
+ORDERBOOK 2023/09/26 15:24:28 service.go:284: Matching PG4P with RZP1
+ORDERBOOK 2023/09/26 15:24:28 service.go:273: Matching CHX0 at price level 10.02
+
+ORDERBOOK 2023/09/26 15:24:28 service.go:529: Set market price: 10.02
+ORDERBOOK 2023/09/26 15:24:28 service.go:284: Matching CHX0 with RZP1
+ORDERBOOK 2023/09/26 15:24:28 service.go:273: Matching CHX0 at price level 10.28
+
+ORDERBOOK 2023/09/26 15:24:28 service.go:529: Set market price: 10.28
+ORDERBOOK 2023/09/26 15:24:28 service.go:284: Matching CHX0 with 9CWR
+ORDERBOOK 2023/09/26 15:24:28 service.go:273: Matching CHX0 at price level 10.54
+
+ORDERBOOK 2023/09/26 15:24:28 service.go:529: Set market price: 10.54
+ORDERBOOK 2023/09/26 15:24:28 service.go:284: Matching CHX0 with SXSX
+ORDERBOOK 2023/09/26 15:24:29 service.go:273: Matching FBTJ at price level 10.54
+
+ORDERBOOK 2023/09/26 15:24:29 service.go:529: Set market price: 10.54
+ORDERBOOK 2023/09/26 15:24:29 service.go:284: Matching FBTJ with SXSX
+ORDERBOOK 2023/09/26 15:24:29 service.go:273: Matching CDQ8 at price level 10.54
+
+ORDERBOOK 2023/09/26 15:24:29 service.go:529: Set market price: 10.54
+ORDERBOOK 2023/09/26 15:24:29 service.go:284: Matching CDQ8 with SXSX
+ORDERBOOK 2023/09/26 15:24:29 service.go:273: Matching CDQ8 at price level 10.87
+
+ORDERBOOK 2023/09/26 15:24:29 service.go:529: Set market price: 10.87
+ORDERBOOK 2023/09/26 15:24:29 service.go:284: Matching CDQ8 with 6KVH
+ORDERBOOK 2023/09/26 15:24:29 service.go:273: Matching FB67 at price level 10.87
+
+ORDERBOOK 2023/09/26 15:24:29 service.go:529: Set market price: 10.87
+ORDERBOOK 2023/09/26 15:24:29 service.go:284: Matching FB67 with 6KVH
+ORDERBOOK 2023/09/26 15:24:29 service.go:273: Matching 5320 at price level 10.87
+
+ORDERBOOK 2023/09/26 15:24:29 service.go:529: Set market price: 10.87
+ORDERBOOK 2023/09/26 15:24:29 service.go:284: Matching 5320 with 6KVH
+ORDERBOOK 2023/09/26 15:24:29 service.go:273: Matching 5320 at price level 11.49
+
+ORDERBOOK 2023/09/26 15:24:29 service.go:529: Set market price: 11.49
+ORDERBOOK 2023/09/26 15:24:29 service.go:284: Matching 5320 with 16QY
+ORDERBOOK 2023/09/26 15:24:29 service.go:273: Matching C4BW at price level 11.49
+
+ORDERBOOK 2023/09/26 15:24:29 service.go:529: Set market price: 11.49
+ORDERBOOK 2023/09/26 15:24:29 service.go:284: Matching C4BW with 16QY
+ORDERBOOK 2023/09/26 15:24:30 service.go:273: Matching XDF0 at price level 11.49
+
+ORDERBOOK 2023/09/26 15:24:30 service.go:529: Set market price: 11.49
+ORDERBOOK 2023/09/26 15:24:30 service.go:284: Matching XDF0 with 16QY
+ORDERBOOK 2023/09/26 15:24:30 service.go:273: Matching 6GTK at price level 11.49
+
+ORDERBOOK 2023/09/26 15:24:30 service.go:529: Set market price: 11.49
+ORDERBOOK 2023/09/26 15:24:30 service.go:284: Matching 6GTK with 16QY
+ORDERBOOK 2023/09/26 15:24:30 service.go:273: Matching M90S at price level 11.49
+
+ORDERBOOK 2023/09/26 15:24:30 service.go:529: Set market price: 11.49
+ORDERBOOK 2023/09/26 15:24:30 service.go:284: Matching M90S with 16QY
+ORDERBOOK 2023/09/26 15:24:30 service.go:273: Matching ZQVX at price level 8.91
+
+ORDERBOOK 2023/09/26 15:24:30 service.go:529: Set market price: 8.91
+ORDERBOOK 2023/09/26 15:24:30 service.go:284: Matching ZQVX with DWBW
+ORDERBOOK 2023/09/26 15:24:31 service.go:273: Matching WNRZ at price level 11.49
+
+ORDERBOOK 2023/09/26 15:24:31 service.go:529: Set market price: 11.49
+ORDERBOOK 2023/09/26 15:24:31 service.go:284: Matching WNRZ with 16QY
+ORDERBOOK 2023/09/26 15:24:31 service.go:273: Matching WNRZ at price level 12.39
+
+ORDERBOOK 2023/09/26 15:24:31 service.go:529: Set market price: 12.39
+ORDERBOOK 2023/09/26 15:24:31 service.go:284: Matching WNRZ with R053
+ORDERBOOK 2023/09/26 15:24:31 service.go:273: Matching 114S at price level 12.39
+
+ORDERBOOK 2023/09/26 15:24:31 service.go:529: Set market price: 12.39
+ORDERBOOK 2023/09/26 15:24:31 service.go:284: Matching 114S with R053
+ORDERBOOK 2023/09/26 15:24:31 service.go:273: Matching 6A42 at price level 12.39
+
+ORDERBOOK 2023/09/26 15:24:31 service.go:529: Set market price: 12.39
+ORDERBOOK 2023/09/26 15:24:31 service.go:284: Matching 6A42 with R053
+ORDERBOOK 2023/09/26 15:24:31 service.go:273: Matching F172 at price level 12.39
+
+ORDERBOOK 2023/09/26 15:24:31 service.go:529: Set market price: 12.39
+ORDERBOOK 2023/09/26 15:24:31 service.go:284: Matching F172 with R053
+ORDERBOOK 2023/09/26 15:24:31 service.go:273: Matching F172 at price level 12.42
+
+ORDERBOOK 2023/09/26 15:24:31 service.go:529: Set market price: 12.42
+ORDERBOOK 2023/09/26 15:24:31 service.go:284: Matching F172 with 9H8G
+ORDERBOOK 2023/09/26 15:24:31 service.go:273: Matching 2FAB at price level 12.42
+
+ORDERBOOK 2023/09/26 15:24:31 service.go:529: Set market price: 12.42
+ORDERBOOK 2023/09/26 15:24:31 service.go:284: Matching 2FAB with 9H8G
+ORDERBOOK 2023/09/26 15:24:31 service.go:273: Matching GWPS at price level 12.42
+
+ORDERBOOK 2023/09/26 15:24:31 service.go:529: Set market price: 12.42
+ORDERBOOK 2023/09/26 15:24:31 service.go:284: Matching GWPS with 9H8G
+ORDERBOOK 2023/09/26 15:24:32 service.go:273: Matching 1480 at price level 12.42
+
+ORDERBOOK 2023/09/26 15:24:32 service.go:529: Set market price: 12.42
+ORDERBOOK 2023/09/26 15:24:32 service.go:284: Matching 1480 with 9H8G
+ORDERBOOK 2023/09/26 15:24:32 service.go:273: Matching BXZ7 at price level 12.42
+
+ORDERBOOK 2023/09/26 15:24:32 service.go:529: Set market price: 12.42
+ORDERBOOK 2023/09/26 15:24:32 service.go:284: Matching BXZ7 with 9H8G
+ORDERBOOK 2023/09/26 15:24:32 service.go:273: Matching 030T at price level 12.42
+
+ORDERBOOK 2023/09/26 15:24:32 service.go:529: Set market price: 12.42
+ORDERBOOK 2023/09/26 15:24:32 service.go:284: Matching 030T with 9H8G
+ORDERBOOK 2023/09/26 15:24:32 service.go:273: Matching 4ANZ at price level 12.42
+
+ORDERBOOK 2023/09/26 15:24:32 service.go:529: Set market price: 12.42
+ORDERBOOK 2023/09/26 15:24:32 service.go:284: Matching 4ANZ with 9H8G
+ORDERBOOK 2023/09/26 15:24:32 service.go:273: Matching 4ANZ at price level 12.71
+
+ORDERBOOK 2023/09/26 15:24:32 service.go:529: Set market price: 12.71
+ORDERBOOK 2023/09/26 15:24:32 service.go:284: Matching 4ANZ with 419T
+ORDERBOOK 2023/09/26 15:24:32 service.go:273: Matching 4ANZ at price level 13.12
+
+ORDERBOOK 2023/09/26 15:24:32 service.go:529: Set market price: 13.12
+ORDERBOOK 2023/09/26 15:24:32 service.go:284: Matching 4ANZ with F8JA
+ORDERBOOK 2023/09/26 15:24:32 service.go:273: Matching ESKP at price level 13.12
+
+ORDERBOOK 2023/09/26 15:24:32 service.go:529: Set market price: 13.12
+ORDERBOOK 2023/09/26 15:24:32 service.go:284: Matching ESKP with F8JA
+ORDERBOOK 2023/09/26 15:24:32 service.go:273: Matching K099 at price level 13.12
+
+ORDERBOOK 2023/09/26 15:24:32 service.go:529: Set market price: 13.12
+ORDERBOOK 2023/09/26 15:24:32 service.go:284: Matching K099 with F8JA
+ORDERBOOK 2023/09/26 15:24:33 service.go:273: Matching 028H at price level 13.12
+
+ORDERBOOK 2023/09/26 15:24:33 service.go:529: Set market price: 13.12
+ORDERBOOK 2023/09/26 15:24:33 service.go:284: Matching 028H with F8JA
+ORDERBOOK 2023/09/26 15:24:33 service.go:273: Matching 028H at price level 13.51
+
+ORDERBOOK 2023/09/26 15:24:33 service.go:529: Set market price: 13.51
+ORDERBOOK 2023/09/26 15:24:33 service.go:284: Matching 028H with PA7F
+ORDERBOOK 2023/09/26 15:24:33 service.go:273: Matching DEG0 at price level 13.51
+
+ORDERBOOK 2023/09/26 15:24:33 service.go:529: Set market price: 13.51
+ORDERBOOK 2023/09/26 15:24:33 service.go:284: Matching DEG0 with PA7F
+ORDERBOOK 2023/09/26 15:24:33 service.go:273: Matching FQT7 at price level 13.51
+
+ORDERBOOK 2023/09/26 15:24:33 service.go:529: Set market price: 13.51
+ORDERBOOK 2023/09/26 15:24:33 service.go:284: Matching FQT7 with PA7F
+ORDERBOOK 2023/09/26 15:24:34 service.go:529: Set market price: 12.08
+ORDERBOOK 2023/09/26 15:24:34 service.go:529: Set market price: 12.08
+ORDERBOOK 2023/09/26 15:24:34 service.go:273: Matching 8XK8 at price level 12.33
+
+ORDERBOOK 2023/09/26 15:24:34 service.go:529: Set market price: 12.33
+ORDERBOOK 2023/09/26 15:24:34 service.go:284: Matching 8XK8 with HY7M
+ORDERBOOK 2023/09/26 15:24:34 service.go:433: No limit orders in the opposite side, initialize order: JGM7
+ORDERBOOK 2023/09/26 15:24:35 service.go:433: No limit orders in the opposite side, initialize order: XMHK
+ORDERBOOK 2023/09/26 15:24:35 service.go:273: Matching 86BC at price level 12.33
+
+ORDERBOOK 2023/09/26 15:24:35 service.go:529: Set market price: 12.33
+ORDERBOOK 2023/09/26 15:24:35 service.go:284: Matching 86BC with HY7M
+ORDERBOOK 2023/09/26 15:24:35 service.go:273: Matching 86BC at price level 10.92
+
+ORDERBOOK 2023/09/26 15:24:35 service.go:529: Set market price: 10.92
+ORDERBOOK 2023/09/26 15:24:35 service.go:284: Matching 86BC with 0E9X
+ORDERBOOK 2023/09/26 15:24:36 service.go:273: Matching 6X1G at price level 10.92
+
+ORDERBOOK 2023/09/26 15:24:36 service.go:529: Set market price: 10.92
+ORDERBOOK 2023/09/26 15:24:36 service.go:284: Matching 6X1G with 0E9X
+ORDERBOOK 2023/09/26 15:24:36 service.go:273: Matching 6X1G at price level 8.91
+
+ORDERBOOK 2023/09/26 15:24:36 service.go:529: Set market price: 8.91
+ORDERBOOK 2023/09/26 15:24:36 service.go:284: Matching 6X1G with DWBW
+ORDERBOOK 2023/09/26 15:24:36 service.go:273: Matching 6X1G at price level 8.27
+
+ORDERBOOK 2023/09/26 15:24:36 service.go:529: Set market price: 8.27
+ORDERBOOK 2023/09/26 15:24:36 service.go:284: Matching 6X1G with J96T
+ORDERBOOK 2023/09/26 15:24:37 service.go:273: Matching K33E at price level 14.58
+
+ORDERBOOK 2023/09/26 15:24:37 service.go:529: Set market price: 14.58
+ORDERBOOK 2023/09/26 15:24:37 service.go:284: Matching K33E with 6BT3
+ORDERBOOK 2023/09/26 15:24:37 service.go:273: Matching 4NHT at price level 14.58
+
+ORDERBOOK 2023/09/26 15:24:37 service.go:529: Set market price: 14.58
+ORDERBOOK 2023/09/26 15:24:37 service.go:284: Matching 4NHT with 6BT3
+ORDERBOOK 2023/09/26 15:24:37 service.go:273: Matching W681 at price level 14.58
+
+ORDERBOOK 2023/09/26 15:24:37 service.go:529: Set market price: 14.58
+ORDERBOOK 2023/09/26 15:24:37 service.go:284: Matching W681 with 6BT3
+ORDERBOOK 2023/09/26 15:24:37 service.go:273: Matching 7XPA at price level 14.58
+
+ORDERBOOK 2023/09/26 15:24:37 service.go:529: Set market price: 14.58
+ORDERBOOK 2023/09/26 15:24:37 service.go:284: Matching 7XPA with 6BT3
+ORDERBOOK 2023/09/26 15:24:38 service.go:273: Matching QDWY at price level 14.58
+
+ORDERBOOK 2023/09/26 15:24:38 service.go:529: Set market price: 14.58
+ORDERBOOK 2023/09/26 15:24:38 service.go:284: Matching QDWY with 6BT3
+ORDERBOOK 2023/09/26 15:24:38 service.go:273: Matching 973C at price level 14.59
+
+ORDERBOOK 2023/09/26 15:24:38 service.go:529: Set market price: 14.59
+ORDERBOOK 2023/09/26 15:24:38 service.go:284: Matching 973C with 1G8R
+ORDERBOOK 2023/09/26 15:24:38 service.go:273: Matching XYJC at price level 14.58
+
+ORDERBOOK 2023/09/26 15:24:38 service.go:529: Set market price: 14.58
+ORDERBOOK 2023/09/26 15:24:38 service.go:284: Matching XYJC with 6BT3
+ORDERBOOK 2023/09/26 15:24:38 service.go:273: Matching 0WYH at price level 14.58
+
+ORDERBOOK 2023/09/26 15:24:38 service.go:529: Set market price: 14.58
+ORDERBOOK 2023/09/26 15:24:38 service.go:284: Matching 0WYH with 6BT3
+ORDERBOOK 2023/09/26 15:24:38 service.go:273: Matching 0WYH at price level 8.27
+
+ORDERBOOK 2023/09/26 15:24:38 service.go:529: Set market price: 8.27
+ORDERBOOK 2023/09/26 15:24:38 service.go:284: Matching 0WYH with J96T
+ORDERBOOK 2023/09/26 15:24:38 service.go:273: Matching QP0A at price level 8.27
+
+ORDERBOOK 2023/09/26 15:24:38 service.go:529: Set market price: 8.27
+ORDERBOOK 2023/09/26 15:24:38 service.go:284: Matching QP0A with J96T
+ORDERBOOK 2023/09/26 15:24:38 service.go:273: Matching P83D at price level 8.27
+
+ORDERBOOK 2023/09/26 15:24:38 service.go:529: Set market price: 8.27
+ORDERBOOK 2023/09/26 15:24:38 service.go:284: Matching P83D with J96T
+ORDERBOOK 2023/09/26 15:24:39 service.go:273: Matching MANN at price level 8.27
+
+ORDERBOOK 2023/09/26 15:24:39 service.go:529: Set market price: 8.27
+ORDERBOOK 2023/09/26 15:24:39 service.go:284: Matching MANN with J96T
+ORDERBOOK 2023/09/26 15:24:39 service.go:273: Matching VH7V at price level 8.27
+
+ORDERBOOK 2023/09/26 15:24:39 service.go:529: Set market price: 8.27
+ORDERBOOK 2023/09/26 15:24:39 service.go:284: Matching VH7V with J96T
+ORDERBOOK 2023/09/26 15:24:39 service.go:273: Matching VH7V at price level 6.57
+
+ORDERBOOK 2023/09/26 15:24:39 service.go:529: Set market price: 6.57
+ORDERBOOK 2023/09/26 15:24:39 service.go:284: Matching VH7V with VV55
+ORDERBOOK 2023/09/26 15:24:39 service.go:273: Matching J6ST at price level 6.57
+
+ORDERBOOK 2023/09/26 15:24:39 service.go:529: Set market price: 6.57
+ORDERBOOK 2023/09/26 15:24:39 service.go:284: Matching J6ST with VV55
+ORDERBOOK 2023/09/26 15:24:39 service.go:273: Matching BTRD at price level 6.57
+
+ORDERBOOK 2023/09/26 15:24:39 service.go:529: Set market price: 6.57
+ORDERBOOK 2023/09/26 15:24:39 service.go:284: Matching BTRD with VV55
+ORDERBOOK 2023/09/26 15:24:39 service.go:273: Matching F7X0 at price level 6.57
+
+ORDERBOOK 2023/09/26 15:24:39 service.go:529: Set market price: 6.57
+ORDERBOOK 2023/09/26 15:24:39 service.go:284: Matching F7X0 with VV55
+ORDERBOOK 2023/09/26 15:24:39 service.go:273: Matching F7X0 at price level 6.19
+
+ORDERBOOK 2023/09/26 15:24:39 service.go:529: Set market price: 6.19
+ORDERBOOK 2023/09/26 15:24:39 service.go:284: Matching F7X0 with 02VY
+ORDERBOOK 2023/09/26 15:24:39 service.go:273: Matching T6XJ at price level 6.19
+
+ORDERBOOK 2023/09/26 15:24:39 service.go:529: Set market price: 6.19
+ORDERBOOK 2023/09/26 15:24:39 service.go:284: Matching T6XJ with 02VY
+ORDERBOOK 2023/09/26 15:24:40 service.go:273: Matching JB0H at price level 6.19
+
+ORDERBOOK 2023/09/26 15:24:40 service.go:529: Set market price: 6.19
+ORDERBOOK 2023/09/26 15:24:40 service.go:284: Matching JB0H with 02VY
+ORDERBOOK 2023/09/26 15:24:40 service.go:273: Matching WW6H at price level 10.31
+
+ORDERBOOK 2023/09/26 15:24:40 service.go:529: Set market price: 10.31
+ORDERBOOK 2023/09/26 15:24:40 service.go:284: Matching WW6H with XAAM
+ORDERBOOK 2023/09/26 15:24:40 service.go:273: Matching WW6H at price level 14.59
+
+ORDERBOOK 2023/09/26 15:24:40 service.go:529: Set market price: 14.59
+ORDERBOOK 2023/09/26 15:24:40 service.go:284: Matching WW6H with 1G8R
+ORDERBOOK 2023/09/26 15:24:40 service.go:273: Matching WW6H at price level 17.1
+
+ORDERBOOK 2023/09/26 15:24:40 service.go:529: Set market price: 17.1
+ORDERBOOK 2023/09/26 15:24:40 service.go:284: Matching WW6H with 6PYC
+ORDERBOOK 2023/09/26 15:24:40 service.go:273: Matching ZS71 at price level 6.19
+
+ORDERBOOK 2023/09/26 15:24:40 service.go:529: Set market price: 6.19
+ORDERBOOK 2023/09/26 15:24:40 service.go:284: Matching ZS71 with 02VY
+ORDERBOOK 2023/09/26 15:24:40 service.go:273: Matching JS3A at price level 6.19
+
+ORDERBOOK 2023/09/26 15:24:40 service.go:529: Set market price: 6.19
+ORDERBOOK 2023/09/26 15:24:40 service.go:284: Matching JS3A with 02VY
+ORDERBOOK 2023/09/26 15:24:40 service.go:273: Matching 3D7H at price level 6.19
+
+ORDERBOOK 2023/09/26 15:24:40 service.go:529: Set market price: 6.19
+ORDERBOOK 2023/09/26 15:24:40 service.go:284: Matching 3D7H with 02VY
+ORDERBOOK 2023/09/26 15:24:40 service.go:273: Matching 3D7H at price level 4.47
+
+ORDERBOOK 2023/09/26 15:24:40 service.go:529: Set market price: 4.47
+ORDERBOOK 2023/09/26 15:24:40 service.go:284: Matching 3D7H with JGM7
+ORDERBOOK 2023/09/26 15:24:40 service.go:273: Matching F7BG at price level 4.47
+
+ORDERBOOK 2023/09/26 15:24:40 service.go:529: Set market price: 4.47
+ORDERBOOK 2023/09/26 15:24:40 service.go:284: Matching F7BG with JGM7
+ORDERBOOK 2023/09/26 15:24:40 service.go:273: Matching F7BG at price level 2.18
+
+ORDERBOOK 2023/09/26 15:24:40 service.go:529: Set market price: 2.18
+ORDERBOOK 2023/09/26 15:24:40 service.go:284: Matching F7BG with WNH3
+ORDERBOOK 2023/09/26 15:24:41 service.go:273: Matching GB4J at price level 2.18
+
+ORDERBOOK 2023/09/26 15:24:41 service.go:529: Set market price: 2.18
+ORDERBOOK 2023/09/26 15:24:41 service.go:284: Matching GB4J with WNH3
+ORDERBOOK 2023/09/26 15:24:41 service.go:273: Matching E8B5 at price level 2.18
+
+ORDERBOOK 2023/09/26 15:24:41 service.go:529: Set market price: 2.18
+ORDERBOOK 2023/09/26 15:24:41 service.go:284: Matching E8B5 with WNH3
+ORDERBOOK 2023/09/26 15:24:41 service.go:273: Matching HD59 at price level 2.18
+
+ORDERBOOK 2023/09/26 15:24:41 service.go:529: Set market price: 2.18
+ORDERBOOK 2023/09/26 15:24:41 service.go:284: Matching HD59 with WNH3
+ORDERBOOK 2023/09/26 15:24:41 service.go:273: Matching HD59 at price level 2.17
+
+ORDERBOOK 2023/09/26 15:24:41 service.go:529: Set market price: 2.17
+ORDERBOOK 2023/09/26 15:24:41 service.go:284: Matching HD59 with XHW7
+ORDERBOOK 2023/09/26 15:24:41 service.go:273: Matching 61RW at price level 2.17
+
+ORDERBOOK 2023/09/26 15:24:41 service.go:529: Set market price: 2.17
+ORDERBOOK 2023/09/26 15:24:41 service.go:284: Matching 61RW with XHW7
+ORDERBOOK 2023/09/26 15:24:41 service.go:273: Matching 61RW at price level 2.09
+
+ORDERBOOK 2023/09/26 15:24:41 service.go:529: Set market price: 2.09
+ORDERBOOK 2023/09/26 15:24:41 service.go:284: Matching 61RW with X34N
+ORDERBOOK 2023/09/26 15:24:41 service.go:273: Matching WWBH at price level 2.09
+
+ORDERBOOK 2023/09/26 15:24:41 service.go:529: Set market price: 2.09
+ORDERBOOK 2023/09/26 15:24:41 service.go:284: Matching WWBH with X34N
+ORDERBOOK 2023/09/26 15:24:41 service.go:273: Matching WFKX at price level 2.09
+
+ORDERBOOK 2023/09/26 15:24:41 service.go:529: Set market price: 2.09
+ORDERBOOK 2023/09/26 15:24:41 service.go:284: Matching WFKX with X34N
+ORDERBOOK 2023/09/26 15:24:42 service.go:273: Matching FY4W at price level 17.1
+
+ORDERBOOK 2023/09/26 15:24:42 service.go:529: Set market price: 17.1
+ORDERBOOK 2023/09/26 15:24:42 service.go:284: Matching FY4W with 6PYC
+ORDERBOOK 2023/09/26 15:24:42 service.go:273: Matching FMBA at price level 18.76
+
+ORDERBOOK 2023/09/26 15:24:42 service.go:529: Set market price: 18.76
+ORDERBOOK 2023/09/26 15:24:42 service.go:284: Matching FMBA with FY4W
+ORDERBOOK 2023/09/26 15:24:42 service.go:273: Matching X486 at price level 18.76
+
+ORDERBOOK 2023/09/26 15:24:42 service.go:529: Set market price: 18.76
+ORDERBOOK 2023/09/26 15:24:42 service.go:284: Matching X486 with FY4W
+ORDERBOOK 2023/09/26 15:24:42 service.go:273: Matching BMK5 at price level 18.76
+
+ORDERBOOK 2023/09/26 15:24:42 service.go:529: Set market price: 18.76
+ORDERBOOK 2023/09/26 15:24:42 service.go:284: Matching BMK5 with FY4W
+ORDERBOOK 2023/09/26 15:24:42 service.go:273: Matching BMK5 at price level 2.09
+
+ORDERBOOK 2023/09/26 15:24:42 service.go:529: Set market price: 2.09
+ORDERBOOK 2023/09/26 15:24:42 service.go:284: Matching BMK5 with X34N
+ORDERBOOK 2023/09/26 15:24:42 service.go:273: Matching G38G at price level 2.09
+
+ORDERBOOK 2023/09/26 15:24:42 service.go:529: Set market price: 2.09
+ORDERBOOK 2023/09/26 15:24:42 service.go:284: Matching G38G with X34N
+ORDERBOOK 2023/09/26 15:24:43 service.go:273: Matching 2SXH at price level 19.11
+
+ORDERBOOK 2023/09/26 15:24:43 service.go:529: Set market price: 19.11
+ORDERBOOK 2023/09/26 15:24:43 service.go:284: Matching 2SXH with GMW0
+ORDERBOOK 2023/09/26 15:24:43 service.go:273: Matching YJ29 at price level 19.25
+
+ORDERBOOK 2023/09/26 15:24:43 service.go:529: Set market price: 19.25
+ORDERBOOK 2023/09/26 15:24:43 service.go:284: Matching YJ29 with 2SXH
+ORDERBOOK 2023/09/26 15:24:43 service.go:273: Matching XZZN at price level 19.25
+
+ORDERBOOK 2023/09/26 15:24:43 service.go:529: Set market price: 19.25
+ORDERBOOK 2023/09/26 15:24:43 service.go:284: Matching XZZN with 2SXH
+ORDERBOOK 2023/09/26 15:24:43 service.go:273: Matching XZZN at price level 2.09
+
+ORDERBOOK 2023/09/26 15:24:43 service.go:529: Set market price: 2.09
+ORDERBOOK 2023/09/26 15:24:43 service.go:284: Matching XZZN with X34N
+ORDERBOOK 2023/09/26 15:24:43 service.go:273: Matching BF29 at price level 2.09
+
+ORDERBOOK 2023/09/26 15:24:43 service.go:529: Set market price: 2.09
+ORDERBOOK 2023/09/26 15:24:43 service.go:284: Matching BF29 with X34N
+ORDERBOOK 2023/09/26 15:24:43 service.go:273: Matching A9Q7 at price level 2.09
+
+ORDERBOOK 2023/09/26 15:24:43 service.go:529: Set market price: 2.09
+ORDERBOOK 2023/09/26 15:24:43 service.go:284: Matching A9Q7 with X34N
+ORDERBOOK 2023/09/26 15:24:44 service.go:273: Matching 360D at price level 2.09
+
+ORDERBOOK 2023/09/26 15:24:44 service.go:529: Set market price: 2.09
+ORDERBOOK 2023/09/26 15:24:44 service.go:284: Matching 360D with X34N
+ORDERBOOK 2023/09/26 15:24:44 service.go:273: Matching V1QM at price level 2.09
+
+ORDERBOOK 2023/09/26 15:24:44 service.go:529: Set market price: 2.09
+ORDERBOOK 2023/09/26 15:24:44 service.go:284: Matching V1QM with X34N
+ORDERBOOK 2023/09/26 15:24:44 service.go:273: Matching ZDA5 at price level 2.09
+
+ORDERBOOK 2023/09/26 15:24:44 service.go:529: Set market price: 2.09
+ORDERBOOK 2023/09/26 15:24:44 service.go:284: Matching ZDA5 with X34N
+ORDERBOOK 2023/09/26 15:24:44 service.go:273: Matching ZDA5 at price level 1.99
+
+ORDERBOOK 2023/09/26 15:24:44 service.go:529: Set market price: 1.99
+ORDERBOOK 2023/09/26 15:24:44 service.go:284: Matching ZDA5 with 9PC2
+ORDERBOOK 2023/09/26 15:24:44 service.go:273: Matching ZRCM at price level 1.99
+
+ORDERBOOK 2023/09/26 15:24:44 service.go:529: Set market price: 1.99
+ORDERBOOK 2023/09/26 15:24:44 service.go:284: Matching ZRCM with 9PC2
+ORDERBOOK 2023/09/26 15:24:45 service.go:273: Matching QSX3 at price level 1.99
+
+ORDERBOOK 2023/09/26 15:24:45 service.go:529: Set market price: 1.99
+ORDERBOOK 2023/09/26 15:24:45 service.go:284: Matching QSX3 with 9PC2
+ORDERBOOK 2023/09/26 15:24:45 service.go:433: No limit orders in the opposite side, initialize order: YQNT
+ORDERBOOK 2023/09/26 15:24:45 service.go:273: Matching VZ42 at price level 1.99
+
+ORDERBOOK 2023/09/26 15:24:45 service.go:529: Set market price: 1.99
+ORDERBOOK 2023/09/26 15:24:45 service.go:284: Matching VZ42 with 9PC2
+ORDERBOOK 2023/09/26 15:24:45 service.go:273: Matching T7NP at price level 1.99
+
+ORDERBOOK 2023/09/26 15:24:45 service.go:529: Set market price: 1.99
+ORDERBOOK 2023/09/26 15:24:45 service.go:284: Matching T7NP with 9PC2
+ORDERBOOK 2023/09/26 15:24:45 service.go:273: Matching 2ZEX at price level 1.99
+
+ORDERBOOK 2023/09/26 15:24:45 service.go:529: Set market price: 1.99
+ORDERBOOK 2023/09/26 15:24:45 service.go:284: Matching 2ZEX with 9PC2
+ORDERBOOK 2023/09/26 15:24:45 service.go:273: Matching 6S74 at price level 1.99
+
+ORDERBOOK 2023/09/26 15:24:45 service.go:529: Set market price: 1.99
+ORDERBOOK 2023/09/26 15:24:45 service.go:284: Matching 6S74 with 9PC2
+ORDERBOOK 2023/09/26 15:24:45 service.go:273: Matching 6S74 at price level 1.81
+
+ORDERBOOK 2023/09/26 15:24:45 service.go:529: Set market price: 1.81
+ORDERBOOK 2023/09/26 15:24:45 service.go:284: Matching 6S74 with XMHK
+ORDERBOOK 2023/09/26 15:24:46 service.go:433: No limit orders in the opposite side, initialize order: VSNF
+ORDERBOOK 2023/09/26 15:24:47 service.go:273: Matching 0KAX at price level 2.13
+
+ORDERBOOK 2023/09/26 15:24:47 service.go:529: Set market price: 2.13
+ORDERBOOK 2023/09/26 15:24:47 service.go:284: Matching 0KAX with VSNF
+ORDERBOOK 2023/09/26 15:24:47 service.go:433: No limit orders in the opposite side, initialize order: A8C0
+ORDERBOOK 2023/09/26 15:24:47 service.go:273: Matching FXFZ at price level 4.15
+
+ORDERBOOK 2023/09/26 15:24:47 service.go:529: Set market price: 4.15
+ORDERBOOK 2023/09/26 15:24:47 service.go:284: Matching FXFZ with A8C0
+ORDERBOOK 2023/09/26 15:24:47 service.go:273: Matching D0MN at price level 4.15
+
+ORDERBOOK 2023/09/26 15:24:47 service.go:529: Set market price: 4.15
+ORDERBOOK 2023/09/26 15:24:47 service.go:284: Matching D0MN with A8C0
+ORDERBOOK 2023/09/26 15:24:47 service.go:273: Matching 82QG at price level 4.15
+
+ORDERBOOK 2023/09/26 15:24:47 service.go:529: Set market price: 4.15
+ORDERBOOK 2023/09/26 15:24:47 service.go:284: Matching 82QG with A8C0
+ORDERBOOK 2023/09/26 15:24:48 service.go:273: Matching J4XM at price level 4.15
+
+ORDERBOOK 2023/09/26 15:24:48 service.go:529: Set market price: 4.15
+ORDERBOOK 2023/09/26 15:24:48 service.go:284: Matching J4XM with A8C0
+ORDERBOOK 2023/09/26 15:24:48 service.go:273: Matching 1GGG at price level 4.15
+
+ORDERBOOK 2023/09/26 15:24:48 service.go:529: Set market price: 4.15
+ORDERBOOK 2023/09/26 15:24:48 service.go:284: Matching 1GGG with A8C0
+ORDERBOOK 2023/09/26 15:24:48 service.go:273: Matching 9T19 at price level 4.15
+
+ORDERBOOK 2023/09/26 15:24:48 service.go:529: Set market price: 4.15
+ORDERBOOK 2023/09/26 15:24:48 service.go:284: Matching 9T19 with A8C0
+ORDERBOOK 2023/09/26 15:24:48 service.go:273: Matching 9T19 at price level 2.13
+
+ORDERBOOK 2023/09/26 15:24:48 service.go:529: Set market price: 2.13
+ORDERBOOK 2023/09/26 15:24:48 service.go:284: Matching 9T19 with VSNF
+ORDERBOOK 2023/09/26 15:24:48 service.go:273: Matching YGKC at price level 2.13
+
+ORDERBOOK 2023/09/26 15:24:48 service.go:529: Set market price: 2.13
+ORDERBOOK 2023/09/26 15:24:48 service.go:284: Matching YGKC with VSNF
+ORDERBOOK 2023/09/26 15:24:48 service.go:273: Matching 8WMM at price level 2.13
+
+ORDERBOOK 2023/09/26 15:24:48 service.go:529: Set market price: 2.13
+ORDERBOOK 2023/09/26 15:24:48 service.go:284: Matching 8WMM with VSNF
+ORDERBOOK 2023/09/26 15:24:48 service.go:273: Matching 1CR0 at price level 2.13
+
+ORDERBOOK 2023/09/26 15:24:48 service.go:529: Set market price: 2.13
+ORDERBOOK 2023/09/26 15:24:48 service.go:284: Matching 1CR0 with VSNF
+ORDERBOOK 2023/09/26 15:24:48 service.go:273: Matching VHW3 at price level 2.13
+
+ORDERBOOK 2023/09/26 15:24:48 service.go:529: Set market price: 2.13
+ORDERBOOK 2023/09/26 15:24:48 service.go:284: Matching VHW3 with VSNF
+ORDERBOOK 2023/09/26 15:24:48 service.go:273: Matching XY6N at price level 2.13
+
+ORDERBOOK 2023/09/26 15:24:48 service.go:529: Set market price: 2.13
+ORDERBOOK 2023/09/26 15:24:48 service.go:284: Matching XY6N with VSNF
+ORDERBOOK 2023/09/26 15:24:48 service.go:273: Matching XY6N at price level 1.81
+
+ORDERBOOK 2023/09/26 15:24:48 service.go:529: Set market price: 1.81
+ORDERBOOK 2023/09/26 15:24:48 service.go:284: Matching XY6N with XMHK
+ORDERBOOK 2023/09/26 15:24:49 service.go:273: Matching GH3X at price level 1.81
+
+ORDERBOOK 2023/09/26 15:24:49 service.go:529: Set market price: 1.81
+ORDERBOOK 2023/09/26 15:24:49 service.go:284: Matching GH3X with XMHK
+ORDERBOOK 2023/09/26 15:24:49 service.go:273: Matching C086 at price level 2.42
+
+ORDERBOOK 2023/09/26 15:24:49 service.go:529: Set market price: 2.42
+ORDERBOOK 2023/09/26 15:24:49 service.go:284: Matching C086 with CN9X
+ORDERBOOK 2023/09/26 15:24:49 service.go:273: Matching 0RFZ at price level 1.81
+
+ORDERBOOK 2023/09/26 15:24:49 service.go:529: Set market price: 1.81
+ORDERBOOK 2023/09/26 15:24:49 service.go:284: Matching 0RFZ with XMHK
+ORDERBOOK 2023/09/26 15:24:49 service.go:273: Matching KYT0 at price level 1.81
+
+ORDERBOOK 2023/09/26 15:24:49 service.go:529: Set market price: 1.81
+ORDERBOOK 2023/09/26 15:24:49 service.go:284: Matching KYT0 with XMHK
+ORDERBOOK 2023/09/26 15:24:50 service.go:273: Matching E7DE at price level 2.42
+
+ORDERBOOK 2023/09/26 15:24:50 service.go:529: Set market price: 2.42
+ORDERBOOK 2023/09/26 15:24:50 service.go:284: Matching E7DE with CN9X
+ORDERBOOK 2023/09/26 15:24:51 service.go:433: No limit orders in the opposite side, initialize order: FYAW
+ORDERBOOK 2023/09/26 15:24:51 service.go:273: Matching DKB3 at price level 6.27
+
+ORDERBOOK 2023/09/26 15:24:51 service.go:529: Set market price: 6.27
+ORDERBOOK 2023/09/26 15:24:51 service.go:284: Matching DKB3 with E7DE
+ORDERBOOK 2023/09/26 15:24:51 service.go:273: Matching DKB3 at price level 4.9
+
+ORDERBOOK 2023/09/26 15:24:51 service.go:529: Set market price: 4.9
+ORDERBOOK 2023/09/26 15:24:51 service.go:284: Matching DKB3 with FYAW
+ORDERBOOK 2023/09/26 15:24:51 service.go:273: Matching DKB3 at price level 1.84
+
+ORDERBOOK 2023/09/26 15:24:51 service.go:529: Set market price: 1.84
+ORDERBOOK 2023/09/26 15:24:51 service.go:284: Matching DKB3 with G1T3
+ORDERBOOK 2023/09/26 15:24:51 service.go:273: Matching DKB3 at price level 1.81
+
+ORDERBOOK 2023/09/26 15:24:51 service.go:529: Set market price: 1.81
+ORDERBOOK 2023/09/26 15:24:51 service.go:284: Matching DKB3 with XMHK
+ORDERBOOK 2023/09/26 15:24:51 service.go:273: Matching DKB3 at price level 1.45
+
+ORDERBOOK 2023/09/26 15:24:51 service.go:529: Set market price: 1.45
+ORDERBOOK 2023/09/26 15:24:51 service.go:284: Matching DKB3 with 5T7H
+ORDERBOOK 2023/09/26 15:24:51 service.go:284: Matching DKB3 with BWBJ
+ORDERBOOK 2023/09/26 15:24:51 service.go:273: Matching DKB3 at price level 1.44
+
+ORDERBOOK 2023/09/26 15:24:51 service.go:529: Set market price: 1.44
+ORDERBOOK 2023/09/26 15:24:51 service.go:284: Matching DKB3 with HM80
+ORDERBOOK 2023/09/26 15:24:51 service.go:273: Matching DKB3 at price level 1.38
+
+ORDERBOOK 2023/09/26 15:24:51 service.go:529: Set market price: 1.38
+ORDERBOOK 2023/09/26 15:24:51 service.go:284: Matching DKB3 with 5Z8G
+ORDERBOOK 2023/09/26 15:24:51 service.go:273: Matching DKB3 at price level 1.34
+
+ORDERBOOK 2023/09/26 15:24:51 service.go:529: Set market price: 1.34
+ORDERBOOK 2023/09/26 15:24:51 service.go:284: Matching DKB3 with CNKB
+ORDERBOOK 2023/09/26 15:24:51 service.go:273: Matching DKB3 at price level 1.22
+
+ORDERBOOK 2023/09/26 15:24:51 service.go:529: Set market price: 1.22
+ORDERBOOK 2023/09/26 15:24:51 service.go:284: Matching DKB3 with 1W5T
+ORDERBOOK 2023/09/26 15:24:51 service.go:273: Matching DKB3 at price level 1.01
+
+ORDERBOOK 2023/09/26 15:24:51 service.go:529: Set market price: 1.01
+ORDERBOOK 2023/09/26 15:24:51 service.go:284: Matching DKB3 with YQNT
+ORDERBOOK 2023/09/26 15:24:51 service.go:273: Matching DKB3 at price level 0.98
+
+ORDERBOOK 2023/09/26 15:24:51 service.go:529: Set market price: 0.98
+ORDERBOOK 2023/09/26 15:24:51 service.go:284: Matching DKB3 with 9F2E
+ORDERBOOK 2023/09/26 15:24:51 service.go:529: Set market price: 3.03
+ORDERBOOK 2023/09/26 15:24:53 service.go:529: Set market price: 3.45
+ORDERBOOK 2023/09/26 15:24:54 service.go:529: Set market price: 4.13
+ORDERBOOK 2023/09/26 15:24:54 service.go:433: No limit orders in the opposite side, initialize order: TCRW
+ORDERBOOK 2023/09/26 15:24:55 service.go:433: No limit orders in the opposite side, initialize order: 2CZG
+ORDERBOOK 2023/09/26 15:24:56 service.go:529: Set market price: 2.53
+ORDERBOOK 2023/09/26 15:24:56 service.go:273: Matching SZAK at price level 1.6
+
+ORDERBOOK 2023/09/26 15:24:56 service.go:529: Set market price: 1.6
+ORDERBOOK 2023/09/26 15:24:56 service.go:284: Matching SZAK with 2CZG
+ORDERBOOK 2023/09/26 15:24:58 service.go:273: Matching ZFHG at price level 1.6
+
+ORDERBOOK 2023/09/26 15:24:58 service.go:529: Set market price: 1.6
+ORDERBOOK 2023/09/26 15:24:58 service.go:284: Matching ZFHG with 2CZG
+ORDERBOOK 2023/09/26 15:24:58 service.go:273: Matching ZFHG at price level 2.06
+
+ORDERBOOK 2023/09/26 15:24:58 service.go:529: Set market price: 2.06
+ORDERBOOK 2023/09/26 15:24:58 service.go:284: Matching ZFHG with TCRW
+ORDERBOOK 2023/09/26 15:24:59 service.go:273: Matching GZYH at price level 2.06
+
+ORDERBOOK 2023/09/26 15:24:59 service.go:529: Set market price: 2.06
+ORDERBOOK 2023/09/26 15:24:59 service.go:284: Matching GZYH with TCRW
+ORDERBOOK 2023/09/26 15:25:00 service.go:273: Matching 5BRD at price level 6.21
+
+ORDERBOOK 2023/09/26 15:25:00 service.go:529: Set market price: 6.21
+ORDERBOOK 2023/09/26 15:25:00 service.go:284: Matching 5BRD with DG94
+ORDERBOOK 2023/09/26 15:25:00 service.go:433: No limit orders in the opposite side, initialize order: XAJA
+ORDERBOOK 2023/09/26 15:25:01 service.go:273: Matching 38XC at price level 10.39
+
+ORDERBOOK 2023/09/26 15:25:01 service.go:529: Set market price: 10.39
+ORDERBOOK 2023/09/26 15:25:01 service.go:284: Matching 38XC with 5BRD
+ORDERBOOK 2023/09/26 15:25:01 service.go:273: Matching 38XC at price level 4.42
+
+ORDERBOOK 2023/09/26 15:25:01 service.go:529: Set market price: 4.42
+ORDERBOOK 2023/09/26 15:25:01 service.go:284: Matching 38XC with GZYH
+ORDERBOOK 2023/09/26 15:25:02 service.go:273: Matching AM51 at price level 4.42
+
+ORDERBOOK 2023/09/26 15:25:02 service.go:529: Set market price: 4.42
+ORDERBOOK 2023/09/26 15:25:02 service.go:284: Matching AM51 with GZYH
+ORDERBOOK 2023/09/26 15:25:02 service.go:273: Matching AM51 at price level 3.38
+
+ORDERBOOK 2023/09/26 15:25:02 service.go:529: Set market price: 3.38
+ORDERBOOK 2023/09/26 15:25:02 service.go:284: Matching AM51 with XAJA
+ORDERBOOK 2023/09/26 15:25:03 service.go:433: No limit orders in the opposite side, initialize order: 5A4Y
+ORDERBOOK 2023/09/26 15:25:03 service.go:273: Matching MCS3 at price level 4.42
+
+ORDERBOOK 2023/09/26 15:25:03 service.go:529: Set market price: 4.42
+ORDERBOOK 2023/09/26 15:25:03 service.go:284: Matching MCS3 with 5A4Y
+ORDERBOOK 2023/09/26 15:25:05 service.go:273: Matching HJAV at price level 8.37
+
+ORDERBOOK 2023/09/26 15:25:05 service.go:529: Set market price: 8.37
+ORDERBOOK 2023/09/26 15:25:05 service.go:284: Matching HJAV with AF3H
+ORDERBOOK 2023/09/26 15:25:06 service.go:273: Matching GQ9Y at price level 8.37
+
+ORDERBOOK 2023/09/26 15:25:06 service.go:529: Set market price: 8.37
+ORDERBOOK 2023/09/26 15:25:06 service.go:284: Matching GQ9Y with AF3H
+ORDERBOOK 2023/09/26 15:25:06 service.go:433: No limit orders in the opposite side, initialize order: BZXC
+ORDERBOOK 2023/09/26 15:25:07 service.go:273: Matching G2SD at price level 14.87
+
+ORDERBOOK 2023/09/26 15:25:07 service.go:529: Set market price: 14.87
+ORDERBOOK 2023/09/26 15:25:07 service.go:284: Matching G2SD with K8H3
+ORDERBOOK 2023/09/26 15:25:09 service.go:273: Matching CRCQ at price level 16.97
+
+ORDERBOOK 2023/09/26 15:25:09 service.go:529: Set market price: 16.97
+ORDERBOOK 2023/09/26 15:25:09 service.go:284: Matching CRCQ with G2SD
+ORDERBOOK 2023/09/26 15:25:09 service.go:273: Matching CRCQ at price level 10.39
+
+ORDERBOOK 2023/09/26 15:25:09 service.go:529: Set market price: 10.39
+ORDERBOOK 2023/09/26 15:25:09 service.go:284: Matching CRCQ with GQ9Y
+ORDERBOOK 2023/09/26 15:25:09 service.go:273: Matching CRCQ at price level 4.42
+
+ORDERBOOK 2023/09/26 15:25:09 service.go:529: Set market price: 4.42
+ORDERBOOK 2023/09/26 15:25:09 service.go:284: Matching CRCQ with 5A4Y
+ORDERBOOK 2023/09/26 15:25:09 service.go:273: Matching CRCQ at price level 3.64
+
+ORDERBOOK 2023/09/26 15:25:09 service.go:529: Set market price: 3.64
+ORDERBOOK 2023/09/26 15:25:09 service.go:284: Matching CRCQ with BZXC
+ORDERBOOK 2023/09/26 15:25:09 service.go:273: Matching EXMQ at price level 19.02
+
+ORDERBOOK 2023/09/26 15:25:09 service.go:529: Set market price: 19.02
+ORDERBOOK 2023/09/26 15:25:09 service.go:284: Matching EXMQ with 29XS

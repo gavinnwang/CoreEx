@@ -106,6 +106,7 @@ func (s *service) Run() {
 						RecordedAt: time.Now().Unix(),
 					}
 					new = true
+
 					err := s.PersistMarketPrice(priceData)
 					if err != nil {
 						log.Printf("Could not persist market price: %v", err)
@@ -117,8 +118,14 @@ func (s *service) Run() {
 						Volume:     s.AskVolume().Add(s.BidVolume()),
 						RecordedAt: time.Now().Unix(),
 					}
+
 					new = false
 				}
+				// if (len(s.prices) == 1) {
+				// 	new = true
+				// } else {
+				// 	new = false
+				// }
 				s.publishPrice(priceData, new)
 			}
 		}
@@ -150,10 +157,10 @@ func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
 		BidVolume: s.BidVolume().InexactFloat64(),
 		CandleData: CandleData{
 			StockPriceHistory: priceData,
-			NewCandle: new,
+			NewCandle:         new,
 		},
 	}
-	log.Printf("Publishing market info: %v to redis channel %s\n", symbolMarketInfo, s.symbol)
+	// log.Printf("Publishing market info: %v to redis channel %s\n", symbolMarketInfo, s.symbol)
 
 	pubMsg := SymbolInfoPubMsg{
 		RedisPubMsgBase: RedisPubMsgBase{
@@ -173,17 +180,24 @@ func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
 
 func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 	go func() {
-		ticker := time.NewTicker(5 * time.Second)
+		ticker := time.NewTicker(500 * time.Millisecond)
 		defer ticker.Stop()
 
 		for range ticker.C {
-			side := Buy
+
+			var price decimal.Decimal
+			var side Side
+
 			if rand.Intn(2) == 0 {
+				side = Buy
+				price = s.BestAsk().Add(decimal.NewFromInt(5)).Sub(decimal.NewFromFloat(rand.Float64() * 10).Round(2))
+			} else {
 				side = Sell
+				price = s.BestBid().Sub(decimal.NewFromInt(5)).Add(decimal.NewFromFloat(rand.Float64() * 10).Round(2))
 			}
 
-			volume := decimal.NewFromFloat(rand.Float64() * 10).Round(2)
-			price := decimal.NewFromFloat(rand.Float64() * 5000).Round(2)
+			volume := decimal.NewFromFloat(rand.Float64() * 50).Add(decimal.NewFromInt(50)).Round(2)
+
 			log.Printf("Simulating market fluctuations: %v %v %v\n", side, volume, price)
 			if rand.Intn(2) == 0 {
 				_, _ = s.PlaceLimitOrder(side, marketSimulationUlid, volume, price)
