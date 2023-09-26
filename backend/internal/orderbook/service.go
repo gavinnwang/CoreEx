@@ -97,26 +97,32 @@ func (s *service) RunPublishMarketInfoToRedis() {
 
 		for range ticker.C {
 			symbolMarketInfo := SymbolInfoResponse{
-				Symbol:      s.symbol,
-				Price: s.MarketPrice().InexactFloat64(),
-				BestBid:     s.BestBid().InexactFloat64(),
-				BestAsk:     s.BestAsk().InexactFloat64(),
-				AskVolume:   s.AskVolume().InexactFloat64(),
-				BidVolume:   s.BidVolume().InexactFloat64(),
+				Symbol:    s.symbol,
+				Price:     s.MarketPrice().InexactFloat64(),
+				BestBid:   s.BestBid().InexactFloat64(),
+				BestAsk:   s.BestAsk().InexactFloat64(),
+				AskVolume: s.AskVolume().InexactFloat64(),
+				BidVolume: s.BidVolume().InexactFloat64(),
 			}
-			symbolBytes, err := json.Marshal(symbolMarketInfo)
+			log.Printf("Publishing market info: %v to redis channel %s\n", symbolMarketInfo, s.symbol)
+
+			pubMsg := SymbolInfoPubMsg{
+				RedisPubMsgBase: RedisPubMsgBase{
+					Event:   EventStreamSymbolInfo,
+					Success: true,
+				},
+				Result: symbolMarketInfo,
+			}
+			pubMsgBytes, err := json.Marshal(pubMsg)
 			if err != nil {
 				log.Printf("Service: failed to marshal market info into JSON: %v", s.symbol)
 				return
 			}
-			log.Printf("Publishing market info: %v to redis channel %s\n", symbolMarketInfo, s.symbol)
 
-			s.rdb.Publish(context.Background(), s.symbol, symbolBytes)
+			s.rdb.Publish(context.Background(), s.symbol, pubMsgBytes)
 		}
 	}()
 }
-
-
 
 func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 	go func() {

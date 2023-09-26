@@ -8,3 +8,18 @@ type SymbolInfoResponse struct {
 	BestAsk   float64 `json:"best_ask"`
 	Price     float64 `json:"price"`
 }
+
+type RedisPubMsgBase struct {
+	Event        string `json:"event"`
+	Success      bool   `json:"success"`
+	ErrorMessage string `json:"error_message,omitempty"`
+}
+
+type SymbolInfoPubMsg struct {
+	RedisPubMsgBase
+	Result SymbolInfoResponse `json:"result,omitempty"`
+}
+
+const (
+	EventStreamSymbolInfo = "exchange.stream_info"
+)

@@ -187,8 +187,6 @@ func handleMessage(c *Client, msg []byte) {
 	case "":
 		closeConnection(c, websocket.CloseInvalidFramePayloadData, CloseReasonBadEvent)
 		return
-	case EventStreamMarketPrice:
-		handleStreamMarketPrice(c, msgReq)
 	case EventStreamSymbolInfo:
 		handleStreamSymbolInfo(c, msgReq)
 	default:

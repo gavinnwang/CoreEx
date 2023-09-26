@@ -2,13 +2,11 @@ package ws
 
 import (
 	"encoding/json"
-	"github/wry-0313/exchange/internal/orderbook"
 )
 
 const (
 
 	// Events
-	EventStreamMarketPrice = "exchange.stream_price"
 
 	EventStreamSymbolInfo = "exchange.stream_info"
 
@@ -47,20 +45,4 @@ type ResponseBase struct {
 // ParamsSymbol contains the parameter symbol and is used for handlers that only needs the symbol
 type ParamsSymbol struct {
 	Symbol string `json:"symbol" validate:"required"`
-}
-
-type ResponseGetMarketPrice struct {
-	ResponseBase
-	Result ResultGetMarketPrice `json:"result,omitempty"`
-}
-
-type ResponseGetSymbolInfo struct {
-	ResponseBase
-	Result orderbook.SymbolInfoResponse `json:"result,omitempty"`
-}
-
-// ResultBoardConnect contains the result of board connection.
-type ResultGetMarketPrice struct {
-	Symbol string  `json:"symbol"`
-	Price  float64 `json:"price"`
 }
