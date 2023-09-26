@@ -18,7 +18,7 @@ import (
 
 const (
 	kafkaTopic   = "orders"
-	numConsumers = 3
+	NumPartitions = 3
 )
 
 var (
@@ -150,38 +150,74 @@ func (s *service) GetSymbolInfo(symbol string) (orderbook.SymbolInfoResponse, er
 
 func (s *service) startConsumers(brokerList []string) {
 	config := sarama.NewConfig()
+	admin, err := sarama.NewClusterAdmin(brokerList, config)
+	if err != nil {
+        log.Fatal("Error while creating cluster admin: ", err.Error())
+    }
+    defer func() { admin.Close() }()
+	err = admin.CreateTopic(kafkaTopic, &sarama.TopicDetail{
+        NumPartitions:     NumPartitions,
+        ReplicationFactor: 1,
+    }, false)
+	if err != nil {
+        log.Fatal("Error while creating topic: ", err.Error())
+    }
+
+
 	config.Consumer.Return.Errors = true
 	consumer, err := sarama.NewConsumer(brokerList, config)
 	if err != nil {
 		log.Fatal("Failed to start consumer:", err)
 	}
 
-	log.Printf("Starting Kafka consumers at offest: %v", sarama.OffsetNewest)
+	// log.Printf("Starting Kafka consumers at offest: %v", sarama.OffsetNewest)
 
-	pc, err := consumer.ConsumePartition(kafkaTopic, 0, sarama.OffsetNewest)
-	if err != nil {
-		log.Fatal("Failed to start partition consumer:", err)
-	}
+	// pc, err := consumer.ConsumePartition(kafkaTopic, 0, sarama.OffsetNewest)
+	// if err != nil {
+	// 	log.Fatal("Failed to start partition consumer:", err)
+	// }
 
-	defer func() {
-		log.Println("Closing consumer partition")
-		if err := pc.Close(); err != nil {
-			panic(err)
-		}
-	}()
+	// defer func() {
+	// 	log.Println("Closing consumer partition")
+	// 	if err := pc.Close(); err != nil {
+	// 		panic(err)
+	// 	}
+	// }()
 
 	var wg sync.WaitGroup
 
-	for w := 1; w <= numConsumers; w++ {
-		wg.Add(1)
-		log.Println("Starting consumer", w)
-		go s.consumer(pc, &wg, w)
+	// for w := 1; w <= numConsumers; w++ {
+	// 	wg.Add(1)
+	// 	log.Println("Starting consumer", w)
+	// 	go s.consumer(pc, &wg, w)
+	// }
+
+	partitionList, err := consumer.Partitions(kafkaTopic)
+	if err != nil {
+		log.Fatal("Failed to get the list of partitions:", err)
+	}
+
+	for _, partition := range partitionList {
+
+		pc, err := consumer.ConsumePartition(kafkaTopic, partition, sarama.OffsetNewest)
+		if err != nil {
+			log.Fatalf("Failed to start consumer for partition %d: %s", partition, err)
+		}
+
+		go func(pc sarama.PartitionConsumer) {
+			<-s.Shutdown
+			log.Printf("Shutting down partition consumer %d\n", partition)
+			pc.AsyncClose()
+		}(pc)
+
+		s.consume(pc, &wg, 0)
 	}
 
 	wg.Wait()
 }
 
-func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup, index int) {
+
+func (s *service) consume(pc sarama.PartitionConsumer, wg *sync.WaitGroup, index int) {
 	defer wg.Done()
 	for {
 		select {
@@ -226,7 +262,7 @@ func (s *service) consumer(pc sarama.PartitionConsumer, wg *sync.WaitGroup, inde
 		case err := <-pc.Errors():
 			log.Println("Error consuming message: ", err)
 		case <-s.Shutdown:
-			log.Printf("Shutting down consumer %d\n", index)
+			log.Printf("Shutting down partition consumer %d\n", index)
 			return
 		}
 	}

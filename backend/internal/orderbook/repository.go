@@ -125,8 +125,17 @@ func (r *repository) CreateMarketPriceHistory(symbol string, priceHistory models
 
 func (r *repository) GetEntireMarketPriceHistory(symbol string) ([]models.StockPriceHistory, error) {
 
-	sql := `SELECT open, high, low, close, volume, recorded_at FROM stock_history WHERE symbol = ? ORDER BY recorded_at ASC LIMIT 50`
-	
+	sql := `SELECT open, high, low, close, volume, recorded_at 
+	FROM (
+		SELECT open, high, low, close, volume, recorded_at 
+		FROM stock_history 
+		WHERE symbol = ? 
+		ORDER BY recorded_at DESC 
+		LIMIT 75
+	) AS sub
+	ORDER BY recorded_at ASC;
+	`
+
 	rows, err := r.db.Query(sql, symbol)
 	if err != nil {
 		return nil, fmt.Errorf("repository: failed to get market price history: %v", err)

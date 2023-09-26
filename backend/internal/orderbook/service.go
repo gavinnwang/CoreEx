@@ -121,11 +121,7 @@ func (s *service) Run() {
 
 					new = false
 				}
-				// if (len(s.prices) == 1) {
-				// 	new = true
-				// } else {
-				// 	new = false
-				// }
+
 				s.publishPrice(priceData, new)
 			}
 		}
@@ -180,29 +176,75 @@ func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
 
 func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 	go func() {
-		ticker := time.NewTicker(500 * time.Millisecond)
+		ticker := time.NewTicker(200 * time.Millisecond)
 		defer ticker.Stop()
+
+		// _, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(140))
+		// if err != nil {
+		// 	log.Fatalf("Service: failed to place limit order: %v", err)
+		// }
+		// _, err = s.PlaceLimitOrder(Sell, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(150))
+		// if err != nil {
+		// 	log.Fatalf("Service: failed to place limit order: %v", err)
+		// }
+
+		// time.Sleep(3 * time.Second)
+
+		s.SetMarketPrice(decimal.NewFromInt(150))
 
 		for range ticker.C {
 
 			var price decimal.Decimal
 			var side Side
+			var err error
+			var BuyMoreThanAsk bool
 
 			if rand.Intn(2) == 0 {
 				side = Buy
-				price = s.BestAsk().Add(decimal.NewFromInt(5)).Sub(decimal.NewFromFloat(rand.Float64() * 10).Round(2))
+				price = s.MarketPrice().Add(decimal.NewFromInt(2)).Sub(decimal.NewFromFloat(rand.Float64() * 5).Round(2))
 			} else {
 				side = Sell
-				price = s.BestBid().Sub(decimal.NewFromInt(5)).Add(decimal.NewFromFloat(rand.Float64() * 10).Round(2))
+				price = s.MarketPrice().Sub(decimal.NewFromInt(2)).Add(decimal.NewFromFloat(rand.Float64() * 5).Round(2))
 			}
 
-			volume := decimal.NewFromFloat(rand.Float64() * 50).Add(decimal.NewFromInt(50)).Round(2)
+			price = price.Abs()
 
-			log.Printf("Simulating market fluctuations: %v %v %v\n", side, volume, price)
+			BuyMoreThanAsk = s.BidVolume().GreaterThan(s.AskVolume())
+
+			limitOrderVolume := decimal.NewFromFloat(rand.Float64() * 50).Add(decimal.NewFromInt(50)).Round(1)
+			marketOrderVolume := decimal.NewFromFloat(rand.Float64() * 50).Add(decimal.NewFromInt(50)).Round(1)
+
+			// log.Printf("Simulating market fluctuations: %v %v %v\n", side, limitOrderVolume, price)
 			if rand.Intn(2) == 0 {
-				_, _ = s.PlaceLimitOrder(side, marketSimulationUlid, volume, price)
+				_, err = s.PlaceLimitOrder(side, marketSimulationUlid, limitOrderVolume, price)
+				if err != nil {
+					log.Fatalf("Service: failed to place limit order: %v", err)
+				}
+				_, err = s.PlaceMarketOrder(side, marketSimulationUlid, marketOrderVolume)
+				if err != nil {
+					log.Fatalf("Service: failed to place limit order: %v", err)
+				}
+				if !BuyMoreThanAsk {
+					_, err = s.PlaceLimitOrder(side, marketSimulationUlid, limitOrderVolume, price)
+					if err != nil {
+						log.Fatalf("Service: failed to place limit order: %v", err)
+					}
+				}
 			} else {
-				_, _ = s.PlaceLimitOrder(side, marketSimulationUlid, volume, price)
+				_, err = s.PlaceLimitOrder(side, marketSimulationUlid, limitOrderVolume, price)
+				if err != nil {
+					log.Fatalf("Service: failed to place limit order: %v", err)
+				}
+				_, err = s.PlaceMarketOrder(side, marketSimulationUlid, marketOrderVolume)
+				if err != nil {
+					log.Fatalf("Service: failed to place limit order: %v", err)
+				}
+				if BuyMoreThanAsk {
+					_, err = s.PlaceLimitOrder(side, marketSimulationUlid, limitOrderVolume, price)
+					if err != nil {
+						log.Fatalf("Service: failed to place limit order: %v", err)
+					}
+				}
 			}
 		}
 	}()
