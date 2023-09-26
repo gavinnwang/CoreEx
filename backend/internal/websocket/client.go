@@ -29,16 +29,9 @@ const (
 	maxMessageSize = 512
 )
 
-type Symbol struct {
-	streaming bool
-}
-
 // Client is a middleman between the websocket connection and the hub.
 type Client struct {
 	user *models.User
-
-	// A map of symbols that the client is subscribed to.
-	// symbols map[string]Symbol
 
 	// A map of subscriptions that the client has. Each value is a cancel channel to close the subscription.
 	subscriptions map[string]chan bool
@@ -143,7 +136,6 @@ func (c *Client) writePump() {
 	}
 }
 
-
 // subscribe subscribes a client to a Redis symbol channel
 func (c *Client) subscribe(symbol string) {
 	rdb := c.ws.rdb
@@ -154,11 +146,11 @@ func (c *Client) subscribe(symbol string) {
 	c.subscriptions[symbol] = cancel
 
 	ch := pubsub.Channel()
-	fmt.Printf("Channel created for symbol %v\n", symbol)
+	// fmt.Printf("Channel created for symbol %v\n", symbol)
 	for {
 		select {
 		case msg := <-ch:
-			log.Printf("Received message from channel %v: %v", symbol, msg.Payload)
+			// log.Printf("Received message from channel %v: %v", symbol, msg.Payload)
 			// Forward messages received from pubsub channel to client
 			c.send <- []byte(msg.Payload)
 		case <-cancel:
