@@ -76,13 +76,13 @@ func (s *service) Run(brokerList []string) {
 		if err != nil {
 			log.Fatalf("Service: failed to parse market simulation user ulid: %v", err)
 		}
-
 	}
 
 	go s.startConsumers(brokerList)
 	for _, ob := range s.obServices {
 		log.Printf("Starting market price history persistance for %v\n", ob.Symbol())
 		ob.Run()
+		ob.SimulateMarketFluctuations(marketSimulationUlid)
 	}
 }
 

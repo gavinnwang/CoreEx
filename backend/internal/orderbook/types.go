@@ -13,7 +13,7 @@ type SymbolInfoResponse struct {
 }
 
 type CandleData struct {
-	models.PriceData
+	models.StockPriceHistory
 	NewCandle bool `json:"new_candle"`
 }
 

@@ -139,22 +139,6 @@ func getPriceDataFromPriceSlice(prices []decimal.Decimal) models.PriceData {
 	}
 }
 
-// func (s *service) persistPrice() {
-// 	if len(s.prices) >= 5 {
-// 		priceData := models.StockPriceHistory{
-// 			PriceData:  getPriceDataFromPriceSlice(s.prices),
-// 			Volume:     s.AskVolume().Add(s.BidVolume()),
-// 			RecordedAt: time.Now().Unix(),
-// 		}
-// 		err := s.PersistMarketPrice(priceData)
-// 		if err != nil {
-// 			log.Printf("Could not persist market price: %v", err)
-// 		}
-// 		s.prices = []decimal.Decimal{}
-// 	}
-// 	s.prices = append(s.prices, s.MarketPrice())
-// }
-
 func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
 
 	symbolMarketInfo := SymbolInfoResponse{
@@ -165,7 +149,7 @@ func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
 		AskVolume: s.AskVolume().InexactFloat64(),
 		BidVolume: s.BidVolume().InexactFloat64(),
 		CandleData: CandleData{
-			PriceData: priceData.PriceData,
+			StockPriceHistory: priceData,
 			NewCandle: new,
 		},
 	}
