@@ -54,53 +54,54 @@ func handleStreamSymbolInfo(c *Client, msgReq Request) {
 	symbol := params.Symbol
 
 	// Create a new ticker that fires every second.
-	ticker := time.NewTicker(1 * time.Second)
-	defer ticker.Stop()
+	// ticker := time.NewTicker(1 * time.Second)
+	// defer ticker.Stop()
 
-	stopChan := make(chan struct{})
+	// stopChan := make(chan struct{})
 
+	go c.subscribe(symbol)
 	// Run the ticker in a separate goroutine.
-	go func() {
-		for {
-			select {
-			case <-ticker.C:
-				symbolInfo, err := c.ws.exchangeService.GetSymbolInfo(symbol)
-				if err != nil {
-					log.Printf("Failed to get symbol info: %v", err)
-					sendErrorMessage(c, buildErrorResponse(msgReq, ErrMsgInternalServer))
-					return
-				}
+	// go func() {
+	// 	for {
+	// 		select {
+	// 		case <-ticker.C:
+	// 			symbolInfo, err := c.ws.exchangeService.GetSymbolInfo(symbol)
+	// 			if err != nil {
+	// 				log.Printf("Failed to get symbol info: %v", err)
+	// 				sendErrorMessage(c, buildErrorResponse(msgReq, ErrMsgInternalServer))
+	// 				return
+	// 			}
 
-				// Broacast successful message response
-				msgRes := ResponseGetSymbolInfo{
-					ResponseBase: ResponseBase{
-						Event:   EventStreamSymbolInfo,
-						Success: true,
-					},
-					Result: symbolInfo,
-				}
+	// 			// Broacast successful message response
+				// msgRes := ResponseGetSymbolInfo{
+				// 	ResponseBase: ResponseBase{
+				// 		Event:   EventStreamSymbolInfo,
+				// 		Success: true,
+				// 	},
+				// 	Result: symbolInfo,
+				// }
 
-				msgResBytes, err := json.Marshal(msgRes)
-				if err := handleMarshalError(err, "handleStreamSymbolInfo", c); err != nil {
-					return
-				}
-				c.send <- msgResBytes
-			case <-stopChan:
-				log.Println("Stopping stream symbol info ticker")
-				return
-			}
-		}
-	}()
+	// 			msgResBytes, err := json.Marshal(msgRes)
+	// 			if err := handleMarshalError(err, "handleStreamSymbolInfo", c); err != nil {
+	// 				return
+	// 			}
+	// 			c.send <- msgResBytes
+	// 		case <-stopChan:
+	// 			log.Println("Stopping stream symbol info ticker")
+	// 			return
+	// 		}
+	// 	}
+	// }()
 
 	// Wait for the client to close the connection or any other stop condition.
-	for {
-		_, _, err := c.conn.ReadMessage()
-		if err != nil {
-			// Stop the ticker if the client has disconnected.
-			stopChan <- struct{}{}
-			return
-		}
-	}
+	// for {
+	// 	_, _, err := c.conn.ReadMessage()
+	// 	if err != nil {
+	// 		// Stop the ticker if the client has disconnected.
+	// 		stopChan <- struct{}{}
+	// 		return
+	// 	}
+	// }
 }
 
 func handleStreamMarketPrice(c *Client, msgReq Request) {

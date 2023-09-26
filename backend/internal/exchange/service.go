@@ -28,7 +28,7 @@ var (
 type Service interface {
 	PlaceOrder(input PlaceOrderInput) error
 	GetMarketPrice(symbol string) (float64, error)
-	GetSymbolInfo(symbol string) (SymbolInfoResponse, error)
+	GetSymbolInfo(symbol string) (orderbook.SymbolInfoResponse, error)
 	Run(brokerList []string)
 	ShutdownConsumers()
 	GetSymbolMarketPriceHistory(symbol string) ([]models.StockPriceHistory, error)
@@ -83,7 +83,8 @@ func (s *service) Run(brokerList []string) {
 	for _, ob := range s.obServices {
 		log.Printf("Starting market price history persistance for %v\n", ob.Symbol())
 		ob.RunMarketPriceHistoryPersistance()
-		ob.SimulateMarketFluctuations(marketSimulationUlid)
+		// ob.SimulateMarketFluctuations(marketSimulationUlid)
+		ob.RunPublishMarketInfoToRedis()
 	}
 }
 
@@ -133,12 +134,12 @@ func (s *service) GetMarketPrice(symbol string) (float64, error) {
 	return ob.MarketPrice().InexactFloat64(), nil
 }
 
-func (s *service) GetSymbolInfo(symbol string) (SymbolInfoResponse, error) {
+func (s *service) GetSymbolInfo(symbol string) (orderbook.SymbolInfoResponse, error) {
 	ob, ok := s.obServices[symbol]
 	if !ok {
-		return SymbolInfoResponse{}, ErrInvalidSymbol
+		return orderbook.SymbolInfoResponse{}, ErrInvalidSymbol
 	}
-	return SymbolInfoResponse{
+	return orderbook.SymbolInfoResponse{
 		Symbol:    symbol,
 		AskVolume: ob.AskVolume().InexactFloat64(),
 		BidVolume: ob.BidVolume().InexactFloat64(),

@@ -1,11 +1,11 @@
-package ws
+package redis
 
 import (
 	"context"
 	"fmt"
 	"github/wry-0313/exchange/internal/config"
 
-	"github.com/go-redis/redis"
+	"github.com/redis/go-redis/v9"
 )
 
 var ctx = context.Background()
@@ -15,5 +15,13 @@ func NewRedis(cfg config.RedisConfig) *redis.Client {
 		Addr: fmt.Sprintf("%v:%v", cfg.Host, cfg.Port),
 	})
 
+	// check redis connetcion
+	_, err := rdb.Ping(ctx).Result()
+	if err != nil {
+		panic(err)
+	} else {
+		fmt.Println("Redis connected")
+	}
+	
 	return rdb
 }

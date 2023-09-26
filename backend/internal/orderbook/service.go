@@ -1,6 +1,8 @@
 package orderbook
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
 	"github/wry-0313/exchange/internal/models"
 	list "github/wry-0313/exchange/pkg/dsa/linkedlist"
@@ -10,7 +12,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-redis/redis"
+	"github.com/redis/go-redis/v9"
+
 	"github.com/oklog/ulid/v2"
 	"github.com/shopspring/decimal"
 )
@@ -29,6 +32,7 @@ type Service interface {
 	GetMarketPriceHistory() ([]models.StockPriceHistory, error)
 	RunMarketPriceHistoryPersistance()
 	SimulateMarketFluctuations(marketSimulationUlid ulid.ULID)
+	RunPublishMarketInfoToRedis()
 }
 
 type service struct {
@@ -85,6 +89,34 @@ func NewService(symbol string, obRepo Repository, rdb *redis.Client) Service {
 		prices:           []decimal.Decimal{},
 	}
 }
+
+func (s *service) RunPublishMarketInfoToRedis() {
+	go func() {
+		ticker := time.NewTicker(1 * time.Second)
+		defer ticker.Stop()
+
+		for range ticker.C {
+			symbolMarketInfo := SymbolInfoResponse{
+				Symbol:      s.symbol,
+				Price: s.MarketPrice().InexactFloat64(),
+				BestBid:     s.BestBid().InexactFloat64(),
+				BestAsk:     s.BestAsk().InexactFloat64(),
+				AskVolume:   s.AskVolume().InexactFloat64(),
+				BidVolume:   s.BidVolume().InexactFloat64(),
+			}
+			symbolBytes, err := json.Marshal(symbolMarketInfo)
+			if err != nil {
+				log.Printf("Service: failed to marshal market info into JSON: %v", s.symbol)
+				return
+			}
+			log.Printf("Publishing market info: %v to redis channel %s\n", symbolMarketInfo, s.symbol)
+
+			s.rdb.Publish(context.Background(), s.symbol, symbolBytes)
+		}
+	}()
+}
+
+
 
 func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 	go func() {
@@ -387,8 +419,7 @@ func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price dec
 }
 
 func (s *service) PersistMarketPrice(priceData models.StockPriceHistory) error {
-	log.Printf("Persisting market price: %v", priceData)
-	// persist market price to db
+	// log.Printf("Persisting market price: %v", priceData)
 	err := s.obRepo.CreateMarketPriceHistory(s.symbol, priceData)
 	if err != nil {
 		return fmt.Errorf("Service: failed to persist market price history: %w", err)

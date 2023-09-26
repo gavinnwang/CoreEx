@@ -5,13 +5,13 @@ import (
 	"github/wry-0313/exchange/db"
 	"github/wry-0313/exchange/internal/config"
 	"github/wry-0313/exchange/internal/orderbook"
+	"github/wry-0313/exchange/internal/redis"
 	"log"
 	"math/rand"
 	"sync"
 	"testing"
 	"time"
 
-	ws "github/wry-0313/exchange/internal/websocket"
 
 	"github.com/oklog/ulid/v2"
 	"github.com/shopspring/decimal"
@@ -213,7 +213,7 @@ func TestSimulateStockMarketFluctuations(t *testing.T) {
 		log.Fatalf("Could not load config: %v", err)
 	}
 
-	rdb := ws.NewRedis(cfg.Rdb)
+	rdb := redis.NewRedis(cfg.Rdb)
 
 	db, err := db.New(cfg.DB)
 	if err != nil {

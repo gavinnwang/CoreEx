@@ -2,7 +2,7 @@ package ws
 
 import (
 	"encoding/json"
-	"github/wry-0313/exchange/internal/exchange"
+	"github/wry-0313/exchange/internal/orderbook"
 )
 
 const (
@@ -56,7 +56,7 @@ type ResponseGetMarketPrice struct {
 
 type ResponseGetSymbolInfo struct {
 	ResponseBase
-	Result exchange.SymbolInfoResponse `json:"result,omitempty"`
+	Result orderbook.SymbolInfoResponse `json:"result,omitempty"`
 }
 
 // ResultBoardConnect contains the result of board connection.

@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github/wry-0313/exchange/internal/models"
@@ -146,17 +147,18 @@ func (c *Client) writePump() {
 // subscribe subscribes a client to a Redis symbol channel
 func (c *Client) subscribe(symbol string) {
 	rdb := c.ws.rdb
-	pubsub := rdb.Subscribe(symbol)
+	pubsub := rdb.Subscribe(context.Background(), symbol)
 	defer pubsub.Close()
 
 	cancel := make(chan bool)
 	c.subscriptions[symbol] = cancel
 
 	ch := pubsub.Channel()
-	fmt.Printf("Channel created for board %v\n", symbol)
+	fmt.Printf("Channel created for symbol %v\n", symbol)
 	for {
 		select {
 		case msg := <-ch:
+			log.Printf("Received message from channel %v: %v", symbol, msg.Payload)
 			// Forward messages received from pubsub channel to client
 			c.send <- []byte(msg.Payload)
 		case <-cancel:

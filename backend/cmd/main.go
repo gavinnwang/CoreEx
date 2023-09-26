@@ -11,6 +11,7 @@ import (
 	"github/wry-0313/exchange/internal/middleware"
 	"github/wry-0313/exchange/internal/models"
 	"github/wry-0313/exchange/internal/orderbook"
+	"github/wry-0313/exchange/internal/redis"
 	"github/wry-0313/exchange/internal/user"
 	ws "github/wry-0313/exchange/internal/websocket"
 	"github/wry-0313/exchange/pkg/validator"
@@ -91,7 +92,7 @@ func setupHandlerAndService(
 
 	obServices := make(map[string]orderbook.Service)
 
-	rdb := ws.NewRedis(cfg.Rdb)
+	rdb := redis.NewRedis(cfg.Rdb)
 	obServices["AAPL"] = orderbook.NewService("AAPL", obRepo, rdb)
 
 	exchangeService := exchange.NewService(userRepo, obServices, v, cfg.KafkaBrokers)

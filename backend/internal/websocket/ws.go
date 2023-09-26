@@ -3,7 +3,7 @@ package ws
 import (
 	"github/wry-0313/exchange/internal/exchange"
 
-	"github.com/go-redis/redis"
+	"github.com/redis/go-redis/v9"
 )
 
 type WebSocket struct {
