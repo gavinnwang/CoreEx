@@ -8,12 +8,16 @@ type Stock struct {
 }
 
 type StockPriceHistory struct {
-	Open       decimal.Decimal `json:"open"`
-	Close      decimal.Decimal `json:"close"`
-	High       decimal.Decimal `json:"high"`
-	Low        decimal.Decimal `json:"low"`
+	PriceData
 	Volume     decimal.Decimal `json:"volume"`
 	RecordedAt int64           `json:"recorded_at"`
+}
+
+type PriceData struct {
+	Open  decimal.Decimal `json:"open"`
+	Close decimal.Decimal `json:"close"`
+	High  decimal.Decimal `json:"high"`
+	Low   decimal.Decimal `json:"low"`
 }
 
 type Holding struct {

@@ -30,9 +30,8 @@ type Service interface {
 	NewOrder(side Side, userID ulid.ULID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order
 	PersistMarketPrice(priceData models.StockPriceHistory) error
 	GetMarketPriceHistory() ([]models.StockPriceHistory, error)
-	RunMarketPriceHistoryPersistance()
 	SimulateMarketFluctuations(marketSimulationUlid ulid.ULID)
-	RunPublishMarketInfoToRedis()
+	Run()
 }
 
 type service struct {
@@ -90,38 +89,102 @@ func NewService(symbol string, obRepo Repository, rdb *redis.Client) Service {
 	}
 }
 
-func (s *service) RunPublishMarketInfoToRedis() {
+func (s *service) Run() {
 	go func() {
 		ticker := time.NewTicker(1 * time.Second)
 		defer ticker.Stop()
-
-		for range ticker.C {
-			symbolMarketInfo := SymbolInfoResponse{
-				Symbol:    s.symbol,
-				Price:     s.MarketPrice().InexactFloat64(),
-				BestBid:   s.BestBid().InexactFloat64(),
-				BestAsk:   s.BestAsk().InexactFloat64(),
-				AskVolume: s.AskVolume().InexactFloat64(),
-				BidVolume: s.BidVolume().InexactFloat64(),
+		for {
+			select {
+			case <-ticker.C:
+				var priceData models.StockPriceHistory
+				var new bool // new means to create a new candle, otherwise update the last candle
+				s.prices = append(s.prices, s.MarketPrice())
+				if len(s.prices) >= 5 {
+					priceData = models.StockPriceHistory{
+						PriceData:  getPriceDataFromPriceSlice(s.prices),
+						Volume:     s.AskVolume().Add(s.BidVolume()),
+						RecordedAt: time.Now().Unix(),
+					}
+					new = true
+					err := s.PersistMarketPrice(priceData)
+					if err != nil {
+						log.Printf("Could not persist market price: %v", err)
+					}
+					s.prices = []decimal.Decimal{}
+				} else {
+					priceData = models.StockPriceHistory{
+						PriceData:  getPriceDataFromPriceSlice(s.prices),
+						Volume:     s.AskVolume().Add(s.BidVolume()),
+						RecordedAt: time.Now().Unix(),
+					}
+					new = false
+				}
+				s.publishPrice(priceData, new)
 			}
-			log.Printf("Publishing market info: %v to redis channel %s\n", symbolMarketInfo, s.symbol)
-
-			pubMsg := SymbolInfoPubMsg{
-				RedisPubMsgBase: RedisPubMsgBase{
-					Event:   EventStreamSymbolInfo,
-					Success: true,
-				},
-				Result: symbolMarketInfo,
-			}
-			pubMsgBytes, err := json.Marshal(pubMsg)
-			if err != nil {
-				log.Printf("Service: failed to marshal market info into JSON: %v", s.symbol)
-				return
-			}
-
-			s.rdb.Publish(context.Background(), s.symbol, pubMsgBytes)
 		}
 	}()
+}
+
+func getPriceDataFromPriceSlice(prices []decimal.Decimal) models.PriceData {
+	open := prices[0]
+	close := prices[len(prices)-1]
+	sort.Slice(prices, func(i, j int) bool {
+		return prices[i].LessThan(prices[j])
+	})
+	return models.PriceData{
+		Open:  open,
+		Close: close,
+		High:  prices[len(prices)-1],
+		Low:   prices[0],
+	}
+}
+
+// func (s *service) persistPrice() {
+// 	if len(s.prices) >= 5 {
+// 		priceData := models.StockPriceHistory{
+// 			PriceData:  getPriceDataFromPriceSlice(s.prices),
+// 			Volume:     s.AskVolume().Add(s.BidVolume()),
+// 			RecordedAt: time.Now().Unix(),
+// 		}
+// 		err := s.PersistMarketPrice(priceData)
+// 		if err != nil {
+// 			log.Printf("Could not persist market price: %v", err)
+// 		}
+// 		s.prices = []decimal.Decimal{}
+// 	}
+// 	s.prices = append(s.prices, s.MarketPrice())
+// }
+
+func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
+
+	symbolMarketInfo := SymbolInfoResponse{
+		Symbol:    s.symbol,
+		Price:     s.MarketPrice().InexactFloat64(),
+		BestBid:   s.BestBid().InexactFloat64(),
+		BestAsk:   s.BestAsk().InexactFloat64(),
+		AskVolume: s.AskVolume().InexactFloat64(),
+		BidVolume: s.BidVolume().InexactFloat64(),
+		CandleData: CandleData{
+			PriceData: priceData.PriceData,
+			NewCandle: new,
+		},
+	}
+	log.Printf("Publishing market info: %v to redis channel %s\n", symbolMarketInfo, s.symbol)
+
+	pubMsg := SymbolInfoPubMsg{
+		RedisPubMsgBase: RedisPubMsgBase{
+			Event:   EventStreamSymbolInfo,
+			Success: true,
+		},
+		Result: symbolMarketInfo,
+	}
+	pubMsgBytes, err := json.Marshal(pubMsg)
+	if err != nil {
+		log.Printf("Service: failed to marshal market info into JSON: %v", s.symbol)
+		return
+	}
+
+	s.rdb.Publish(context.Background(), s.symbol, pubMsgBytes)
 }
 
 func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
@@ -142,40 +205,6 @@ func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 				_, _ = s.PlaceLimitOrder(side, marketSimulationUlid, volume, price)
 			} else {
 				_, _ = s.PlaceLimitOrder(side, marketSimulationUlid, volume, price)
-			}
-		}
-	}()
-}
-
-func (s *service) RunMarketPriceHistoryPersistance() {
-	go func() {
-		ticker := time.NewTicker(1 * time.Second)
-		defer ticker.Stop()
-		for {
-			select {
-			case <-ticker.C:
-				// log.Printf("price vector %v\n", s.prices)
-				if len(s.prices) >= 5 {
-					open := s.prices[0]
-					close := s.prices[len(s.prices)-1]
-					sort.Slice(s.prices, func(i, j int) bool {
-						return s.prices[i].LessThan(s.prices[j])
-					})
-					priceData := models.StockPriceHistory{
-						Open:       open,
-						Close:      close,
-						High:       s.prices[len(s.prices)-1],
-						Low:        s.prices[0],
-						Volume:     s.AskVolume().Add(s.BidVolume()),
-						RecordedAt: time.Now().Unix(),
-					}
-					err := s.PersistMarketPrice(priceData)
-					if err != nil {
-						log.Printf("Could not persist market price: %v", err)
-					}
-					s.prices = []decimal.Decimal{}
-				}
-				s.prices = append(s.prices, s.MarketPrice())
 			}
 		}
 	}()

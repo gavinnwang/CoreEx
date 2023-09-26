@@ -1,12 +1,20 @@
 package orderbook
 
+import "github/wry-0313/exchange/internal/models"
+
 type SymbolInfoResponse struct {
-	Symbol    string  `json:"symbol"`
-	AskVolume float64 `json:"ask_volume"`
-	BidVolume float64 `json:"bid_volume"`
-	BestBid   float64 `json:"best_bid"`
-	BestAsk   float64 `json:"best_ask"`
-	Price     float64 `json:"price"`
+	Symbol     string     `json:"symbol"`
+	AskVolume  float64    `json:"ask_volume"`
+	BidVolume  float64    `json:"bid_volume"`
+	BestBid    float64    `json:"best_bid"`
+	BestAsk    float64    `json:"best_ask"`
+	Price      float64    `json:"price"`
+	CandleData CandleData `json:"candle_data"`
+}
+
+type CandleData struct {
+	models.PriceData
+	NewCandle bool `json:"new_candle"`
 }
 
 type RedisPubMsgBase struct {
