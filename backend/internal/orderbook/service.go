@@ -21,11 +21,6 @@ import (
 type Service interface {
 	PlaceMarketOrder(side Side, userID ulid.ULID, volume decimal.Decimal) (orderID ulid.ULID, err error)
 	PlaceLimitOrder(side Side, userID ulid.ULID, volume, price decimal.Decimal) (orderID ulid.ULID, err error)
-	AskVolume() decimal.Decimal
-	BidVolume() decimal.Decimal
-	BestBid() decimal.Decimal
-	BestAsk() decimal.Decimal
-	MarketPrice() decimal.Decimal
 	Symbol() string
 	NewOrder(side Side, userID ulid.ULID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order
 	PersistMarketPrice(priceData models.StockPriceHistory) error
@@ -96,13 +91,14 @@ func (s *service) Run() {
 		for {
 			select {
 			case <-ticker.C:
+
 				var priceData models.StockPriceHistory
 				var new bool // new means to create a new candle, otherwise update the last candle
 				s.prices = append(s.prices, s.MarketPrice())
 				if len(s.prices) >= 5 {
 					priceData = models.StockPriceHistory{
 						PriceData:  getPriceDataFromPriceSlice(s.prices),
-						Volume:     s.AskVolume().Add(s.BidVolume()),
+						Volume:     s.asks.Volume().Add(s.bids.Volume()),
 						RecordedAt: time.Now().Unix(),
 					}
 					new = true
@@ -115,7 +111,7 @@ func (s *service) Run() {
 				} else {
 					priceData = models.StockPriceHistory{
 						PriceData:  getPriceDataFromPriceSlice(s.prices),
-						Volume:     s.AskVolume().Add(s.BidVolume()),
+						Volume:     s.asks.Volume().Add(s.bids.Volume()),
 						RecordedAt: time.Now().Unix(),
 					}
 
@@ -123,6 +119,9 @@ func (s *service) Run() {
 				}
 
 				s.publishPrice(priceData, new)
+
+				s.asks.ResetVolume()
+				s.bids.ResetVolume()
 			}
 		}
 	}()
@@ -149,8 +148,8 @@ func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
 		Price:     s.MarketPrice().InexactFloat64(),
 		BestBid:   s.BestBid().InexactFloat64(),
 		BestAsk:   s.BestAsk().InexactFloat64(),
-		AskVolume: s.AskVolume().InexactFloat64(),
-		BidVolume: s.BidVolume().InexactFloat64(),
+		AskVolume: s.asks.Volume().InexactFloat64(),
+		BidVolume: s.bids.Volume().InexactFloat64(),
 		CandleData: CandleData{
 			StockPriceHistory: priceData,
 			NewCandle:         new,
@@ -175,79 +174,38 @@ func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
 }
 
 func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
-	go func() {
-		ticker := time.NewTicker(200 * time.Millisecond)
-		defer ticker.Stop()
 
-		// _, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(140))
-		// if err != nil {
-		// 	log.Fatalf("Service: failed to place limit order: %v", err)
-		// }
-		// _, err = s.PlaceLimitOrder(Sell, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(150))
-		// if err != nil {
-		// 	log.Fatalf("Service: failed to place limit order: %v", err)
-		// }
+	s.PlaceLimitOrder(Buy, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(140))
+	s.PlaceLimitOrder(Sell, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(150))
 
-		// time.Sleep(3 * time.Second)
+	time.Sleep(5 * time.Second)
 
-		s.SetMarketPrice(decimal.NewFromInt(150))
-
-		for range ticker.C {
-
-			var price decimal.Decimal
-			var side Side
-			var err error
-			var BuyMoreThanAsk bool
-
-			if rand.Intn(2) == 0 {
-				side = Buy
-				price = s.MarketPrice().Add(decimal.NewFromInt(2)).Sub(decimal.NewFromFloat(rand.Float64() * 5).Round(2))
-			} else {
-				side = Sell
-				price = s.MarketPrice().Sub(decimal.NewFromInt(2)).Add(decimal.NewFromFloat(rand.Float64() * 5).Round(2))
+	go func() { // limit buy order
+		for {
+			log.Printf("Best ask: %s", s.BestAsk())
+			price := decimal.NewFromFloat(rand.NormFloat64() * 1).Add(s.BestAsk()).Sub(decimal.NewFromInt(1)).Round(2)
+			volume := decimal.NewFromFloat(rand.NormFloat64() * 20).Add(decimal.NewFromInt(100)).Round(2)
+			_, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, volume, price)
+			if err != nil {
+				log.Printf("Failed to place limit order: %v", err)
 			}
-
-			price = price.Abs()
-
-			BuyMoreThanAsk = s.BidVolume().GreaterThan(s.AskVolume())
-
-			limitOrderVolume := decimal.NewFromFloat(rand.Float64() * 50).Add(decimal.NewFromInt(50)).Round(1)
-			marketOrderVolume := decimal.NewFromFloat(rand.Float64() * 50).Add(decimal.NewFromInt(50)).Round(1)
-
-			// log.Printf("Simulating market fluctuations: %v %v %v\n", side, limitOrderVolume, price)
-			if rand.Intn(2) == 0 {
-				_, err = s.PlaceLimitOrder(side, marketSimulationUlid, limitOrderVolume, price)
-				if err != nil {
-					log.Fatalf("Service: failed to place limit order: %v", err)
-				}
-				_, err = s.PlaceMarketOrder(side, marketSimulationUlid, marketOrderVolume)
-				if err != nil {
-					log.Fatalf("Service: failed to place limit order: %v", err)
-				}
-				if !BuyMoreThanAsk {
-					_, err = s.PlaceLimitOrder(side, marketSimulationUlid, limitOrderVolume, price)
-					if err != nil {
-						log.Fatalf("Service: failed to place limit order: %v", err)
-					}
-				}
-			} else {
-				_, err = s.PlaceLimitOrder(side, marketSimulationUlid, limitOrderVolume, price)
-				if err != nil {
-					log.Fatalf("Service: failed to place limit order: %v", err)
-				}
-				_, err = s.PlaceMarketOrder(side, marketSimulationUlid, marketOrderVolume)
-				if err != nil {
-					log.Fatalf("Service: failed to place limit order: %v", err)
-				}
-				if BuyMoreThanAsk {
-					_, err = s.PlaceLimitOrder(side, marketSimulationUlid, limitOrderVolume, price)
-					if err != nil {
-						log.Fatalf("Service: failed to place limit order: %v", err)
-					}
-				}
-			}
+			time.Sleep(200 * time.Millisecond)
 		}
 	}()
+
+	go func() {
+		for {
+			log.Printf("Best bid: %s", s.BestBid())
+			price := decimal.NewFromFloat(rand.NormFloat64() * 1).Add(s.BestBid()).Add(decimal.NewFromInt(1)).Round(2)
+			volume := decimal.NewFromFloat(rand.NormFloat64() * 20).Add(decimal.NewFromInt(100)).Round(2)
+			_, err := s.PlaceLimitOrder(Sell, marketSimulationUlid, volume, price)
+			if err != nil {
+				log.Printf("Failed to place limit order: %v", err)
+			}
+			time.Sleep(200 * time.Millisecond)
+		}
+	}()
+
 }
 
 func (s *service) GetMarketPriceHistory() ([]models.StockPriceHistory, error) {
@@ -331,11 +289,11 @@ func (s *service) matchAtPriceLevel(oq *OrderQueue, o *Order) (volumeLeft decima
 			// matchedVolumeLeft := bestOrderVolume.Sub(volumeLeft) // update order status. This change should reflect in order queue
 			oq.SetVolume(oq.Volume().Sub(volumeLeft))
 
-			if o.Side() == Buy {
-				s.asks.SubVolumeBy(volumeLeft)
-			} else {
-				s.bids.SubVolumeBy(volumeLeft)
-			}
+			// if o.Side() == Buy {
+			// 	s.asks.SubVolumeBy(volumeLeft)
+			// } else {
+			// 	s.bids.SubVolumeBy(volumeLeft)
+			// }
 			s.fillOrder(bestOrder, volumeLeft, oq.Price())
 			s.fillOrder(o, volumeLeft, oq.Price()) // completely filled
 
@@ -371,11 +329,11 @@ func (s *service) matchWithMarketOrders(marketOrders *list.List[*Order], order *
 			s.fillOrder(marketOrder, orderVolume, order.Price())
 			s.fillOrder(order, orderVolume, order.Price())
 
-			if order.Side() == Buy {
-				s.asks.SubVolumeBy(orderVolume)
-			} else {
-				s.bids.SubVolumeBy(orderVolume)
-			}
+			// if order.Side() == Buy {
+			// 	s.asks.SubVolumeBy(orderVolume)
+			// } else {
+			// 	s.bids.SubVolumeBy(orderVolume)
+			// }
 
 			break
 
@@ -384,11 +342,11 @@ func (s *service) matchWithMarketOrders(marketOrders *list.List[*Order], order *
 
 			marketOrders.Remove(marketOrderNode)
 
-			if order.Side() == Buy {
-				s.asks.SubVolumeBy(marketOrderVolume)
-			} else {
-				s.bids.SubVolumeBy(marketOrderVolume)
-			}
+			// if order.Side() == Buy {
+			// 	s.asks.SubVolumeBy(marketOrderVolume)
+			// } else {
+			// 	s.bids.SubVolumeBy(marketOrderVolume)
+			// }
 
 			s.fillOrder(order, marketOrderVolume, order.Price())
 			s.fillOrder(marketOrder, marketOrderVolume, order.Price())
@@ -532,13 +490,13 @@ func (s *service) addLimitOrder(o *Order) {
 	}
 }
 
-func (s *service) AskVolume() decimal.Decimal {
-	return s.asks.Volume()
-}
+// func (s *service) AskVolume() decimal.Decimal {
+// 	return s.asks.Volume()
+// }
 
-func (s *service) BidVolume() decimal.Decimal {
-	return s.bids.Volume()
-}
+// func (s *service) BidVolume() decimal.Decimal {
+// 	return s.bids.Volume()
+// }
 
 func (s *service) BestBid() decimal.Decimal {
 	s.sortedOrdersMu.RLock()

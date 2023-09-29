@@ -10,6 +10,7 @@ import (
 	"github/wry-0313/exchange/pkg/validator"
 	"log"
 	"sync"
+	"time"
 
 	"github.com/IBM/sarama"
 	"github.com/oklog/ulid/v2"
@@ -27,8 +28,7 @@ var (
 
 type Service interface {
 	PlaceOrder(input PlaceOrderInput) error
-	GetMarketPrice(symbol string) (float64, error)
-	GetSymbolInfo(symbol string) (orderbook.SymbolInfoResponse, error)
+
 	Run(brokerList []string)
 	ShutdownConsumers()
 	GetSymbolMarketPriceHistory(symbol string) ([]models.StockPriceHistory, error)
@@ -81,8 +81,9 @@ func (s *service) Run(brokerList []string) {
 	go s.startConsumers(brokerList)
 	for _, ob := range s.obServices {
 		log.Printf("Starting market price history persistance for %v\n", ob.Symbol())
-		ob.Run()
 		ob.SimulateMarketFluctuations(marketSimulationUlid)
+		time.Sleep(4 * time.Second)
+		ob.Run()
 	}
 }
 
@@ -124,29 +125,6 @@ func (s *service) PlaceOrder(input PlaceOrderInput) error {
 	return nil
 }
 
-func (s *service) GetMarketPrice(symbol string) (float64, error) {
-	ob, ok := s.obServices[symbol]
-	if !ok {
-		return 0, ErrInvalidSymbol
-	}
-	return ob.MarketPrice().InexactFloat64(), nil
-}
-
-func (s *service) GetSymbolInfo(symbol string) (orderbook.SymbolInfoResponse, error) {
-	ob, ok := s.obServices[symbol]
-	if !ok {
-		return orderbook.SymbolInfoResponse{}, ErrInvalidSymbol
-	}
-	return orderbook.SymbolInfoResponse{
-		Symbol:    symbol,
-		AskVolume: ob.AskVolume().InexactFloat64(),
-		BidVolume: ob.BidVolume().InexactFloat64(),
-		BestAsk:   ob.BestAsk().InexactFloat64(),
-		BestBid:   ob.BestBid().InexactFloat64(),
-		Price:     ob.MarketPrice().InexactFloat64(),
-	}, nil
-
-}
 
 func (s *service) startConsumers(brokerList []string) {
 	config := sarama.NewConfig()
@@ -170,27 +148,7 @@ func (s *service) startConsumers(brokerList []string) {
 		log.Fatal("Failed to start consumer:", err)
 	}
 
-	// log.Printf("Starting Kafka consumers at offest: %v", sarama.OffsetNewest)
-
-	// pc, err := consumer.ConsumePartition(kafkaTopic, 0, sarama.OffsetNewest)
-	// if err != nil {
-	// 	log.Fatal("Failed to start partition consumer:", err)
-	// }
-
-	// defer func() {
-	// 	log.Println("Closing consumer partition")
-	// 	if err := pc.Close(); err != nil {
-	// 		panic(err)
-	// 	}
-	// }()
-
 	var wg sync.WaitGroup
-
-	// for w := 1; w <= numConsumers; w++ {
-	// 	wg.Add(1)
-	// 	log.Println("Starting consumer", w)
-	// 	go s.consumer(pc, &wg, w)
-	// }
 
 	partitionList, err := consumer.Partitions(kafkaTopic)
 	if err != nil {

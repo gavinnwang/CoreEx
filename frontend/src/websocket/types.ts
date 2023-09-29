@@ -34,10 +34,18 @@ type GraphPriceDataPoint = {
   y: [number, number, number, number];
 };
 
-type GraphPriceData = GraphPriceDataPoint[];
+type GraphVolumeDataPoint = {
+  x: Date;
+  y: number;
+}
 
-type ApexGraphData = {
+
+type ApexGraphPriceData = {
   data: GraphPriceDataPoint[];
+}[];
+
+type ApexGraphVolumeData = {
+  data: GraphVolumeDataPoint[];
 }[];
 
 type SymbolInfo = {

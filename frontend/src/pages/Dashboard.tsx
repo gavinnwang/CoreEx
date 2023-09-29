@@ -11,84 +11,67 @@ import toast from "solid-toast";
 import { getPriceData } from "../api/marketData";
 import { SolidApexCharts } from "solid-apexcharts";
 
-
-
 const Price: Component = () => {
   const [symbolInfo, setSymbolInfo] = createSignal<SymbolInfo | null>(null);
-  // const [candleData, setCandleData] = createSignal<CandleDataUpdate | null>(
-  //   null
-  // );
+
   const [fetchErrorMsg, setFetchErrorMsg] = createSignal<string | null>(null);
 
-  const [graphData, setGraphData] = createSignal<ApexGraphData | null>(null);
+  const [graphPriceData, setGraphPriceData] =
+    createSignal<ApexGraphPriceData | null>(null);
+
+  const [graphVolumeData, setGraphVolumeData] =
+    createSignal<ApexGraphVolumeData | null>(null);
 
   const symbol = "AAPL";
 
   const [priceData] = createResource(symbol, getPriceHistoryData);
 
-  const convertDataToGraphFormat = (
-  data: CandleDataPoint[]
-): { data: GraphPriceDataPoint[] } [] => {
-  return [
-    {
-      data: data.map((item) => ({
-        x: new Date(item.recorded_at),
-        y: [item.open, item.high, item.low, item.close] as [
-          number,
-          number,
-          number,
-          number
-        ],
-      })),
-    },
-  ];
-};
+  const convertDataToPriceGraphFormat = (
+    data: CandleDataPoint[]
+  ): { data: GraphPriceDataPoint[] }[] => {
+    return [
+      {
+        data: data.map((item) => ({
+          x: new Date(item.recorded_at * 1000),
+          y: [item.open, item.high, item.low, item.close] as [
+            number,
+            number,
+            number,
+            number
+          ],
+        })),
+      },
+    ];
+  };
 
-async function getPriceHistoryData(symbol: string): Promise<ApexGraphData > {
-  try {
-    const data = await getPriceData(symbol);
-    const graphData = convertDataToGraphFormat(data);
-    setGraphData(graphData);
-    return graphData;
-  } catch (e) {
-    console.error(e);
-    throw e;
+  const convertDataToVolumeGraphFormat = (
+    data: CandleDataPoint[]
+  ): { data: GraphVolumeDataPoint[] }[] => {
+    return [
+      {
+        data: data.map((item) => ({
+          x: new Date(item.recorded_at * 1000),
+          y: item.volume,
+        })),
+      },
+    ];
+  };
+
+  async function getPriceHistoryData(
+    symbol: string
+  ): Promise<ApexGraphPriceData> {
+    try {
+      const data = await getPriceData(symbol);
+      const graphPriceData = convertDataToPriceGraphFormat(data);
+      const graphVolumeData = convertDataToVolumeGraphFormat(data);
+      setGraphVolumeData(graphVolumeData);
+      setGraphPriceData(graphPriceData);
+      return graphPriceData;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
-}
-
-
-  // createEffect(() => {
-
-
-  //   const gd = graphData();
-  //   const cd = candleData();
-  //   if (cd && gd) {
-  //     if (cd.new_candle) {
-  //        gd[0].data.push({
-  //         x: new Date(cd.recorded_at),
-  //         y: [
-  //           cd.open,
-  //           cd.high,
-  //           cd.low,
-  //           cd.close,
-  //         ] ,
-  //       });
-        
-  //     } else {
-  //       gd[0].data[gd[0].data.length - 1] = {
-  //         x: new Date(cd.recorded_at),
-  //         y: [
-  //           cd.open,
-  //           cd.high,
-  //           cd.low,
-  //           cd.close,
-  //         ] ,
-  //       };
-  //     }
-  //     toast.success(gd[0].data.length)
-  //     setGraphData(gd);
-  //   }
-  // });
 
   const [needNew, setNeedNew] = createSignal<boolean>(true);
 
@@ -112,95 +95,81 @@ async function getPriceHistoryData(symbol: string): Promise<ApexGraphData > {
       toast.error("Something went wrong.");
     });
 
-
     ws.addEventListener("message", (event) => {
       const res = event.data;
       const resData: WSResponseGetSymbolInfo = JSON.parse(res);
       if (resData.success && resData.result) {
         setSymbolInfo(resData.result);
         // setCandleData(resData.result.candle_data);
-        const cd = resData.result.candle_data
-        if (resData.result.candle_data) {
-          const gd = [...graphData() as ApexGraphData]
+        const cd = resData.result.candle_data;
+        if (cd) {
+          const gd = [...(graphPriceData() as ApexGraphPriceData)];
+          const vd = [...(graphVolumeData() as ApexGraphVolumeData)];
 
           if (needNew() && !cd.new_candle) {
+            if (gd[0].data.length > 50) gd[0].data.shift();
+
             gd[0].data.push({
-              x: new Date(cd.recorded_at),
-              y: [
-                cd.open,
-                cd.high,
-                cd.low,
-                cd.close,
-              ] ,
+              x: new Date(cd.recorded_at * 1000),
+              y: [cd.open, cd.high, cd.low, cd.close],
             });
+
+            if (vd[0].data.length > 50) vd[0].data.shift();
+
+            vd[0].data.push({
+              x: new Date(cd.recorded_at * 1000),
+              y: cd.volume,
+            });
+
             setNeedNew(false);
           }
 
           if (needNew() && cd.new_candle) {
+            if (gd[0].data.length > 50) gd[0].data.shift();
+
             gd[0].data.push({
-              x: new Date(cd.recorded_at),
-              y: [
-                cd.open,
-                cd.high,
-                cd.low,
-                cd.close,
-              ] ,
+              x: new Date(cd.recorded_at * 1000),
+              y: [cd.open, cd.high, cd.low, cd.close],
             });
+
+            if (vd[0].data.length > 50) vd[0].data.shift();
+
+            vd[0].data.push({
+              x: new Date(cd.recorded_at * 1000),
+              y: cd.volume,
+            });
+
             setNeedNew(true);
           }
 
           if (!needNew() && !cd.new_candle) {
             gd[0].data[gd[0].data.length - 1] = {
-              x: new Date(cd.recorded_at),
-              y: [
-                cd.open,
-                cd.high,
-                cd.low,
-                cd.close,
-              ] ,
+              x: new Date(cd.recorded_at * 1000),
+              y: [cd.open, cd.high, cd.low, cd.close],
             };
 
-          } 
+            vd[0].data[gd[0].data.length - 1] = {
+              x: new Date(cd.recorded_at * 1000),
+              y: cd.volume,
+            };
+          }
 
           if (!needNew() && cd.new_candle) {
             gd[0].data[gd[0].data.length - 1] = {
-              x: new Date(cd.recorded_at),
-              y: [
-                cd.open,
-                cd.high,
-                cd.low,
-                cd.close,
-              ] ,
+              x: new Date(cd.recorded_at * 1000),
+              y: [cd.open, cd.high, cd.low, cd.close],
             };
+
+            vd[0].data[gd[0].data.length - 1] = {
+              x: new Date(cd.recorded_at * 1000),
+              y: cd.volume,
+            };
+
             setNeedNew(true);
           }
 
-          // if (cd.new_candle && !createNewCandle()) {
-          //    gd[0].data.push({
-          //     x: new Date(cd.recorded_at),
-          //     y: [
-          //       cd.open,
-          //       cd.high,
-          //       cd.low,
-          //       cd.close,
-          //     ] ,
-          //   });
-
-            
-          // } else if (cd.new_candle && createNewCandle()) {
-          
-          // else if (!cd.new_candle && createNewCandle()) {
-          //   gd[0].data[gd[0].data.length - 1] = {
-          //     x: new Date(cd.recorded_at),
-          //     y: [
-          //       cd.open,
-          //       cd.high,
-          //       cd.low,
-          //       cd.close,
-          //     ] ,
-          //   };
-          // }
-          setGraphData(gd);
+          setGraphPriceData(gd);
+          setGraphVolumeData(vd);
         }
       } else {
         const errMsg = resData.error_message ?? "Something went wrong.";
@@ -231,18 +200,51 @@ async function getPriceHistoryData(symbol: string): Promise<ApexGraphData > {
             <div>Loading...</div>
           ) : priceData.error ? (
             <div>Error: {priceData.error.message}</div>
-          ) : graphData() &&  (
-            (
-              <SolidApexCharts
-                width="800"
-                type="candlestick"
-                options={{
-                  chart: {
-                    id: "solidchart-example",
-                  },
-                }}
-                series={graphData() as ApexGraphData}
-              />
+          ) : (
+            graphPriceData() && (
+              <div class="flex flex-col gap-y-3">
+                <p>Price Chart</p>
+                <SolidApexCharts
+                  width="800"
+                  type="candlestick"
+                  options={{
+                    chart: {
+                      id: "price chart",
+                      toolbar: {
+                        show: false,
+                      },
+                    },
+                    
+                    yaxis: {
+                      tooltip: {
+                        enabled: true,
+                      },
+                    },
+                  }}
+                  series={graphPriceData() as ApexGraphPriceData}
+                />
+                <p>Volume Chart</p>
+                <SolidApexCharts
+                  width="800"
+                  type="area"
+                  options={{
+                    chart: {
+                      id: "volume chart",
+                      animations: {
+                        enabled: true,
+                      },
+                      toolbar: {
+                        show: false,
+                      },
+                    },
+                    stroke: {
+                      curve: "smooth",
+                    },
+                  
+                  }}
+                  series={graphVolumeData() as ApexGraphVolumeData}
+                />
+              </div>
             )
           )}
         </div>

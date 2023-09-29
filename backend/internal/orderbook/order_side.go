@@ -131,9 +131,9 @@ func (os *OrderSide) Remove(n *list.Node[*Order]) *Order {
 	os.numOrdersMu.Lock()
 	os.numOrders--
 	os.numOrdersMu.Unlock()
-	// os.volume = os.volume.Sub(o.Volume())
-	os.SubVolumeBy(o.Volume())
-	// Log(fmt.Sprintf("OrderSide volume after remove: %s", os.Volume()))
+
+	// os.SubVolumeBy(o.Volume())
+
 	return o
 }
 
@@ -191,11 +191,19 @@ func (os *OrderSide) AddVolumeBy(volume decimal.Decimal) {
 	os.volume = os.volume.Add(volume)
 }
 
-func (os *OrderSide) SubVolumeBy(volume decimal.Decimal) {
+func (os *OrderSide) ResetVolume() {
 	os.volumeMu.Lock()
 	defer os.volumeMu.Unlock()
-	os.volume = os.volume.Sub(volume)
+	os.volume = decimal.Zero
 }
+
+// func (os *OrderSide) SubVolumeBy(volume decimal.Decimal) {
+// 	os.volumeMu.Lock()
+// 	defer os.volumeMu.Unlock()
+// 	os.volume = os.volume.Sub(volume)
+// }
+
+
 
 func (os *OrderSide) Volume() decimal.Decimal {
 	os.volumeMu.RLock()
