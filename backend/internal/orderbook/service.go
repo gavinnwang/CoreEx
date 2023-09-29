@@ -8,7 +8,6 @@ import (
 	list "github/wry-0313/exchange/pkg/dsa/linkedlist"
 	"log"
 	"math/rand"
-	"sort"
 	"sync"
 	"time"
 
@@ -86,7 +85,7 @@ func NewService(symbol string, obRepo Repository, rdb *redis.Client) Service {
 
 func (s *service) Run() {
 	go func() {
-		ticker := time.NewTicker(1 * time.Second)
+		ticker := time.NewTicker(500* time.Millisecond)
 		defer ticker.Stop()
 		for {
 			select {
@@ -98,7 +97,8 @@ func (s *service) Run() {
 				if len(s.prices) >= 5 {
 					priceData = models.StockPriceHistory{
 						PriceData:  getPriceDataFromPriceSlice(s.prices),
-						Volume:     s.asks.Volume().Add(s.bids.Volume()),
+						BidVolume: s.bids.Volume().InexactFloat64(),
+						AskVolume: s.asks.Volume().InexactFloat64(),
 						RecordedAt: time.Now().Unix(),
 					}
 					new = true
@@ -111,7 +111,8 @@ func (s *service) Run() {
 				} else {
 					priceData = models.StockPriceHistory{
 						PriceData:  getPriceDataFromPriceSlice(s.prices),
-						Volume:     s.asks.Volume().Add(s.bids.Volume()),
+						BidVolume: s.bids.Volume().InexactFloat64(),
+						AskVolume: s.asks.Volume().InexactFloat64(),
 						RecordedAt: time.Now().Unix(),
 					}
 
@@ -128,17 +129,34 @@ func (s *service) Run() {
 }
 
 func getPriceDataFromPriceSlice(prices []decimal.Decimal) models.PriceData {
-	open := prices[0]
-	close := prices[len(prices)-1]
-	sort.Slice(prices, func(i, j int) bool {
-		return prices[i].LessThan(prices[j])
-	})
+
 	return models.PriceData{
-		Open:  open,
-		Close: close,
-		High:  prices[len(prices)-1],
-		Low:   prices[0],
+		Open:  prices[0],
+		Close: prices[max(0, len(prices)-1)],
+		High:  getMax(prices),
+		Low:   getMin(prices),
 	}
+
+}
+
+func getMin (prices []decimal.Decimal) decimal.Decimal {
+	min := prices[0]
+	for _, price := range prices {
+		if price.LessThan(min) {
+			min = price
+		}
+	}
+	return min
+}
+
+func getMax (prices []decimal.Decimal) decimal.Decimal {
+	max := prices[0]
+	for _, price := range prices {
+		if price.GreaterThan(max) {
+			max = price
+		}
+	}
+	return max
 }
 
 func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
@@ -148,8 +166,8 @@ func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
 		Price:     s.MarketPrice().InexactFloat64(),
 		BestBid:   s.BestBid().InexactFloat64(),
 		BestAsk:   s.BestAsk().InexactFloat64(),
-		AskVolume: s.asks.Volume().InexactFloat64(),
-		BidVolume: s.bids.Volume().InexactFloat64(),
+		// AskVolume: s.asks.Volume().InexactFloat64(),
+		// BidVolume: s.bids.Volume().InexactFloat64(),
 		CandleData: CandleData{
 			StockPriceHistory: priceData,
 			NewCandle:         new,
@@ -175,37 +193,90 @@ func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
 
 func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 
-	s.PlaceLimitOrder(Buy, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(140))
+	s.PlaceLimitOrder(Buy, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(145))
 	s.PlaceLimitOrder(Sell, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(150))
 
-	time.Sleep(5 * time.Second)
+	time.Sleep(3 * time.Second)
 
 	go func() { // limit buy order
 		for {
 			log.Printf("Best ask: %s", s.BestAsk())
-			price := decimal.NewFromFloat(rand.NormFloat64() * 1).Add(s.BestAsk()).Sub(decimal.NewFromInt(1)).Round(2)
-			volume := decimal.NewFromFloat(rand.NormFloat64() * 20).Add(decimal.NewFromInt(100)).Round(2)
+			price := (s.BestAsk()).Add(decimal.NewFromFloat(3)).Sub(decimal.NewFromFloat(rand.Float64() * 5)).Round(2)
+			volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
 			_, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, volume, price)
 			if err != nil {
 				log.Printf("Failed to place limit order: %v", err)
 			}
-			time.Sleep(200 * time.Millisecond)
+			time.Sleep(50 * time.Millisecond)
 		}
 	}()
 
 	go func() {
 		for {
 			log.Printf("Best bid: %s", s.BestBid())
-			price := decimal.NewFromFloat(rand.NormFloat64() * 1).Add(s.BestBid()).Add(decimal.NewFromInt(1)).Round(2)
-			volume := decimal.NewFromFloat(rand.NormFloat64() * 20).Add(decimal.NewFromInt(100)).Round(2)
+			price := (s.BestBid()).Sub(decimal.NewFromFloat(3)).Add(decimal.NewFromFloat(rand.Float64() * 5)).Round(2)
+			volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
 			_, err := s.PlaceLimitOrder(Sell, marketSimulationUlid, volume, price)
 			if err != nil {
 				log.Printf("Failed to place limit order: %v", err)
 			}
-			time.Sleep(200 * time.Millisecond)
+			time.Sleep(50 * time.Millisecond)
 		}
 	}()
 
+
+	go func() { // limit buy order
+		for {
+			log.Printf("Best ask: %s", s.BestAsk())
+			price := (s.BestAsk()).Add(decimal.NewFromFloat(3)).Sub(decimal.NewFromFloat(rand.Float64() * 5)).Round(2)
+			volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
+			_, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, volume, price)
+			if err != nil {
+				log.Printf("Failed to place limit order: %v", err)
+			}
+			time.Sleep(50 * time.Millisecond)
+		}
+	}()
+
+	go func() {
+		for {
+			log.Printf("Best bid: %s", s.BestBid())
+			price := (s.BestBid()).Sub(decimal.NewFromFloat(3)).Add(decimal.NewFromFloat(rand.Float64() * 5)).Round(2)
+			volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
+			_, err := s.PlaceLimitOrder(Sell, marketSimulationUlid, volume, price)
+			if err != nil {
+				log.Printf("Failed to place limit order: %v", err)
+			}
+			time.Sleep(50 * time.Millisecond)
+		}
+	}()
+
+	// go func() { // limit buy order
+	// 	for {
+	// 		log.Printf("Best ask: %s", s.BestAsk())
+	// 		price := decimal.NewFromFloat(rand.Float64() * 5).Add(s.BestAsk()).Sub(decimal.NewFromInt(1)).Round(2)
+	// 		volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
+	// 		_, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, volume, price)
+	// 		if err != nil {
+	// 			log.Printf("Failed to place limit order: %v", err)
+	// 		}
+	// 		time.Sleep(100 * time.Millisecond)
+	// 	}
+	// }()
+
+	// go func() {
+	// 	for {
+	// 		log.Printf("Best bid: %s", s.BestBid())
+	// 		price := decimal.NewFromFloat(rand.Float64() * 5).Add(s.BestBid()).Add(decimal.NewFromInt(1)).Round(2)
+	// 		volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
+	// 		_, err := s.PlaceLimitOrder(Sell, marketSimulationUlid, volume, price)
+	// 		if err != nil {
+	// 			log.Printf("Failed to place limit order: %v", err)
+	// 		}
+	// 		time.Sleep(100 * time.Millisecond)
+	// 	}
+	// }()
+	
 }
 
 func (s *service) GetMarketPriceHistory() ([]models.StockPriceHistory, error) {

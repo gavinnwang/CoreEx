@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	kafkaTopic   = "orders"
+	kafkaTopic    = "orders"
 	NumPartitions = 3
 )
 
@@ -60,8 +60,8 @@ func (s *service) Run(brokerList []string) {
 	marketSimulationUlid := ulid.Make()
 	email := "market@gmail.com"
 	err := s.userRepo.CreateUser(models.User{
-		ID: marketSimulationUlid.String(),
-		Name: "Market Simulation",
+		ID:    marketSimulationUlid.String(),
+		Name:  "Market Simulation",
 		Email: &email,
 	})
 
@@ -125,22 +125,29 @@ func (s *service) PlaceOrder(input PlaceOrderInput) error {
 	return nil
 }
 
-
 func (s *service) startConsumers(brokerList []string) {
 	config := sarama.NewConfig()
 	admin, err := sarama.NewClusterAdmin(brokerList, config)
 	if err != nil {
-        log.Fatal("Error while creating cluster admin: ", err.Error())
-    }
-    defer func() { admin.Close() }()
-	err = admin.CreateTopic(kafkaTopic, &sarama.TopicDetail{
-        NumPartitions:     NumPartitions,
-        ReplicationFactor: 1,
-    }, false)
+		log.Fatal("Error while creating cluster admin: ", err.Error())
+	}
+	defer func() { admin.Close() }()
+	topics, err := admin.ListTopics()
 	if err != nil {
-        log.Fatal("Error while creating topic: ", err.Error())
-    }
+		log.Fatal("Error listing topics: ", err.Error())
+	}
 
+	if _, exists := topics[kafkaTopic]; !exists {
+		err = admin.CreateTopic(kafkaTopic, &sarama.TopicDetail{
+			NumPartitions:     NumPartitions,
+			ReplicationFactor: 1,
+		}, false)
+		if err != nil {
+			log.Fatal("Error while creating topic: ", err.Error())
+		}
+	} else {
+		log.Printf("Topic '%s' already exists. Skipping creation.", kafkaTopic)
+	}
 
 	config.Consumer.Return.Errors = true
 	consumer, err := sarama.NewConsumer(brokerList, config)
@@ -173,7 +180,6 @@ func (s *service) startConsumers(brokerList []string) {
 
 	wg.Wait()
 }
-
 
 func (s *service) consume(pc sarama.PartitionConsumer, wg *sync.WaitGroup, index int) {
 	defer wg.Done()

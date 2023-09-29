@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github/wry-0313/exchange/internal/models"
-	"log"
+	// "log"
 
 	"github.com/shopspring/decimal"
 )
@@ -36,7 +36,7 @@ func (r *repository) CreateStock(stock models.Stock) error {
 		return fmt.Errorf("repository: failed to check if stock exists: %w", err)
 	}
 	if exists {
-		log.Printf("Stock already exists: %s\n", stock.Symbol)
+		// log.Printf("Stock already exists: %s\n", stock.Symbol)
 		return nil
 	}
 
@@ -45,7 +45,7 @@ func (r *repository) CreateStock(stock models.Stock) error {
 		return err
 	}
 
-	log.Printf("Stock created successfully: %s\n", stock.Symbol)
+	// log.Printf("Stock created successfully: %s\n", stock.Symbol)
 	return nil
 }
 
@@ -61,7 +61,7 @@ func (r *repository) CreateOrder(order *Order, symbol string) error {
 		return err
 	}
 
-	log.Printf("Order created successfully: %s\n", order.shortOrderID())
+	// log.Printf("Order created successfully: %s\n", order.shortOrderID())
 
 	return nil
 }
@@ -75,23 +75,23 @@ func (r *repository) UpdateOrder(order *Order, newStatus OrderStatus, newVolume,
 		return fmt.Errorf("repository: failed to update order: %v", err)
 	}
 
-	log.Printf("Order updated successfully: %s\n", order.shortOrderID())
+	// log.Printf("Order updated successfully: %s\n", order.shortOrderID())
 
 	return nil
 }
 
 func (r *repository) CreateOrUpdateHolding(holding models.Holding) error {
 
-	log.Printf("holding: %+v\n", holding)
+	// log.Printf("holding: %+v\n", holding)
 
-	sql := `CALL InsertOrUpdateHoldingThenDeleteZeroVolume(?, ?, ?)`
+	sql := `INSERT INTO holdings (user_id, symbol, volume) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE volume = volume + ?`
 
-	_, err := r.db.Exec(sql, holding.UserID, holding.Symbol, holding.VolumeChange)
+	_, err := r.db.Exec(sql, holding.UserID, holding.Symbol, holding.VolumeChange, holding.VolumeChange)
 	if err != nil {
 		return fmt.Errorf("repository: failed to create or update holding: %v", err)
 	}
 
-	log.Printf("Holding created or updated successfully: %s\n", holding.UserID[22:])
+	// log.Printf("Holding created or updated successfully: %s\n", holding.UserID[22:])
 
 	return nil
 }
@@ -105,16 +105,16 @@ func (r *repository) UpdateUserBalance(userID string, balanceChange decimal.Deci
 		return fmt.Errorf("repository: failed to update user balance: %v", err)
 	}
 
-	log.Printf("User balance updated successfully: %s\n", userID[22:])
+	// log.Printf("User balance updated successfully: %s\n", userID[22:])
 
 	return nil
 }
 
 func (r *repository) CreateMarketPriceHistory(symbol string, priceHistory models.StockPriceHistory) error {
 
-	sql := `INSERT INTO stock_history (symbol, open, high, low, close, volume, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?)`
+	sql := `INSERT INTO stock_history (symbol, open, high, low, close, recorded_at, bid_volume, ask_volume) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
 
-	_, err := r.db.Exec(sql, symbol, priceHistory.Open, priceHistory.High, priceHistory.Low, priceHistory.Close, priceHistory.Volume, priceHistory.RecordedAt)
+	_, err := r.db.Exec(sql, symbol, priceHistory.Open, priceHistory.High, priceHistory.Low, priceHistory.Close, priceHistory.RecordedAt, priceHistory.BidVolume, priceHistory.AskVolume)
 
 	if err != nil {
 		return fmt.Errorf("repository: failed to create market price history: %v", err)
@@ -125,9 +125,9 @@ func (r *repository) CreateMarketPriceHistory(symbol string, priceHistory models
 
 func (r *repository) GetEntireMarketPriceHistory(symbol string) ([]models.StockPriceHistory, error) {
 
-	sql := `SELECT open, high, low, close, volume, recorded_at 
+	sql := `SELECT open, high, low, close, recorded_at , bid_volume, ask_volume
 	FROM (
-		SELECT open, high, low, close, volume, recorded_at 
+		SELECT open, high, low, close, recorded_at, bid_volume, ask_volume
 		FROM stock_history 
 		WHERE symbol = ? 
 		ORDER BY recorded_at DESC 
@@ -145,7 +145,7 @@ func (r *repository) GetEntireMarketPriceHistory(symbol string) ([]models.StockP
 	var priceData []models.StockPriceHistory
 	for rows.Next() {
 		var history models.StockPriceHistory
-		if err := rows.Scan(&history.Open, &history.High, &history.Low, &history.Close, &history.Volume, &history.RecordedAt); err != nil {
+		if err := rows.Scan(&history.Open, &history.High, &history.Low, &history.Close, &history.RecordedAt, &history.BidVolume, &history.AskVolume); err != nil {
 			return nil, fmt.Errorf("repository: failed to scan row: %v", err)
 		}
 		priceData = append(priceData, history)

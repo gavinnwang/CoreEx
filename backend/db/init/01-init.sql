@@ -21,7 +21,8 @@ CREATE TABLE if NOT EXISTS stock_history (
     high DECIMAL(10, 2) NOT NULL,
     low DECIMAL(10, 2) NOT NULL,
     close DECIMAL(10, 2) NOT NULL,
-    volume DECIMAL(10, 2) NOT NULL,
+    bid_volume DECIMAL(10, 2) NOT NULL,
+    ask_volume DECIMAL(10, 2) NOT NULL,
     recorded_at INT NOT NULL,
     FOREIGN KEY (symbol) REFERENCES stocks(symbol),
     INDEX idx_stock_time(symbol, recorded_at DESC)

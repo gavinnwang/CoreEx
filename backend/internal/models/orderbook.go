@@ -9,7 +9,8 @@ type Stock struct {
 
 type StockPriceHistory struct {
 	PriceData
-	Volume     decimal.Decimal `json:"volume"`
+	BidVolume  float64 `json:"bid_volume"`
+	AskVolume  float64 `json:"ask_volume"`
 	RecordedAt int64           `json:"recorded_at"`
 }
 

@@ -61,8 +61,6 @@ func (api *API) HandlePlaceOrder(w http.ResponseWriter, r *http.Request) {
 
 func (api *API) HandleGetPriceData(w http.ResponseWriter, r *http.Request) {
 	symbol := chi.URLParam(r, "symbol") // Extract the dynamic parameter
-
-
 	defer r.Body.Close()
 
 	priceData, err := api.exchangeService.GetSymbolMarketPriceHistory(symbol)
