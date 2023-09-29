@@ -10,6 +10,7 @@ import SymbolInfoTable from "../components/SymbolInfoTable";
 import toast from "solid-toast";
 import { getPriceData } from "../api/marketData";
 import { SolidApexCharts } from "solid-apexcharts";
+import UserPrivateInfoPanel from "../components/UserPrivateInfoPanel";
 
 const Price: Component = () => {
   const [symbolInfo, setSymbolInfo] = createSignal<SymbolInfo | null>(null);
@@ -27,13 +28,13 @@ const Price: Component = () => {
   const [priceData] = createResource(symbol, getPriceHistoryData);
 
   const convertDataToPriceGraphFormat = (
-    data: CandleDataPoint[]
+    data: SymbolInfo[]
   ): { data: GraphPriceDataPoint[] }[] => {
     return [
       {
-        data: data.map((item) => ({
-          x: new Date(item.recorded_at * 1000),
-          y: [item.open, item.high, item.low, item.close] as [
+        data: data.map((cd) => ({
+          x: cd.recorded_at,
+          y: [cd.open, cd.high, cd.low, cd.close] as [
             number,
             number,
             number,
@@ -45,28 +46,35 @@ const Price: Component = () => {
   };
 
   const convertDataToVolumeGraphFormat = (
-    data: CandleDataPoint[]
-  ): { data: GraphVolumeDataPoint[] }[] => {
+    d: SymbolInfo[]
+  ): ApexGraphVolumeData => {
     return [
       {
-        data: data.map((item) => ({
-          x: new Date(item.recorded_at * 1000),
-          y: item.volume,
+        name: "Ask Volume",
+        data: d.map((cd) => ({
+          x: cd.recorded_at,
+          y: cd.ask_volume,
+        })),
+      },
+      {
+        name: "Bid Volume",
+        data: d.map((cd) => ({
+          x: cd.recorded_at,
+          y: cd.bid_volume,
         })),
       },
     ];
   };
 
-  async function getPriceHistoryData(
-    symbol: string
-  ): Promise<ApexGraphPriceData> {
+  async function getPriceHistoryData(symbol: string): Promise<SymbolInfo[]> {
     try {
       const data = await getPriceData(symbol);
+
       const graphPriceData = convertDataToPriceGraphFormat(data);
       const graphVolumeData = convertDataToVolumeGraphFormat(data);
       setGraphVolumeData(graphVolumeData);
       setGraphPriceData(graphPriceData);
-      return graphPriceData;
+      return data;
     } catch (e) {
       console.error(e);
       throw e;
@@ -98,79 +106,93 @@ const Price: Component = () => {
     ws.addEventListener("message", (event) => {
       const res = event.data;
       const resData: WSResponseGetSymbolInfo = JSON.parse(res);
-      if (resData.success && resData.result) {
+      if (
+        resData.success &&
+        resData.result &&
+        resData.event == "exchange.stream_info"
+      ) {
         setSymbolInfo(resData.result);
+
         // setCandleData(resData.result.candle_data);
-        const cd = resData.result.candle_data;
-        if (cd) {
-          const gd = [...(graphPriceData() as ApexGraphPriceData)];
-          const vd = [...(graphVolumeData() as ApexGraphVolumeData)];
+        const cd = resData.result;
 
-          if (needNew() && !cd.new_candle) {
-            if (gd[0].data.length > 50) gd[0].data.shift();
+        const gd = [...(graphPriceData() as ApexGraphPriceData)];
+        const vd = [...(graphVolumeData() as ApexGraphVolumeData)];
 
-            gd[0].data.push({
-              x: new Date(cd.recorded_at * 1000),
-              y: [cd.open, cd.high, cd.low, cd.close],
-            });
+        if (needNew() && !cd.new_candle) {
+          // if (gd[0].data.length > 50) gd[0].data.shift();
 
-            if (vd[0].data.length > 50) vd[0].data.shift();
+          gd[0].data.push({
+            x: cd.recorded_at,
+            y: [cd.open, cd.high, cd.low, cd.close],
+          });
 
-            vd[0].data.push({
-              x: new Date(cd.recorded_at * 1000),
-              y: cd.volume,
-            });
+          // if (vd[0].data.length > 50) vd[0].data.shift();
 
-            setNeedNew(false);
-          }
+          vd[0].data.push({
+            x: cd.recorded_at,
+            y: cd.ask_volume,
+          });
+          vd[1].data.push({
+            x: cd.recorded_at,
+            y: cd.bid_volume,
+          });
 
-          if (needNew() && cd.new_candle) {
-            if (gd[0].data.length > 50) gd[0].data.shift();
+          setNeedNew(false);
+        } else if (needNew() && cd.new_candle) {
+          // if (gd[0].data.length > 50) gd[0].data.shift();
 
-            gd[0].data.push({
-              x: new Date(cd.recorded_at * 1000),
-              y: [cd.open, cd.high, cd.low, cd.close],
-            });
+          gd[0].data.push({
+            x: cd.recorded_at,
+            y: [cd.open, cd.high, cd.low, cd.close],
+          });
 
-            if (vd[0].data.length > 50) vd[0].data.shift();
+          // if (vd[0].data.length > 50) vd[0].data.shift();
 
-            vd[0].data.push({
-              x: new Date(cd.recorded_at * 1000),
-              y: cd.volume,
-            });
+          vd[0].data.push({
+            x: cd.recorded_at,
+            y: cd.ask_volume,
+          });
+          vd[1].data.push({
+            x: cd.recorded_at,
+            y: cd.bid_volume,
+          });
 
-            setNeedNew(true);
-          }
+          setNeedNew(true);
+        } else if (!needNew() && !cd.new_candle) {
+          gd[0].data[gd[0].data.length - 1] = {
+            x: cd.recorded_at,
+            y: [cd.open, cd.high, cd.low, cd.close],
+          };
 
-          if (!needNew() && !cd.new_candle) {
-            gd[0].data[gd[0].data.length - 1] = {
-              x: new Date(cd.recorded_at * 1000),
-              y: [cd.open, cd.high, cd.low, cd.close],
-            };
+          vd[0].data[gd[0].data.length - 1] = {
+            x: cd.recorded_at,
+            y: cd.ask_volume,
+          };
+          vd[1].data[gd[0].data.length - 1] = {
+            x: cd.recorded_at,
+            y: cd.bid_volume,
+          };
+        } else if (!needNew() && cd.new_candle) {
+          gd[0].data[gd[0].data.length - 1] = {
+            x: cd.recorded_at,
+            y: [cd.open, cd.high, cd.low, cd.close],
+          };
 
-            vd[0].data[gd[0].data.length - 1] = {
-              x: new Date(cd.recorded_at * 1000),
-              y: cd.volume,
-            };
-          }
+          vd[0].data[gd[0].data.length - 1] = {
+            x: cd.recorded_at,
+            y: cd.ask_volume,
+          };
+          vd[1].data[gd[0].data.length - 1] = {
+            x: cd.recorded_at,
+            y: cd.bid_volume,
+          };
 
-          if (!needNew() && cd.new_candle) {
-            gd[0].data[gd[0].data.length - 1] = {
-              x: new Date(cd.recorded_at * 1000),
-              y: [cd.open, cd.high, cd.low, cd.close],
-            };
-
-            vd[0].data[gd[0].data.length - 1] = {
-              x: new Date(cd.recorded_at * 1000),
-              y: cd.volume,
-            };
-
-            setNeedNew(true);
-          }
-
-          setGraphPriceData(gd);
-          setGraphVolumeData(vd);
+          setNeedNew(true);
         }
+
+        setGraphPriceData(gd);
+        setGraphVolumeData(vd);
       } else {
         const errMsg = resData.error_message ?? "Something went wrong.";
         setFetchErrorMsg(errMsg);
@@ -190,22 +212,25 @@ const Price: Component = () => {
       class="py-5 px-10"
     >
       <div class="flex flex-col gap-y-5 ">
-        <PlaceOrderForm />
-        <div class="flex flex-col gap-y-5 md:flex-row md:gap-x-5">
+        <div class="flex flex-row gap-x-10">
           <SymbolInfoTable
             symbolInfo={symbolInfo}
             fetchErrorMsg={fetchErrorMsg}
           />
+          <PlaceOrderForm />
+        </div>
+        <div class="flex flex-col gap-y-5 md:flex-row md:gap-x-5">
           {priceData.loading ? (
             <div>Loading...</div>
           ) : priceData.error ? (
             <div>Error: {priceData.error.message}</div>
           ) : (
             graphPriceData() && (
-              <div class="flex flex-col gap-y-3">
+              <div class="flex flex-col gap-y-3 mb-10">
                 <p>Price Chart</p>
                 <SolidApexCharts
-                  width="800"
+                  width={1000}
+                  height={250}
                   type="candlestick"
                   options={{
                     chart: {
@@ -214,18 +239,22 @@ const Price: Component = () => {
                         show: false,
                       },
                     },
-                    
                     yaxis: {
                       tooltip: {
                         enabled: true,
                       },
+                    },
+
+                    xaxis: {
+                      type: "datetime",
                     },
                   }}
                   series={graphPriceData() as ApexGraphPriceData}
                 />
                 <p>Volume Chart</p>
                 <SolidApexCharts
-                  width="800"
+                  width={1000}
+                  height={250}
                   type="area"
                   options={{
                     chart: {
@@ -237,13 +266,16 @@ const Price: Component = () => {
                         show: false,
                       },
                     },
+                    xaxis: {
+                      type: "datetime",
+                    },
                     stroke: {
                       curve: "smooth",
                     },
-                  
                   }}
                   series={graphVolumeData() as ApexGraphVolumeData}
                 />
+                <UserPrivateInfoPanel />
               </div>
             )
           )}

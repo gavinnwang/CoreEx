@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github/wry-0313/exchange/internal/models"
+	// "github/wry-0313/exchange/internal/models"
 	"log"
 	"time"
 
@@ -31,7 +31,7 @@ const (
 
 // Client is a middleman between the websocket connection and the hub.
 type Client struct {
-	user *models.User
+	userID string
 
 	// A map of subscriptions that the client has. Each value is a cancel channel to close the subscription.
 	subscriptions map[string]chan bool
@@ -181,6 +181,7 @@ func handleMessage(c *Client, msg []byte) {
 		return
 	case EventStreamSymbolInfo:
 		handleStreamSymbolInfo(c, msgReq)
+	
 	default:
 		closeConnection(c, websocket.CloseInvalidFramePayloadData, CloseReasonUnsupportedEvent)
 		return

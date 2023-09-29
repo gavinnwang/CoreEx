@@ -20,6 +20,7 @@ type Repository interface {
 
 	GetUser(userID string) (models.User, error)
 	GetUserByEmail(email string) (models.User, error)
+	GetUserPrivateInfo(userID string) (UserPrivateInfo, error)
 
 	UpdateUserName(userID, name string) error
 }
@@ -52,6 +53,58 @@ func (r *repository) CreateUser(user models.User) error {
 	log.Printf("User created successfully: %s\n", user.ID)
 
 	return nil
+}
+
+func (r *repository) GetUserPrivateInfo(userID string) (UserPrivateInfo, error) {
+	var userPrivateInfo UserPrivateInfo
+
+	rows, err := r.db.Query("SELECT cash_balance FROM users WHERE user_id = ?", userID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return UserPrivateInfo{}, ErrUserNotFound
+		}
+		return UserPrivateInfo{}, fmt.Errorf("repository: failed to get user cash balance: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err := rows.Scan(&userPrivateInfo.CashBalance)
+		if err != nil {
+			return UserPrivateInfo{}, fmt.Errorf("repository: failed to scan user cash balance: %w", err)
+		}
+	}
+
+	rows, err = r.db.Query("SELECT symbol, volume FROM holdings WHERE user_id = ?", userID)
+	if err != nil {
+		return UserPrivateInfo{}, fmt.Errorf("repository: failed to get user holdings: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var holding models.Holding
+		err := rows.Scan(&holding.Symbol, &holding.Volume)
+		if err != nil {
+			return UserPrivateInfo{}, fmt.Errorf("repository: failed to scan user holdings: %w", err)
+		}
+		userPrivateInfo.Holdings = append(userPrivateInfo.Holdings, holding)
+	}
+
+	rows, err = r.db.Query("SELECT symbol, order_id, order_side, order_status, order_type, filled_at, updated_at, total_processed, volume, initial_volume, price FROM orders WHERE user_id = ?", userID)
+	if err != nil {
+		return UserPrivateInfo{}, fmt.Errorf("repository: failed to get user orders: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var order models.Order
+		err := rows.Scan(&order.Symbol, &order.OrderID, &order.OrderSide, &order.OrderStatus, &order.OrderType, &order.FilledAt, &order.FilledAtTime, &order.TotalProcessed, &order.Volume, &order.InitialVolume, &order.Price)
+		if err != nil {
+			return UserPrivateInfo{}, fmt.Errorf("repository: failed to scan user orders: %w", err)
+		}
+		userPrivateInfo.Orders = append(userPrivateInfo.Orders, order)
+	}
+
+	return userPrivateInfo, nil
 }
 
 // GetUserByEmail returns a single user for a given email.

@@ -39,6 +39,9 @@ export default function Navbar() {
     if (currentUser) {
       setUser(currentUser);
       setToken(t)
+    } else {
+      setToken(undefined);
+      setUser(null);
     }
   });
 

@@ -20,6 +20,7 @@ type Service interface {
 	CreateUser(input CreateUserInput) (models.User, error)
 	UpdateUserName(userID, name string) error
 	GetUser(userID string) (models.User, error)
+	GetUserPrivateInfo(userID string) (UserPrivateInfo, error)
 }
 
 func NewService(userRepo Repository, validator validator.Validate) Service {
@@ -95,4 +96,17 @@ func toNameCase(word string) string {
 	nameCase := re.ReplaceAllStringFunc(word, strings.ToUpper)
 
 	return nameCase
+}
+
+func (s *service) GetUserPrivateInfo(userID string) (UserPrivateInfo, error) {
+	if err := s.validator.Var(userID, "required"); err != nil {
+		return UserPrivateInfo{}, fmt.Errorf("service: validation error: %w", err)
+	}
+
+	userPrivateInfo, err := s.userRepo.GetUserPrivateInfo(userID)
+	if err != nil {
+		return UserPrivateInfo{}, fmt.Errorf("service: failed getting user private info: %w", err)
+	}
+
+	return userPrivateInfo, nil
 }

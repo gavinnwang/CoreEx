@@ -19,7 +19,7 @@ import (
 
 const (
 	kafkaTopic    = "orders"
-	NumPartitions = 3
+	NumPartitions = 5
 )
 
 var (
@@ -175,7 +175,7 @@ func (s *service) startConsumers(brokerList []string) {
 			pc.AsyncClose()
 		}(pc)
 
-		s.consume(pc, &wg, 0)
+		go s.consume(pc, &wg, 0)
 	}
 
 	wg.Wait()

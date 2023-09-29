@@ -2,6 +2,8 @@ package ws
 
 import (
 	"encoding/json"
+	"fmt"
+	"github/wry-0313/exchange/internal/middleware"
 	"log"
 	"net/http"
 
@@ -30,8 +32,12 @@ func (ws *WebSocket) HandleConnection(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userID := middleware.UserIDFromContext(r.Context())
+	fmt.Printf("userID: %v\n", userID);
+
 	client := Client{
 		// symbols:       make(map[string]Symbol),
+		userID:        userID,
 		subscriptions: make(map[string]chan bool),
 		conn:          conn,
 		send:          make(chan []byte, 256),
@@ -43,6 +49,7 @@ func (ws *WebSocket) HandleConnection(w http.ResponseWriter, r *http.Request) {
 	go client.writePump()
 	go client.readPump()
 }
+	
 
 func handleStreamSymbolInfo(c *Client, msgReq Request) {
 

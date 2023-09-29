@@ -18,3 +18,9 @@ type CreateUserDTO struct {
 	User     models.User `json:"user"`
 	JwtToken string      `json:"jwt_token"`
 }
+
+type UserPrivateInfo struct {
+	CashBalance float64          `json:"cash_balance"`
+	Holdings    []models.Holding `json:"holdings"`
+	Orders      []models.Order   `json:"orders"`
+}

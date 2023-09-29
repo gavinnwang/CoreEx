@@ -33,3 +33,8 @@ export async function getUserByJwt(jwtToken: string): Promise<User> {
   const url = `http://${BASE_URL}/users/me`;
   return sendGetRequest<User>(url, jwtToken);
 }
+
+export async function getUserPrivateInfo(jwtToken: string): Promise<UserPrivateInfo> {
+  const url = `http://${BASE_URL}/users/me/private`;
+  return sendGetRequest<UserPrivateInfo>(url, jwtToken);
+}

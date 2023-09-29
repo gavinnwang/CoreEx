@@ -27,6 +27,7 @@ type Order struct {
 }
 
 func (s *service) NewOrder(side Side, userID ulid.ULID, orderType OrderType, price, volume decimal.Decimal, partialAllowed bool) *Order {
+	loc, _ := time.LoadLocation("America/Chicago")
 	o := &Order{
 		side:      side,
 		orderID:   ulid.Make(),
@@ -35,7 +36,7 @@ func (s *service) NewOrder(side Side, userID ulid.ULID, orderType OrderType, pri
 		status:    Open,
 		price:     price,
 		volume:    volume,
-		createdAt: time.Now(),
+		createdAt: time.Now().In(loc),
 	}
 	go func() {
 		err := s.obRepo.CreateOrder(o, s.symbol)
@@ -87,7 +88,7 @@ func (o *Order) UserID() ulid.ULID {
 }
 
 func (s *service) fillOrder(o *Order, filledVolume, filledAt decimal.Decimal) {
-	log.Printf("service: order %s filled with volume %s at price %s\n", o.shortOrderID(), filledVolume, filledAt)
+	// log.Printf("service: order %s filled with volume %s at price %s\n", o.shortOrderID(), filledVolume, filledAt)
 	o.volumeMu.Lock()
 	newVolume := o.volume.Sub(filledVolume)
 	o.volume = newVolume
@@ -103,22 +104,22 @@ func (s *service) fillOrder(o *Order, filledVolume, filledAt decimal.Decimal) {
 		if err != nil {
 			log.Fatalf("service: failed to update order: %v", err)
 		}
-		var holding models.Holding
+		var holdingChange models.HoldingChange
 		if o.Side() == Buy { // order wants to buy stock so we need to add new holding to user and subtract user balance
-			holding = models.Holding{
+			holdingChange = models.HoldingChange{
 				UserID:       o.UserID().String(),
 				Symbol:       s.symbol,
 				VolumeChange: filledVolume,
 			}
 			processedValue = processedValue.Neg()
 		} else {
-			holding = models.Holding{
+			holdingChange = models.HoldingChange{
 				UserID:       o.UserID().String(),
 				Symbol:       s.symbol,
 				VolumeChange: filledVolume.Neg(),
 			}
 		}
-		err = s.obRepo.CreateOrUpdateHolding(holding)
+		err = s.obRepo.CreateOrUpdateHolding(holdingChange)
 		if err != nil {
 			log.Fatalf("service: failed to create or update holding: %v", err)
 		}

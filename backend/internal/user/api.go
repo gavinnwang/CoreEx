@@ -114,6 +114,22 @@ func (api *API) HandleGetUserFromJWT(w http.ResponseWriter, r *http.Request) {
 	endpoint.WriteWithStatus(w, http.StatusOK, user)
 }
 
+func (api *API) HandleGetUserPrivateInfo(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	userID := middleware.UserIDFromContext(ctx)
+	userPrivateInfo, err := api.userService.GetUserPrivateInfo(userID)
+	if err != nil {
+		log.Printf("handler: failed to get user private info: %v\n", err)
+		switch {
+		default:
+			endpoint.WriteWithError(w, http.StatusInternalServerError, ErrMsgInternalServer)
+		}
+		return
+	}
+	// write response
+	endpoint.WriteWithStatus(w, http.StatusOK, userPrivateInfo)
+}
+
 // RegisterHandlers is a function that registers all the handlers for the user endpoints
 func (api *API) RegisterHandlers(r chi.Router, authHandler func(http.Handler) http.Handler) {
 	r.Route("/users", func(r chi.Router) {
@@ -122,6 +138,9 @@ func (api *API) RegisterHandlers(r chi.Router, authHandler func(http.Handler) ht
 			r.Use(authHandler)
 			r.Post("/name", api.HandleUpdateUserName)
 			r.Get("/me", api.HandleGetUserFromJWT)
+			r.Get("/me/private", api.HandleGetUserPrivateInfo)
 		})
 	})
 }
+
+

@@ -17,7 +17,7 @@ type Repository interface {
 	CreateStock(stock models.Stock) error
 	CreateOrder(order *Order, symbol string) error
 	UpdateOrder(order *Order, newStatus OrderStatus, newVolume, totalProcessed, filledAt decimal.Decimal) error
-	CreateOrUpdateHolding(holding models.Holding) error
+	CreateOrUpdateHolding(holding models.HoldingChange) error
 	UpdateUserBalance(userID string, newBalance decimal.Decimal) error
 	CreateMarketPriceHistory(symbol string, priceHistory models.StockPriceHistory) error
 	GetEntireMarketPriceHistory(symbol string) ([]models.StockPriceHistory, error)
@@ -80,7 +80,7 @@ func (r *repository) UpdateOrder(order *Order, newStatus OrderStatus, newVolume,
 	return nil
 }
 
-func (r *repository) CreateOrUpdateHolding(holding models.Holding) error {
+func (r *repository) CreateOrUpdateHolding(holding models.HoldingChange) error {
 
 	// log.Printf("holding: %+v\n", holding)
 
@@ -125,13 +125,13 @@ func (r *repository) CreateMarketPriceHistory(symbol string, priceHistory models
 
 func (r *repository) GetEntireMarketPriceHistory(symbol string) ([]models.StockPriceHistory, error) {
 
-	sql := `SELECT open, high, low, close, recorded_at , bid_volume, ask_volume
+	sql := `SELECT open, high, low, close, recorded_at, bid_volume, ask_volume
 	FROM (
 		SELECT open, high, low, close, recorded_at, bid_volume, ask_volume
 		FROM stock_history 
 		WHERE symbol = ? 
 		ORDER BY recorded_at DESC 
-		LIMIT 75
+		LIMIT 50
 	) AS sub
 	ORDER BY recorded_at ASC;
 	`

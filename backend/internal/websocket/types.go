@@ -10,6 +10,8 @@ const (
 
 	EventStreamSymbolInfo = "exchange.stream_info"
 
+	EventStreamUserPrivateInfo = "exchange.stream_user_private_info"
+
 	// CloseReasonBadEvent indicates that the event field has an incorrect type.
 	CloseReasonBadEvent = "The event field is an incorrect type."
 

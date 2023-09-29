@@ -23,7 +23,7 @@ CREATE TABLE if NOT EXISTS stock_history (
     close DECIMAL(10, 2) NOT NULL,
     bid_volume DECIMAL(10, 2) NOT NULL,
     ask_volume DECIMAL(10, 2) NOT NULL,
-    recorded_at INT NOT NULL,
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (symbol) REFERENCES stocks(symbol),
     INDEX idx_stock_time(symbol, recorded_at DESC)
 );
