@@ -227,9 +227,9 @@ const Price: Component = () => {
           ) : (
             graphPriceData() && (
               <div class="flex flex-col gap-y-3 mb-10">
-                <p>Price Chart</p>
+                <p>Charts</p>
                 <SolidApexCharts
-                  width={800}
+                  width={1000}
                   height={400}
                   type="candlestick"
                   options={{
@@ -272,10 +272,10 @@ const Price: Component = () => {
                   }}
                   series={graphPriceData() as ApexGraphPriceData}
                 />
-                <p>Volume Chart</p>
+                {/* <p>Volume Chart</p> */}
                 <SolidApexCharts
                   width={1000}
-                  height={300}
+                  height={250}
                   type="area"
                   options={{
                     chart: {
@@ -295,7 +295,7 @@ const Price: Component = () => {
                     },
                     yaxis: {
                       min: 0,
-                      max: 10000,
+                      max: 7000,
                     },
                   }}
                   series={graphVolumeData() as ApexGraphVolumeData}

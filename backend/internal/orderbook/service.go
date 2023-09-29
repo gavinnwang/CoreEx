@@ -250,7 +250,7 @@ func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 	}()
 
 	t1 := 0.0
-
+	
 	go func() {
 		for {
 			// log.Printf("Best bid: %s", s.BestBid())
@@ -266,40 +266,40 @@ func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 		}
 	}()
 
-	// time.Sleep(3 * time.Second)
-	t2 := 0.0
+	// // time.Sleep(3 * time.Second)
+	// t2 := 0.0
 
-	go func() { // limit buy order
-		for {
-			// log.Printf("Best ask: %s", s.BestAsk())
-			priceFluctuation := calculateSuperimposedSine(t2)
-			price := (s.MarketPrice()).Add(decimal.NewFromFloat(3)).Sub(decimal.NewFromFloat(rand.Float64() * 5)).Add(decimal.NewFromFloat(priceFluctuation)).Round(2)
-			volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
-			_, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, volume, price)
-			if err != nil {
-				// log.Printf("Failed to place limit order: %v", err)
-			}
-			time.Sleep(50 * time.Millisecond)
-			t2 += 0.03
-		}
-	}()
+	// go func() { // limit buy order
+	// 	for {
+	// 		// log.Printf("Best ask: %s", s.BestAsk())
+	// 		priceFluctuation := calculateSuperimposedSine(t2)
+	// 		price := (s.MarketPrice()).Add(decimal.NewFromFloat(3)).Sub(decimal.NewFromFloat(rand.Float64() * 5)).Add(decimal.NewFromFloat(priceFluctuation)).Round(2)
+	// 		volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
+	// 		_, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, volume, price)
+	// 		if err != nil {
+	// 			// log.Printf("Failed to place limit order: %v", err)
+	// 		}
+	// 		time.Sleep(50 * time.Millisecond)
+	// 		t2 += 0.03
+	// 	}
+	// }()
 
-	t3 := 0.0
+	// t3 := 0.0
 
-	go func() {
-		for {
-			// log.Printf("Best bid: %s", s.BestBid())
-			priceFluctuation := calculateSuperimposedSine(t3)
-			price := (s.MarketPrice()).Sub(decimal.NewFromFloat(3)).Add(decimal.NewFromFloat(rand.Float64() * 5)).Add(decimal.NewFromFloat(priceFluctuation)).Round(2)
-			volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
-			_, err := s.PlaceLimitOrder(Sell, marketSimulationUlid, volume, price)
-			if err != nil {
-				// log.Printf("Failed to place limit order: %v", err)
-			}
-			time.Sleep(50 * time.Millisecond)
-			t3 += 0.03
-		}
-	}()
+	// go func() {
+	// 	for {
+	// 		// log.Printf("Best bid: %s", s.BestBid())
+	// 		priceFluctuation := calculateSuperimposedSine(t3)
+	// 		price := (s.MarketPrice()).Sub(decimal.NewFromFloat(3)).Add(decimal.NewFromFloat(rand.Float64() * 5)).Add(decimal.NewFromFloat(priceFluctuation)).Round(2)
+	// 		volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
+	// 		_, err := s.PlaceLimitOrder(Sell, marketSimulationUlid, volume, price)
+	// 		if err != nil {
+	// 			// log.Printf("Failed to place limit order: %v", err)
+	// 		}
+	// 		time.Sleep(50 * time.Millisecond)
+	// 		t3 += 0.03
+	// 	}
+	// }()
 
 	// go func() { // limit buy order
 	// 	for {
@@ -355,6 +355,8 @@ func (s *service) PlaceMarketOrder(side Side, userID ulid.ULID, volume decimal.D
 		iter = s.bids.MaxPriceQueue
 		os = s.bids
 	}
+
+	// os.AddVolumeBy(volume)
 
 	if os.Len() == 0 {
 		// no limit orders in the opposite side, add the order to the market order list
@@ -508,6 +510,24 @@ func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price dec
 
 	o := s.NewOrder(side, userID, Limit, price, volume, true)
 
+	var (
+		os         *OrderSide
+		iter       func() (*OrderQueue, bool)
+		comparator func(decimal.Decimal) bool
+	)
+
+	if side == Buy {
+		iter = s.asks.MinPriceQueue
+		comparator = price.GreaterThanOrEqual
+		os = s.asks
+	} else {
+		iter = s.bids.MaxPriceQueue
+		comparator = price.LessThanOrEqual
+		os = s.bids
+	}
+
+	// os.AddVolumeBy(volume);
+
 	if o.Side() == Buy { // there are market orders waiting to be match
 
 		s.marketSellMu.Lock() // Lock the mutex
@@ -531,21 +551,7 @@ func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price dec
 		return o.orderID, nil
 	}
 
-	var (
-		os         *OrderSide
-		iter       func() (*OrderQueue, bool)
-		comparator func(decimal.Decimal) bool
-	)
-
-	if side == Buy {
-		iter = s.asks.MinPriceQueue
-		comparator = price.GreaterThanOrEqual
-		os = s.asks
-	} else {
-		iter = s.bids.MaxPriceQueue
-		comparator = price.LessThanOrEqual
-		os = s.bids
-	}
+	
 
 	s.sortedOrdersMu.Lock()
 	bestPrice, ok := iter()

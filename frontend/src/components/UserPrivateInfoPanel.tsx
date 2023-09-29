@@ -11,7 +11,6 @@ function getToken(): string | undefined {
   return jwtToken;
 }
 
-
 const UserPrivateInfoPanel = () => {
   const [userInfo, { refetch }] = createResource(
     getToken(),
@@ -25,16 +24,17 @@ const UserPrivateInfoPanel = () => {
           <Refetch />
         </div>
         Account
-        <button onClick={()=>{
-            refetch()
+        <button
+          onClick={() => {
+            refetch();
             if (userInfo()?.cash_balance === 0) {
-              toast.error("Log in to view account info")
-              return
+              toast.error("Log in to view account info");
+              return;
             } else {
-              toast.success("Refetched user info")
+              toast.success("Refetched user info");
             }
-
-        }}>
+          }}
+        >
           <Refetch />
         </button>
       </div>
@@ -104,8 +104,15 @@ const UserPrivateInfoPanel = () => {
                   <td>{order.order_side}</td>
                   <td>{order.order_status}</td>
                   <td>{order.order_type}</td>
-                  <td>{order.filled_at ? (order.filled_at / order.initial_volume).toFixed(2) : "NaN"}</td>
-                  <td>${order.price}</td>
+                  <td>
+                    ${order.order_type === "Market" ? "N/A" : order.price}
+                  </td>
+                  <td>
+                    {order.filled_at
+                      ? (order.total_processed / order.initial_volume).toFixed(2)
+                      : "N/A"}
+                  </td>
+
                   <td>{new Date(order.filled_at_time).toLocaleTimeString()}</td>
                   <td>{order.volume}</td>
                   <td>{order.initial_volume}</td>
