@@ -229,8 +229,8 @@ const Price: Component = () => {
               <div class="flex flex-col gap-y-3 mb-10">
                 <p>Price Chart</p>
                 <SolidApexCharts
-                  width={1000}
-                  height={250}
+                  width={800}
+                  height={400}
                   type="candlestick"
                   options={{
                     chart: {
@@ -239,14 +239,35 @@ const Price: Component = () => {
                         show: false,
                       },
                     },
+                    plotOptions: {
+                      candlestick: {
+                        colors: {
+                          upward: "#00B746",
+                          downward: "#EF403C",
+                        },
+                        wick: {
+                          useFillColor: true,
+                        },
+                      },
+                    },
+                    xaxis: {
+                      labels: {
+                        show: false, 
+                      },
+                      axisBorder: {
+                        show: true,
+                      },
+                      axisTicks: {
+                        show: true,
+                      },
+                    },
                     yaxis: {
                       tooltip: {
                         enabled: true,
                       },
-                    },
 
-                    xaxis: {
-                      type: "datetime",
+                      // min: 200,
+                      // max: 300,
                     },
                   }}
                   series={graphPriceData() as ApexGraphPriceData}
@@ -254,7 +275,7 @@ const Price: Component = () => {
                 <p>Volume Chart</p>
                 <SolidApexCharts
                   width={1000}
-                  height={250}
+                  height={300}
                   type="area"
                   options={{
                     chart: {
@@ -271,6 +292,10 @@ const Price: Component = () => {
                     },
                     stroke: {
                       curve: "smooth",
+                    },
+                    yaxis: {
+                      min: 0,
+                      max: 10000,
                     },
                   }}
                   series={graphVolumeData() as ApexGraphVolumeData}

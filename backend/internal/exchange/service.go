@@ -10,7 +10,6 @@ import (
 	"github/wry-0313/exchange/pkg/validator"
 	"log"
 	"sync"
-	"time"
 
 	"github.com/IBM/sarama"
 	"github.com/oklog/ulid/v2"
@@ -82,7 +81,7 @@ func (s *service) Run(brokerList []string) {
 	for _, ob := range s.obServices {
 		log.Printf("Starting market price history persistance for %v\n", ob.Symbol())
 		ob.SimulateMarketFluctuations(marketSimulationUlid)
-		time.Sleep(4 * time.Second)
+		// time.Sleep(4 * time.Second)
 		ob.Run()
 	}
 }

@@ -7,6 +7,7 @@ import (
 	"github/wry-0313/exchange/internal/models"
 	list "github/wry-0313/exchange/pkg/dsa/linkedlist"
 	"log"
+	"math"
 	"math/rand"
 	"sync"
 	"time"
@@ -83,12 +84,10 @@ func NewService(symbol string, obRepo Repository, rdb *redis.Client) Service {
 	}
 }
 
-
-
 func (s *service) Run() {
 	loc, _ := time.LoadLocation("America/Chicago")
 	go func() {
-		ticker := time.NewTicker(500* time.Millisecond)
+		ticker := time.NewTicker(500 * time.Millisecond)
 		defer ticker.Stop()
 		for {
 			select {
@@ -100,8 +99,8 @@ func (s *service) Run() {
 				if len(s.prices) >= 5 {
 					priceData = models.StockPriceHistory{
 						PriceData:  getPriceDataFromPriceSlice(s.prices),
-						BidVolume: s.bids.Volume().InexactFloat64(),
-						AskVolume: s.asks.Volume().InexactFloat64(),
+						BidVolume:  s.bids.Volume().InexactFloat64(),
+						AskVolume:  s.asks.Volume().InexactFloat64(),
 						RecordedAt: time.Now().In(loc),
 					}
 					new = true
@@ -111,11 +110,13 @@ func (s *service) Run() {
 						log.Printf("Could not persist market price: %v", err)
 					}
 					s.prices = []decimal.Decimal{}
+					s.asks.ResetVolume()
+					s.bids.ResetVolume()
 				} else {
 					priceData = models.StockPriceHistory{
 						PriceData:  getPriceDataFromPriceSlice(s.prices),
-						BidVolume: s.bids.Volume().InexactFloat64(),
-						AskVolume: s.asks.Volume().InexactFloat64(),
+						BidVolume:  s.bids.Volume().InexactFloat64(),
+						AskVolume:  s.asks.Volume().InexactFloat64(),
 						RecordedAt: time.Now().In(loc),
 					}
 
@@ -124,8 +125,6 @@ func (s *service) Run() {
 
 				s.publishPrice(priceData, new)
 
-				s.asks.ResetVolume()
-				s.bids.ResetVolume()
 			}
 		}
 	}()
@@ -142,7 +141,7 @@ func getPriceDataFromPriceSlice(prices []decimal.Decimal) models.PriceData {
 
 }
 
-func getMin (prices []decimal.Decimal) decimal.Decimal {
+func getMin(prices []decimal.Decimal) decimal.Decimal {
 	min := prices[0]
 	for _, price := range prices {
 		if price.LessThan(min) {
@@ -152,7 +151,7 @@ func getMin (prices []decimal.Decimal) decimal.Decimal {
 	return min
 }
 
-func getMax (prices []decimal.Decimal) decimal.Decimal {
+func getMax(prices []decimal.Decimal) decimal.Decimal {
 	max := prices[0]
 	for _, price := range prices {
 		if price.GreaterThan(max) {
@@ -165,10 +164,10 @@ func getMax (prices []decimal.Decimal) decimal.Decimal {
 func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
 
 	symbolMarketInfo := SymbolInfoResponse{
-		Symbol:    s.symbol,
-		Price:     s.MarketPrice().InexactFloat64(),
-		BestBid:   s.BestBid().InexactFloat64(),
-		BestAsk:   s.BestAsk().InexactFloat64(),
+		Symbol:  s.symbol,
+		Price:   s.MarketPrice().InexactFloat64(),
+		BestBid: s.BestBid().InexactFloat64(),
+		BestAsk: s.BestAsk().InexactFloat64(),
 		// AskVolume: s.asks.Volume().InexactFloat64(),
 		// BidVolume: s.bids.Volume().InexactFloat64(),
 		CandleData: CandleData{
@@ -194,63 +193,111 @@ func (s *service) publishPrice(priceData models.StockPriceHistory, new bool) {
 	s.rdb.Publish(context.Background(), s.symbol, pubMsgBytes)
 }
 
+// Define our sine wave parameters
+type SineWave struct {
+	frequency float64
+	amplitude float64
+	phase     float64
+}
+
+var sineWaves = []SineWave{
+
+	{frequency: 0.1, amplitude: 2, phase: 0.5},
+	{frequency: 0.3, amplitude: 1, phase: 0.2},
+
+	{frequency: 0.4, amplitude: 10, phase: 0.3},
+	{frequency: 0.6, amplitude: 5, phase: 0.1},
+	{frequency: 0.8, amplitude: 2, phase: 0.5},
+
+	{frequency: 0.1, amplitude: 3, phase: 0},
+	{frequency: 0.3, amplitude: 1.5, phase: 1},
+	{frequency: 0.5, amplitude: 1, phase: 0.5},
+	{frequency: 0.7, amplitude: 0.5, phase: 0.2},
+}
+
+func calculateSuperimposedSine(t float64) float64 {
+	totalValue := 0.0
+	for _, wave := range sineWaves {
+		totalValue += wave.amplitude * math.Sin(wave.frequency*t+wave.phase)
+	}
+	// log.Printf("Total value: %f\	 totalValue);
+	return totalValue / 10
+}
+
 func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 
-	s.PlaceLimitOrder(Buy, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(145))
-	s.PlaceLimitOrder(Sell, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(150))
+	// s.PlaceLimitOrder(Buy, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(145))
+	// s.PlaceLimitOrder(Sell, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(150))
 
-	time.Sleep(3 * time.Second)
+	s.SetMarketPrice(decimal.NewFromFloat(150))
+
+	// time.Sleep(3 * time.Second)
+	t := 0.0
 
 	go func() { // limit buy order
 		for {
 			// log.Printf("Best ask: %s", s.BestAsk())
-			price := (s.BestAsk()).Add(decimal.NewFromFloat(3)).Sub(decimal.NewFromFloat(rand.Float64() * 5)).Round(2)
+			priceFluctuation := calculateSuperimposedSine(t)
+			price := (s.MarketPrice()).Add(decimal.NewFromFloat(3)).Sub(decimal.NewFromFloat(rand.Float64() * 5)).Add(decimal.NewFromFloat(priceFluctuation)).Round(2)
 			volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
 			_, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, volume, price)
 			if err != nil {
 				// log.Printf("Failed to place limit order: %v", err)
 			}
 			time.Sleep(50 * time.Millisecond)
+			t += 0.03
 		}
 	}()
+
+	t1 := 0.0
 
 	go func() {
 		for {
 			// log.Printf("Best bid: %s", s.BestBid())
-			price := (s.BestBid()).Sub(decimal.NewFromFloat(3)).Add(decimal.NewFromFloat(rand.Float64() * 5)).Round(2)
+			priceFluctuation := calculateSuperimposedSine(t1)
+			price := (s.MarketPrice()).Sub(decimal.NewFromFloat(3)).Add(decimal.NewFromFloat(rand.Float64() * 5)).Add(decimal.NewFromFloat(priceFluctuation)).Round(2)
 			volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
 			_, err := s.PlaceLimitOrder(Sell, marketSimulationUlid, volume, price)
 			if err != nil {
 				// log.Printf("Failed to place limit order: %v", err)
 			}
 			time.Sleep(50 * time.Millisecond)
+			t1 += 0.03
 		}
 	}()
 
+	// time.Sleep(3 * time.Second)
+	t2 := 0.0
 
 	go func() { // limit buy order
 		for {
 			// log.Printf("Best ask: %s", s.BestAsk())
-			price := (s.BestAsk()).Add(decimal.NewFromFloat(3)).Sub(decimal.NewFromFloat(rand.Float64() * 5)).Round(2)
+			priceFluctuation := calculateSuperimposedSine(t2)
+			price := (s.MarketPrice()).Add(decimal.NewFromFloat(3)).Sub(decimal.NewFromFloat(rand.Float64() * 5)).Add(decimal.NewFromFloat(priceFluctuation)).Round(2)
 			volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
 			_, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, volume, price)
 			if err != nil {
 				// log.Printf("Failed to place limit order: %v", err)
 			}
 			time.Sleep(50 * time.Millisecond)
+			t2 += 0.03
 		}
 	}()
+
+	t3 := 0.0
 
 	go func() {
 		for {
 			// log.Printf("Best bid: %s", s.BestBid())
-			price := (s.BestBid()).Sub(decimal.NewFromFloat(3)).Add(decimal.NewFromFloat(rand.Float64() * 5)).Round(2)
+			priceFluctuation := calculateSuperimposedSine(t3)
+			price := (s.MarketPrice()).Sub(decimal.NewFromFloat(3)).Add(decimal.NewFromFloat(rand.Float64() * 5)).Add(decimal.NewFromFloat(priceFluctuation)).Round(2)
 			volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
 			_, err := s.PlaceLimitOrder(Sell, marketSimulationUlid, volume, price)
 			if err != nil {
 				// log.Printf("Failed to place limit order: %v", err)
 			}
 			time.Sleep(50 * time.Millisecond)
+			t3 += 0.03
 		}
 	}()
 
@@ -279,7 +326,7 @@ func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 	// 		time.Sleep(100 * time.Millisecond)
 	// 	}
 	// }()
-	
+
 }
 
 func (s *service) GetMarketPriceHistory() ([]models.StockPriceHistory, error) {

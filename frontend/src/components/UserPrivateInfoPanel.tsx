@@ -27,7 +27,13 @@ const UserPrivateInfoPanel = () => {
         Account
         <button onClick={()=>{
             refetch()
-            toast.success("Refetched user info")
+            if (userInfo()?.cash_balance === 0) {
+              toast.error("Log in to view account info")
+              return
+            } else {
+              toast.success("Refetched user info")
+            }
+
         }}>
           <Refetch />
         </button>
@@ -98,7 +104,7 @@ const UserPrivateInfoPanel = () => {
                   <td>{order.order_side}</td>
                   <td>{order.order_status}</td>
                   <td>{order.order_type}</td>
-                  <td>{(order.filled_at / order.initial_volume).toFixed(2)}</td>
+                  <td>{order.filled_at ? (order.filled_at / order.initial_volume).toFixed(2) : "NaN"}</td>
                   <td>${order.price}</td>
                   <td>{new Date(order.filled_at_time).toLocaleTimeString()}</td>
                   <td>{order.volume}</td>

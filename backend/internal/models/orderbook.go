@@ -42,7 +42,7 @@ type Order struct {
 	OrderSide      string    `json:"order_side"`
 	OrderStatus    string    `json:"order_status"`
 	OrderType      string    `json:"order_type"`
-	FilledAt       float64   `json:"filled_at"`
+	FilledAt       *float64   `json:"filled_at"`
 	FilledAtTime   time.Time `json:"filled_at_time"`
 	TotalProcessed float64   `json:"total_processed"`
 	Volume         float64   `json:"volume"`
