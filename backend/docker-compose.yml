@@ -48,9 +48,9 @@ services:
       - MYSQL_DATABASE=exchange
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 3s
-      timeout: 10s
-      retries: 10
+      interval: 7s
+      timeout: 20s
+      retries: 5
   redis-ws:
     container_name: redis-ws
     image: redis:latest
