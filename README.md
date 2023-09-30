@@ -6,8 +6,4 @@
 <img width="1250" alt="Screenshot 2023-09-29 at 9 42 49 PM" src="https://github.com/wry0313/exchange/assets/79772347/29983d5f-25e1-4fbd-87b9-5e817079c944">
 
 
-
-
-
-Uploading Untitled.mp4…
-
+https://youtu.be/SZhr6M-z1Jo
