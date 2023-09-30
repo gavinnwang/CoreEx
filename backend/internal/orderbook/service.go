@@ -243,7 +243,6 @@ func calculateSuperimposedSine(sineWaves []SineWave, t float64) float64 {
 
 
 
-	s.SetMarketPrice(decimal.NewFromFloat(150))
 func calculateSuperimposedCoSine(sineWaves []SineWave, t float64) float64 {
 	totalValue := 0.0
 	for _, wave := range sineWaves {
@@ -251,8 +250,10 @@ func calculateSuperimposedCoSine(sineWaves []SineWave, t float64) float64 {
 	}
 	// log.Printf("Total value: %f\	 totalValue);
 	return totalValue / 10
+}
 
-	// time.Sleep(3 * time.Second)
+
+
 func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 	t := 0.0
 
