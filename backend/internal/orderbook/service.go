@@ -206,6 +206,7 @@ var sineWaves = []SineWave{
 	{frequency: 0.3, amplitude: 1, phase: 0.2},
 
 	{frequency: 0.4, amplitude: 10, phase: 0.3},
+	{frequency: 0.2, amplitude: 4, phase: 0.4},
 	{frequency: 0.6, amplitude: 5, phase: 0.1},
 	{frequency: 0.8, amplitude: 2, phase: 0.5},
 
@@ -215,7 +216,23 @@ var sineWaves = []SineWave{
 	{frequency: 0.7, amplitude: 0.5, phase: 0.2},
 }
 
-func calculateSuperimposedSine(t float64) float64 {
+
+var sineWaves2 = []SineWave{
+
+	{frequency: 0.9, amplitude: 6, phase: -0.7},
+	{frequency: 0.3, amplitude: 1, phase: -0.2},
+	{frequency: 0.4, amplitude: 8, phase: -2.3},
+	{frequency: 0.2, amplitude: 4, phase: -0.4},
+	{frequency: 0.6, amplitude: 5, phase: -0.1},
+	{frequency: 0.8, amplitude: 2, phase: -0.5},
+	{frequency: 0.1, amplitude: 3, phase: -0},
+	{frequency: 0.3, amplitude: 1.5, phase: 1},
+	{frequency: 0.5, amplitude: 1, phase: 0.5},
+	{frequency: 0.7, amplitude: 0.5, phase: 0.2},
+}
+
+
+func calculateSuperimposedSine(sineWaves []SineWave, t float64) float64 {
 	totalValue := 0.0
 	for _, wave := range sineWaves {
 		totalValue += wave.amplitude * math.Sin(wave.frequency*t+wave.phase)
@@ -224,23 +241,29 @@ func calculateSuperimposedSine(t float64) float64 {
 	return totalValue / 10
 }
 
-func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 
-	// s.PlaceLimitOrder(Buy, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(145))
-	// s.PlaceLimitOrder(Sell, marketSimulationUlid, decimal.NewFromInt(100), decimal.NewFromInt(150))
 
 	s.SetMarketPrice(decimal.NewFromFloat(150))
+func calculateSuperimposedCoSine(sineWaves []SineWave, t float64) float64 {
+	totalValue := 0.0
+	for _, wave := range sineWaves {
+		totalValue += wave.amplitude * math.Cos(wave.frequency*t+wave.phase)
+	}
+	// log.Printf("Total value: %f\	 totalValue);
+	return totalValue / 10
 
 	// time.Sleep(3 * time.Second)
+func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 	t := 0.0
 
 	go func() { // limit buy order
 		for {
 			// log.Printf("Best ask: %s", s.BestAsk())
-			priceFluctuation := calculateSuperimposedSine(t)
-			price := (s.MarketPrice()).Add(decimal.NewFromFloat(3)).Sub(decimal.NewFromFloat(rand.Float64() * 5)).Add(decimal.NewFromFloat(priceFluctuation)).Round(2)
-			volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
-			_, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, volume, price)
+			fluctuation := calculateSuperimposedSine(sineWaves, t)
+			// log.Printf("Fluctuation: %f", fluctuation)
+			price := (s.BestAsk()).Add(decimal.NewFromFloat(3)).Sub(decimal.NewFromFloat(rand.Float64() * 5))
+			volume := decimal.NewFromFloat(fluctuation).Mul(decimal.NewFromInt(60)).Abs().Add(decimal.NewFromInt(50))
+			_, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, volume.Round(2), price.Round(2))
 			if err != nil {
 				// log.Printf("Failed to place limit order: %v", err)
 			}
@@ -250,14 +273,14 @@ func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 	}()
 
 	t1 := 0.0
-	
 	go func() {
 		for {
 			// log.Printf("Best bid: %s", s.BestBid())
-			priceFluctuation := calculateSuperimposedSine(t1)
-			price := (s.MarketPrice()).Sub(decimal.NewFromFloat(3)).Add(decimal.NewFromFloat(rand.Float64() * 5)).Add(decimal.NewFromFloat(priceFluctuation)).Round(2)
-			volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
-			_, err := s.PlaceLimitOrder(Sell, marketSimulationUlid, volume, price)
+			fluctuation := calculateSuperimposedCoSine(sineWaves2, t1)
+			// log.Printf("Fluctuation2: %f", fluctuation)
+			price := (s.BestBid()).Sub(decimal.NewFromFloat(3)).Add(decimal.NewFromFloat(rand.Float64() * 5))
+			volume := decimal.NewFromFloat(fluctuation).Mul(decimal.NewFromInt(50)).Abs().Add(decimal.NewFromInt(50))
+			_, err := s.PlaceLimitOrder(Sell, marketSimulationUlid, volume.Round(2), price.Round(2))
 			if err != nil {
 				// log.Printf("Failed to place limit order: %v", err)
 			}
@@ -265,67 +288,6 @@ func (s *service) SimulateMarketFluctuations(marketSimulationUlid ulid.ULID) {
 			t1 += 0.03
 		}
 	}()
-
-	// // time.Sleep(3 * time.Second)
-	// t2 := 0.0
-
-	// go func() { // limit buy order
-	// 	for {
-	// 		// log.Printf("Best ask: %s", s.BestAsk())
-	// 		priceFluctuation := calculateSuperimposedSine(t2)
-	// 		price := (s.MarketPrice()).Add(decimal.NewFromFloat(3)).Sub(decimal.NewFromFloat(rand.Float64() * 5)).Add(decimal.NewFromFloat(priceFluctuation)).Round(2)
-	// 		volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
-	// 		_, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, volume, price)
-	// 		if err != nil {
-	// 			// log.Printf("Failed to place limit order: %v", err)
-	// 		}
-	// 		time.Sleep(50 * time.Millisecond)
-	// 		t2 += 0.03
-	// 	}
-	// }()
-
-	// t3 := 0.0
-
-	// go func() {
-	// 	for {
-	// 		// log.Printf("Best bid: %s", s.BestBid())
-	// 		priceFluctuation := calculateSuperimposedSine(t3)
-	// 		price := (s.MarketPrice()).Sub(decimal.NewFromFloat(3)).Add(decimal.NewFromFloat(rand.Float64() * 5)).Add(decimal.NewFromFloat(priceFluctuation)).Round(2)
-	// 		volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
-	// 		_, err := s.PlaceLimitOrder(Sell, marketSimulationUlid, volume, price)
-	// 		if err != nil {
-	// 			// log.Printf("Failed to place limit order: %v", err)
-	// 		}
-	// 		time.Sleep(50 * time.Millisecond)
-	// 		t3 += 0.03
-	// 	}
-	// }()
-
-	// go func() { // limit buy order
-	// 	for {
-	// 		log.Printf("Best ask: %s", s.BestAsk())
-	// 		price := decimal.NewFromFloat(rand.Float64() * 5).Add(s.BestAsk()).Sub(decimal.NewFromInt(1)).Round(2)
-	// 		volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
-	// 		_, err := s.PlaceLimitOrder(Buy, marketSimulationUlid, volume, price)
-	// 		if err != nil {
-	// 			log.Printf("Failed to place limit order: %v", err)
-	// 		}
-	// 		time.Sleep(100 * time.Millisecond)
-	// 	}
-	// }()
-
-	// go func() {
-	// 	for {
-	// 		log.Printf("Best bid: %s", s.BestBid())
-	// 		price := decimal.NewFromFloat(rand.Float64() * 5).Add(s.BestBid()).Add(decimal.NewFromInt(1)).Round(2)
-	// 		volume := decimal.NewFromFloat(rand.Float64() * 20).Add(decimal.NewFromInt(100)).Round(2)
-	// 		_, err := s.PlaceLimitOrder(Sell, marketSimulationUlid, volume, price)
-	// 		if err != nil {
-	// 			log.Printf("Failed to place limit order: %v", err)
-	// 		}
-	// 		time.Sleep(100 * time.Millisecond)
-	// 	}
-	// }()
 
 }
 
@@ -349,14 +311,14 @@ func (s *service) PlaceMarketOrder(side Side, userID ulid.ULID, volume decimal.D
 		iter func() (*OrderQueue, bool)
 	)
 	if side == Buy {
+		s.bids.AddVolumeBy(volume)
 		iter = s.asks.MinPriceQueue
 		os = s.asks
 	} else {
+		s.asks.AddVolumeBy(volume)
 		iter = s.bids.MaxPriceQueue
 		os = s.bids
 	}
-
-	// os.AddVolumeBy(volume)
 
 	if os.Len() == 0 {
 		// no limit orders in the opposite side, add the order to the market order list
@@ -510,6 +472,34 @@ func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price dec
 
 	o := s.NewOrder(side, userID, Limit, price, volume, true)
 
+	
+	if side == Buy { // there are market orders waiting to be match
+
+		s.bids.AddVolumeBy(volume)
+
+		s.marketSellMu.Lock() // Lock the mutex
+		if s.marketSellOrders.Len() > 0 {
+			// Log(fmt.Sprintf("Limit order matching with market order: %s", o.shortOrderID()))
+			s.matchWithMarketOrders(s.marketSellOrders, o)
+		}
+		s.marketSellMu.Unlock() // Unlock the mutex
+
+	} else {
+
+		s.asks.AddVolumeBy(volume)
+
+		s.marketBuyMu.Lock() // Lock the mutex
+		if s.marketBuyOrders.Len() > 0 {
+			// Log(fmt.Sprintf("Limit order matching with market order: %s", o.shortOrderID()))
+			s.matchWithMarketOrders(s.marketBuyOrders, o)
+		}
+		s.marketBuyMu.Unlock() // Unlock the mutex
+	}
+
+	if o.Status() == Filled {
+		return o.orderID, nil
+	}
+
 	var (
 		os         *OrderSide
 		iter       func() (*OrderQueue, bool)
@@ -525,33 +515,6 @@ func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price dec
 		comparator = price.LessThanOrEqual
 		os = s.bids
 	}
-
-	// os.AddVolumeBy(volume);
-
-	if o.Side() == Buy { // there are market orders waiting to be match
-
-		s.marketSellMu.Lock() // Lock the mutex
-		if s.marketSellOrders.Len() > 0 {
-			// Log(fmt.Sprintf("Limit order matching with market order: %s", o.shortOrderID()))
-			s.matchWithMarketOrders(s.marketSellOrders, o)
-		}
-		s.marketSellMu.Unlock() // Unlock the mutex
-
-	} else if o.Side() == Sell {
-
-		s.marketBuyMu.Lock() // Lock the mutex
-		if s.marketBuyOrders.Len() > 0 {
-			// Log(fmt.Sprintf("Limit order matching with market order: %s", o.shortOrderID()))
-			s.matchWithMarketOrders(s.marketBuyOrders, o)
-		}
-		s.marketBuyMu.Unlock() // Unlock the mutex
-	}
-
-	if o.Status() == Filled {
-		return o.orderID, nil
-	}
-
-	
 
 	s.sortedOrdersMu.Lock()
 	bestPrice, ok := iter()
@@ -592,12 +555,12 @@ func (s *service) addMarketOrder(o *Order) {
 		s.marketBuyMu.Lock() // Lock the mutex
 		s.marketBuyOrders.PushBack(o)
 		s.marketBuyMu.Unlock() // Unlock the mutex
-		s.bids.AddVolumeBy(o.Volume())
+		// s.bids.AddVolumeBy(o.Volume())
 	} else {
 		s.marketSellMu.Lock() // Lock the mutex
 		s.marketSellOrders.PushBack(o)
 		s.marketSellMu.Unlock() // Unlock the mutex
-		s.asks.AddVolumeBy(o.Volume())
+		// s.asks.AddVolumeBy(o.Volume())
 	}
 }
 

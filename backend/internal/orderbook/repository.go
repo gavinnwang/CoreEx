@@ -131,7 +131,7 @@ func (r *repository) GetEntireMarketPriceHistory(symbol string) ([]models.StockP
 		FROM stock_history 
 		WHERE symbol = ? 
 		ORDER BY recorded_at DESC 
-		LIMIT 50
+		LIMIT 25
 	) AS sub
 	ORDER BY recorded_at ASC;
 	`

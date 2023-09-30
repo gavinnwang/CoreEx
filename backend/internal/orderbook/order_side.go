@@ -87,7 +87,7 @@ func (os *OrderSide) Append(o *Order) *list.Node[*Order] {
 	os.numOrders++
 	os.numOrdersMu.Unlock()
 	// os.volume = os.volume.Add(o.Volume())
-	os.AddVolumeBy(o.Volume())
+	// os.AddVolumeBy(o.Volume())
 	return priceQueue.Append(o)
 }
 
