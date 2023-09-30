@@ -1,1 +1,3 @@
-in progress 
+- Matching engine constructed with a custom B-tree and linked-list data structure, concurrently processing orders from Kafka producers.
+- Frontend developed using Solidjs with real-time price and volume graph streaming, leveraging technologies such as WebSockets and Redis PubSub.
+- User authentication system developed using handwritten JWT token verification, MySQL, and middleware.
