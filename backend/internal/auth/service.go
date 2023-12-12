@@ -49,6 +49,10 @@ func (s *service) Login(input LoginInput) (token string, err error) {
 		}
 		return "", fmt.Errorf("service: failed to get user by email: %w", err)
 	}
+	if retrievedUser.Password == nil {
+		return "", fmt.Errorf("service: user %s does not have a password", retrievedUser.ID)
+	}
+
 	if ok := security.CheckPasswordHash(input.Password, *retrievedUser.Password); !ok {
 		return "", errBadLogin
 	}

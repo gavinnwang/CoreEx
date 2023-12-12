@@ -334,7 +334,7 @@ func (s *service) PlaceMarketOrder(side Side, userID ulid.ULID, volume decimal.D
 
 		oq, found := iter()
 
-		if !found {
+		if !found || oq == nil {
 			continue
 		}
 
@@ -520,7 +520,7 @@ func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price dec
 	s.sortedOrdersMu.Lock()
 	bestPrice, ok := iter()
 
-	if !ok {
+	if !ok || bestPrice == nil {
 		logService.logger.Println(fmt.Sprintf("No limit orders in the opposite side, initialize order: %s", o.shortOrderID()))
 		s.addLimitOrder(o)
 		s.sortedOrdersMu.Unlock()
@@ -528,7 +528,10 @@ func (s *service) PlaceLimitOrder(side Side, userID ulid.ULID, volume, price dec
 	}
 
 	for volumeLeft.Sign() > 0 && os.Len() > 0 && comparator(bestPrice.Price()) {
-		bestPrice, _ := iter() // we don't dont have to check ok because we already checked it in the for loop condition with checking orderside size
+		bestPrice, found := iter() // we don't dont have to check ok because we already checked it in the for loop condition with checking orderside size
+		if !found || bestPrice == nil {
+			continue
+		}
 		volumeLeft = s.matchAtPriceLevel(bestPrice, o)
 	}
 
@@ -593,7 +596,7 @@ func (s *service) BestBid() decimal.Decimal {
 	s.sortedOrdersMu.RLock()
 	defer s.sortedOrdersMu.RUnlock()
 	oq, found := s.bids.MaxPriceQueue()
-	if !found {
+	if !found || oq == nil {
 		return decimal.Zero
 	}
 	return oq.Price()
@@ -603,7 +606,7 @@ func (s *service) BestAsk() decimal.Decimal {
 	s.sortedOrdersMu.RLock()
 	defer s.sortedOrdersMu.RUnlock()
 	oq, found := s.asks.MinPriceQueue()
-	if !found {
+	if !found || oq == nil {
 		return decimal.Zero
 	}
 	return oq.Price()
